@@ -1,0 +1,42 @@
+{
+  "app": { "name": "ArthaMitra", "tagline": "Your money friend" },
+  "common": {
+    "save": "Save", "cancel": "Cancel", "back": "Back", "next": "Next",
+    "loading": "Loading...", "error": "Something went wrong. Please try again.",
+    "rupee": "₹", "language": "Language", "logout": "Log out"
+  },
+  "login": {
+    "title": "Welcome", "phone": "Phone number", "pin": "4-digit PIN",
+    "login_btn": "Log in", "register_link": "New here? Create account",
+    "wrong": "Wrong phone number or PIN"
+  },
+  "register": {
+    "title": "Create account", "name": "Your name", "age": "Age",
+    "gender": "Gender", "female": "Woman", "male": "Man", "other": "Other",
+    "bank": "Do you have a bank account?", "insurance": "Do you have any insurance?",
+    "yes": "Yes", "no": "No", "submit": "Create account"
+  },
+  "home": {
+    "welcome": "Hello", "this_week": "This week", "earned": "Earned",
+    "spent": "Spent", "saved": "Saved", "last_week": "Last week",
+    "add_earning": "Add today's earning", "add_expense": "Add expense",
+    "no_data": "Nothing added yet. Add your first earning!"
+  },
+  "entry": {
+    "amount": "Amount", "category": "Category", "note": "Note (optional)",
+    "date": "Date", "income": "Earning", "expense": "Expense",
+    "added": "Added!", "invalid_amount": "Enter an amount greater than 0"
+  },
+  "schemes": {
+    "title": "Schemes for you", "why": "Why you see this",
+    "documents": "Documents you need", "how_to_apply": "How to apply",
+    "official_link": "Official website", "none": "No schemes found yet.",
+    "income_note": "Add your earnings so we can match schemes better."
+  },
+  "learn": { "title": "Learn", "lesson": "Today's lesson" },
+  "goals": {
+    "title": "Savings goals", "new_goal": "New goal", "target": "Target amount",
+    "saved": "Saved so far", "deadline": "Deadline"
+  },
+  "voice": { "tap_to_speak": "Tap and say the amount", "not_supported": "Voice is not supported on this phone. Please type." }
+}

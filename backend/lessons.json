@@ -1,0 +1,50 @@
+{
+  "_note": "DRAFT lessons. Member 3 / community contact: simplify the wording and check the Kannada with a Kannada speaker before the field demo.",
+  "lessons": [
+    {
+      "id": "save-a-little",
+      "title": {"en": "Save daily", "kn": "ಪ್ರತಿದಿನ ಸ್ವಲ್ಪ ಉಳಿಸಿ"},
+      "body": {
+        "en": "Small savings add up. Even setting aside a small amount on days you earn builds a cushion for bad days.",
+        "kn": "ಸಣ್ಣ ಉಳಿತಾಯವೂ ಕೂಡಿ ದೊಡ್ಡದಾಗುತ್ತದೆ. ಗಳಿಕೆ ಇರುವ ದಿನ ಸ್ವಲ್ಪ ಹಣ ಬದಿಗಿಟ್ಟರೆ ಕಷ್ಟದ ದಿನಗಳಲ್ಲಿ ಸಹಾಯವಾಗುತ್ತದೆ."
+      },
+      "action": {"en": "Today: put aside the smallest amount you can.", "kn": "ಇಂದು: ನಿಮಗೆ ಸಾಧ್ಯವಾದ ಚಿಕ್ಕ ಮೊತ್ತ ಬದಿಗಿಡಿ."}
+    },
+    {
+      "id": "write-it-down",
+      "title": {"en": "Write down what you earn and spend", "kn": "ಗಳಿಕೆ ಮತ್ತು ಖರ್ಚು ಬರೆದಿಡಿ"},
+      "body": {
+        "en": "When you note your earning and spending each day, you can see where money goes and plan the week.",
+        "kn": "ಪ್ರತಿದಿನ ಗಳಿಕೆ ಮತ್ತು ಖರ್ಚು ಬರೆದಿಟ್ಟರೆ ಹಣ ಎಲ್ಲಿಗೆ ಹೋಗುತ್ತದೆ ಎಂದು ತಿಳಿಯುತ್ತದೆ, ವಾರವನ್ನು ಯೋಜಿಸಬಹುದು."
+      },
+      "action": {"en": "Today: add your earning and one expense in the app.", "kn": "ಇಂದು: ನಿಮ್ಮ ಗಳಿಕೆ ಮತ್ತು ಒಂದು ಖರ್ಚನ್ನು ಆಪ್‌ನಲ್ಲಿ ಸೇರಿಸಿ."}
+    },
+    {
+      "id": "plan-for-emergencies",
+      "title": {"en": "Keep money for emergencies", "kn": "ತುರ್ತು ಪರಿಸ್ಥಿತಿಗೆ ಹಣ ಇಡಿ"},
+      "body": {
+        "en": "Illness or a day without work can happen to anyone. A small emergency fund means you do not need to borrow in a hurry.",
+        "kn": "ಅನಾರೋಗ್ಯ ಅಥವಾ ಕೆಲಸ ಇಲ್ಲದ ದಿನ ಯಾರಿಗಾದರೂ ಬರಬಹುದು. ಸ್ವಲ್ಪ ತುರ್ತು ಹಣ ಇದ್ದರೆ ಅವಸರದಲ್ಲಿ ಸಾಲ ಮಾಡಬೇಕಾಗಿಲ್ಲ."
+      },
+      "action": {"en": "Today: create an 'Emergency' savings goal.", "kn": "ಇಂದು: 'ತುರ್ತು' ಉಳಿತಾಯ ಗುರಿ ರಚಿಸಿ."}
+    },
+    {
+      "id": "careful-with-loans",
+      "title": {"en": "Be careful with loans", "kn": "ಸಾಲದ ಬಗ್ಗೆ ಎಚ್ಚರ"},
+      "body": {
+        "en": "Before you borrow, ask the total amount you must pay back and by when. Loans that look easy can cost a lot more in the end.",
+        "kn": "ಸಾಲ ತೆಗೆದುಕೊಳ್ಳುವ ಮೊದಲು ಒಟ್ಟು ಎಷ್ಟು ಮರುಪಾವತಿ ಮಾಡಬೇಕು ಮತ್ತು ಯಾವಾಗ ಎಂದು ಕೇಳಿ. ಸುಲಭ ಎನಿಸುವ ಸಾಲ ಕೊನೆಯಲ್ಲಿ ತುಂಬಾ ದುಬಾರಿ ಆಗಬಹುದು."
+      },
+      "action": {"en": "Today: before any loan, ask for the total repayment amount.", "kn": "ಇಂದು: ಯಾವುದೇ ಸಾಲದ ಮೊದಲು ಒಟ್ಟು ಮರುಪಾವತಿ ಮೊತ್ತ ಕೇಳಿ."}
+    },
+    {
+      "id": "use-government-schemes",
+      "title": {"en": "Check government schemes you may qualify for", "kn": "ನೀವು ಅರ್ಹರಾದ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳನ್ನು ನೋಡಿ"},
+      "body": {
+        "en": "Many schemes offer insurance, pension or health cover. Keep your documents ready so you can apply when you qualify.",
+        "kn": "ಅನೇಕ ಯೋಜನೆಗಳು ವಿಮೆ, ಪಿಂಚಣಿ ಅಥವಾ ಆರೋಗ್ಯ ರಕ್ಷಣೆ ನೀಡುತ್ತವೆ. ಅರ್ಹರಾದಾಗ ಅರ್ಜಿ ಹಾಕಲು ದಾಖಲೆಗಳನ್ನು ಸಿದ್ಧವಾಗಿಡಿ."
+      },
+      "action": {"en": "Today: open 'Schemes for you' and check the documents list.", "kn": "ಇಂದು: 'ನಿಮಗಾಗಿ ಯೋಜನೆಗಳು' ತೆರೆದು ದಾಖಲೆಗಳ ಪಟ್ಟಿ ನೋಡಿ."}
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "_readme": "STARTER DATA. Every scheme below has verified=false. Member 2 and Member 3 must copy the eligibility, benefit and documents EXACTLY from the official page (source_url), have the Kannada checked, then set verified=true and fill last_checked. Do not show unverified schemes in the final demo.",
+  "schemes": [
+    {
+      "id": "pmjjby",
+      "name": {"en": "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)", "kn": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಜೀವನ ಜ್ಯೋತಿ ಬಿಮಾ ಯೋಜನೆ"},
+      "category": "insurance",
+      "benefit": {"en": "Low-cost life insurance cover.", "kn": "ಕಡಿಮೆ ವೆಚ್ಚದ ಜೀವ ವಿಮೆ."},
+      "why": {"en": "No insurance on file, and you have a bank account.", "kn": "ನಿಮಗೆ ವಿಮೆ ಇಲ್ಲ, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."},
+      "eligibility": {
+        "min_age": 18, "max_age": 50,
+        "profile_flags": {"has_bank_account": true, "has_insurance": false}
+      },
+      "eligibility_text": {"en": "TODO: copy exactly from official page", "kn": "TODO"},
+      "documents": [
+        {"en": "Bank account (passbook or statement)", "kn": "ಬ್ಯಾಂಕ್ ಖಾತೆ (ಪಾಸ್‌ಬುಕ್ ಅಥವಾ ಸ್ಟೇಟ್‌ಮೆಂಟ್)"},
+        {"en": "TODO: confirm ID document required", "kn": "TODO"}
+      ],
+      "how_to_apply": {"en": "TODO: steps from official page", "kn": "TODO"},
+      "source_url": "https://jansuraksha.gov.in",
+      "verified": false,
+      "last_checked": null
+    },
+    {
+      "id": "pmsby",
+      "name": {"en": "Pradhan Mantri Suraksha Bima Yojana (PMSBY)", "kn": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಸುರಕ್ಷಾ ಬಿಮಾ ಯೋಜನೆ"},
+      "category": "insurance",
+      "benefit": {"en": "Low-cost accident insurance cover.", "kn": "ಕಡಿಮೆ ವೆಚ್ಚದ ಅಪಘಾತ ವಿಮೆ."},
+      "why": {"en": "No insurance on file, and you have a bank account.", "kn": "ನಿಮಗೆ ವಿಮೆ ಇಲ್ಲ, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."},
+      "eligibility": {
+        "min_age": 18, "max_age": 70,
+        "profile_flags": {"has_bank_account": true, "has_insurance": false}
+      },
+      "eligibility_text": {"en": "TODO: copy exactly from official page", "kn": "TODO"},
+      "documents": [
+        {"en": "Bank account (passbook or statement)", "kn": "ಬ್ಯಾಂಕ್ ಖಾತೆ (ಪಾಸ್‌ಬುಕ್ ಅಥವಾ ಸ್ಟೇಟ್‌ಮೆಂಟ್)"},
+        {"en": "TODO: confirm ID document required", "kn": "TODO"}
+      ],
+      "how_to_apply": {"en": "TODO: steps from official page", "kn": "TODO"},
+      "source_url": "https://jansuraksha.gov.in",
+      "verified": false,
+      "last_checked": null
+    },
+    {
+      "id": "apy",
+      "name": {"en": "Atal Pension Yojana (APY)", "kn": "ಅಟಲ್ ಪಿಂಚಣಿ ಯೋಜನೆ"},
+      "category": "pension",
+      "benefit": {"en": "Pension for old age, built from small regular savings.", "kn": "ಸಣ್ಣ ನಿಯಮಿತ ಉಳಿತಾಯದಿಂದ ವೃದ್ಧಾಪ್ಯ ಪಿಂಚಣಿ."},
+      "why": {"en": "Good for building a savings habit, and you have a bank account.", "kn": "ಉಳಿತಾಯ ಅಭ್ಯಾಸಕ್ಕೆ ಒಳ್ಳೆಯದು, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."},
+      "eligibility": {
+        "min_age": 18, "max_age": 40,
+        "profile_flags": {"has_bank_account": true}
+      },
+      "eligibility_text": {"en": "TODO: copy exactly from official page", "kn": "TODO"},
+      "documents": [
+        {"en": "Bank account (passbook or statement)", "kn": "ಬ್ಯಾಂಕ್ ಖಾತೆ (ಪಾಸ್‌ಬುಕ್ ಅಥವಾ ಸ್ಟೇಟ್‌ಮೆಂಟ್)"},
+        {"en": "TODO: confirm ID document required", "kn": "TODO"}
+      ],
+      "how_to_apply": {"en": "TODO: steps from official page", "kn": "TODO"},
+      "source_url": "https://jansuraksha.gov.in",
+      "verified": false,
+      "last_checked": null
+    },
+    {
+      "id": "pmjay",
+      "name": {"en": "Ayushman Bharat PM-JAY (health cover)", "kn": "ಆಯುಷ್ಮಾನ್ ಭಾರತ್ ಪಿಎಂ-ಜೆಎವೈ (ಆರೋಗ್ಯ ವಿಮೆ)"},
+      "category": "health",
+      "benefit": {"en": "Health cover for hospital treatment.", "kn": "ಆಸ್ಪತ್ರೆ ಚಿಕಿತ್ಸೆಗೆ ಆರೋಗ್ಯ ವಿಮೆ."},
+      "why": {"en": "Low logged income and no insurance on file.", "kn": "ಕಡಿಮೆ ಆದಾಯ ಮತ್ತು ವಿಮೆ ಇಲ್ಲ."},
+      "eligibility": {
+        "max_monthly_income": 10000,
+        "profile_flags": {"has_insurance": false}
+      },
+      "eligibility_text": {"en": "TODO: eligibility is decided by official criteria, not income alone. Copy exactly and replace the placeholder income limit above.", "kn": "TODO"},
+      "documents": [
+        {"en": "TODO: copy from official page", "kn": "TODO"}
+      ],
+      "how_to_apply": {"en": "TODO: steps from official page", "kn": "TODO"},
+      "source_url": "https://pmjay.gov.in",
+      "verified": false,
+      "last_checked": null
+    }
+  ]
+}
