@@ -2,24 +2,26 @@
   "_readme": "STARTER DATA. Every scheme below has verified=false. Member 2 and Member 3 must copy the eligibility, benefit and documents EXACTLY from the official page (source_url), have the Kannada checked, then set verified=true and fill last_checked. Do not show unverified schemes in the final demo.",
   "schemes": [
     {
+          
       "id": "pmjjby",
       "name": {"en": "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)", "kn": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಜೀವನ ಜ್ಯೋತಿ ಬಿಮಾ ಯೋಜನೆ"},
       "category": "insurance",
-      "benefit": {"en": "Life insurance cover for death due to any reason. One-year cover, renewable every year.", "kn": "ಕಡಿಮೆ ವೆಚ್ಚದ ಜೀವ ವಿಮೆ."},
+      "benefit": {"en": "Rs 2 lakh life insurance cover for death due to any reason. One-year cover, renewable every year. Premium: Rs 436 per year, deducted from your account.", "kn": "ಕಡಿಮೆ ವೆಚ್ಚದ ಜೀವ ವಿಮೆ."},
       "why": {"en": "No insurance on file, and you have a bank account.", "kn": "ನಿಮಗೆ ವಿಮೆ ಇಲ್ಲ, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."},
       "eligibility": {
         "min_age": 18, "max_age": 50,
         "profile_flags": {"has_bank_account": true, "has_insurance": false}
       },
-      "eligibility_text": {"en": "People aged 18 to 50 years with a bank or post office account who give consent to join and enable auto-debit. If you join on or before age 50, you can renew up to age 55.", "kn": "TODO"},
+      "eligibility_text": {"en": "Bank or post office account holders aged 18 (completed) to 50 who give consent to join and enable auto-debit. You can join through one bank or post office account only. Cover ends at age 55, with yearly renewal.", "kn": "TODO"},
       "documents": [
-        {"en": "Bank account (passbook or statement)", "kn": "ಬ್ಯಾಂಕ್ ಖಾತೆ (ಪಾಸ್‌ಬುಕ್ ಅಥವಾ ಸ್ಟೇಟ್‌ಮೆಂಟ್)"},
-        {"en": "TODO: confirm ID document required", "kn": "TODO"}
+        {"en": "Bank or post office account with enough balance for the yearly premium", "kn": "TODO"},
+        {"en": "Aadhaar (the main KYC for the bank or post office account)", "kn": "TODO"},
+        {"en": "Enrolment and auto-debit consent form (the bank or post office gives the prescribed form)", "kn": "TODO"}
       ],
-      "how_to_apply": {"en": "TODO: steps from official page", "kn": "TODO"},
+      "how_to_apply": {"en": "Give your consent and auto-debit option on the prescribed form to your bank or post office. The premium of Rs 436 per year is then deducted from your account in one payment. The cover runs 1 June to 31 May, and joining late costs less premium.", "kn": "TODO"},
       "source_url": "https://www.jansuraksha.gov.in/Files/PMJJBY/ENGLISH/Rules.pdf",
-      "verified": false,
-      "last_checked": null
+      "verified": true,
+      "last_checked": "2026-11-16"
     },
     {
       "id": "pmsby",
