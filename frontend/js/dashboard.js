@@ -1,14 +1,12 @@
 
 async function loadDashboard() {
     try {
-        // Check whether the user is logged in
         const profile = await api("GET", "/api/me");
         const user = profile.user || profile;
 
         document.getElementById("userName").textContent =
             user.name || "Friend";
 
-        // Load weekly financial summary
         const summary = await api("GET", "/api/summary");
         const week = summary.this_week || {};
 
@@ -21,20 +19,19 @@ async function loadDashboard() {
         document.getElementById("totalSavings").textContent =
             formatMoney(week.saved);
 
-        // Load savings goals
         await loadGoals();
 
     } catch (error) {
         console.error("Dashboard error:", error);
 
-        if (error.message.toLowerCase().includes("login") ||
-            error.message.includes("401")) {
+        if (error.message.includes("401") ||
+            error.message.toLowerCase().includes("login")) {
             window.location.href = "/";
             return;
         }
 
         document.getElementById("notifications").textContent =
-            "Unable to load dashboard data. Please refresh the page.";
+            "Unable to load dashboard data. Please refresh.";
     }
 }
 
@@ -65,8 +62,7 @@ async function loadGoals() {
             title.textContent = goal.title || "Savings goal";
 
             const target = document.createElement("p");
-            target.textContent =
-                "Target: " + formatMoney(goal.target);
+            target.textContent = "Target: " + formatMoney(goal.target);
 
             const progress = document.createElement("p");
             progress.textContent =
@@ -81,6 +77,32 @@ async function loadGoals() {
     }
 }
 
+// Dashboard navigation
+function openFeature(feature) {
+
+    if (feature === "home") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+    }
+
+    if (feature === "income") {
+        window.location.href = "finance.html?type=income";
+        return;
+    }
+
+    if (feature === "expense") {
+        window.location.href = "finance.html?type=expense";
+        return;
+    }
+
+    if (feature === "finance") {
+        window.location.href = "finance.html";
+        return;
+    }
+
+    alert("The " + feature + " section will be added soon!");
+}
+
 // Logout
 document.getElementById("logoutBtn").addEventListener("click", async () => {
     try {
@@ -91,15 +113,5 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
     }
 });
 
-// Temporary navigation until we create the other screens
-function openFeature(feature) {
-    if (feature === "home") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
-    }
-
-    alert("The " + feature + " section will be added in the next steps!");
-}
-
-// Start dashboard
+// Load dashboard
 loadDashboard();
