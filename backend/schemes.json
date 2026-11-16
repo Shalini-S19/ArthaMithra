@@ -68,19 +68,18 @@
       "id": "pmjay",
       "name": {"en": "Ayushman Bharat PM-JAY (health cover)", "kn": "ಆಯುಷ್ಮಾನ್ ಭಾರತ್ ಪಿಎಂ-ಜೆಎವೈ (ಆರೋಗ್ಯ ವಿಮೆ)"},
       "category": "health",
-      "benefit": {"en": "Health cover for hospital treatment.", "kn": "ಆಸ್ಪತ್ರೆ ಚಿಕಿತ್ಸೆಗೆ ಆರೋಗ್ಯ ವಿಮೆ."},
-      "why": {"en": "Low logged income and no insurance on file.", "kn": "ಕಡಿಮೆ ಆದಾಯ ಮತ್ತು ವಿಮೆ ಇಲ್ಲ."},
+      "benefit": {"en": "Free hospital treatment cover of up to Rs 5 lakh per family per year for families who qualify.", "kn": "ಆಸ್ಪತ್ರೆ ಚಿಕಿತ್ಸೆಗೆ ಆರೋಗ್ಯ ವಿಮೆ."},
+      "why": {"en": "Health cover for families who qualify. Check if your family is on the list.", "kn": "ಅರ್ಹ ಕುಟುಂಬಗಳಿಗೆ ಆರೋಗ್ಯ ರಕ್ಷಣೆ. ನಿಮ್ಮ ಕುಟುಂಬ ಪಟ್ಟಿಯಲ್ಲಿದೆಯೇ ನೋಡಿ."},
       "eligibility": {
-        "max_monthly_income": 10000,
         "profile_flags": {"has_insurance": false}
       },
-      "eligibility_text": {"en": "TODO: eligibility is decided by official criteria, not income alone. Copy exactly and replace the placeholder income limit above.", "kn": "TODO"},
+      "eligibility_text": {"en": "Eligibility is decided by official criteria, not by income alone. All senior citizens aged 70 and above are covered regardless of income (approved by the Union Cabinet on 11 September 2024). Check if you qualify on the PM-JAY website ('Am I Eligible'), or at a nearby Common Service Centre.", "kn": "TODO"},
       "documents": [
-        {"en": "TODO: copy from official page", "kn": "TODO"}
+        {"en": "TODO: copy from an official page", "kn": "TODO"}
       ],
-      "how_to_apply": {"en": "TODO: steps from official page", "kn": "TODO"},
-      "source_url": "https://pmjay.gov.in",
-      "verified": false,
+      "how_to_apply": {"en": "Check if you qualify on the PM-JAY website ('Am I Eligible') or at a nearby Common Service Centre (CSC).", "kn": "TODO"},
+      "source_url": "https://india.gov.in/spotlight/details/ayushman-bharat-pradhan-mantri-jan-arogya-yojana",
+            "verified": false,
       "last_checked": null
     }
   ]
