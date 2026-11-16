@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#123c32">
+  <title>ArthaMitra Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<header class="dashboard-header">
+  <div>
+    <h2>🌱 ArthaMitra</h2>
+    <p>Your Financial Friend</p>
+  </div>
+  <button id="logoutBtn">Logout</button>
+</header>
+
+<main class="dashboard-container">
+
+  <section class="welcome-card">
+    <h1>Hello, <span id="userName">Friend</span>! 👋</h1>
+    <p>Let's make your money grow.</p>
+  </section>
+
+  <section class="summary-section">
+    <h2>Your Financial Summary</h2>
+
+    <div class="summary-grid">
+      <article class="summary-card">
+        <span>💰</span>
+        <p>Total Income This Week</p>
+        <h2 id="totalIncome">₹0</h2>
+      </article>
+
+      <article class="summary-card">
+        <span>💸</span>
+        <p>Total Expenses This Week</p>
+        <h2 id="totalExpense">₹0</h2>
+      </article>
+
+      <article class="summary-card">
+        <span>🐷</span>
+        <p>Money Saved This Week</p>
+        <h2 id="totalSavings">₹0</h2>
+      </article>
+    </div>
+  </section>
+
+  <section class="quick-section">
+    <h2>Quick Actions</h2>
+    <div class="quick-grid">
+      <button onclick="openFeature('income')">➕ Add Income</button>
+      <button onclick="openFeature('expense')">➖ Add Expense</button>
+      <button onclick="openFeature('budget')">📊 My Budget</button>
+      <button onclick="openFeature('goals')">🎯 Savings Goals</button>
+    </div>
+  </section>
+
+  <section class="dashboard-section">
+    <h2>My Savings Goals</h2>
+    <div id="goalsList">
+      <p>Loading your goals...</p>
+    </div>
+  </section>
+
+  <section class="dashboard-section">
+    <h2>Government Schemes 🏛️</h2>
+    <p>Discover schemes that may benefit you.</p>
+    <button onclick="openFeature('schemes')">Explore Schemes</button>
+  </section>
+
+  <section class="dashboard-section">
+    <h2>Financial Learning 📚</h2>
+    <p>Improve your financial knowledge every day.</p>
+    <button onclick="openFeature('lessons')">Explore Lessons</button>
+  </section>
+
+  <section class="dashboard-section">
+    <h2>Notifications 🔔</h2>
+    <div id="notifications">
+      <p>You're all caught up!</p>
+    </div>
+  </section>
+
+</main>
+
+<nav class="bottom-nav">
+  <button onclick="openFeature('home')">🏠<span>Home</span></button>
+  <button onclick="openFeature('finance')">💰<span>Finance</span></button>
+  <button onclick="openFeature('schemes')">🏛️<span>Schemes</span></button>
+  <button onclick="openFeature('profile')">👤<span>Profile</span></button>
+</nav>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>
