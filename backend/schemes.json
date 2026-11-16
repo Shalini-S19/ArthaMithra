@@ -44,25 +44,25 @@
       "verified": true,
       "last_checked": "2026-11-16"
     },
-    {
+        {
       "id": "apy",
       "name": {"en": "Atal Pension Yojana (APY)", "kn": "ಅಟಲ್ ಪಿಂಚಣಿ ಯೋಜನೆ"},
       "category": "pension",
-      "benefit": {"en": "Pension for old age, built from small regular savings.", "kn": "ಸಣ್ಣ ನಿಯಮಿತ ಉಳಿತಾಯದಿಂದ ವೃದ್ಧಾಪ್ಯ ಪಿಂಚಣಿ."},
+      "benefit": {"en": "Guaranteed monthly pension of Rs 1,000, 2,000, 3,000, 4,000 or 5,000 (you choose) after age 60, until death. Your spouse gets the same pension after you, and then your nominee gets the savings built up to age 60.", "kn": "ಸಣ್ಣ ನಿಯಮಿತ ಉಳಿತಾಯದಿಂದ ವೃದ್ಧಾಪ್ಯ ಪಿಂಚಣಿ."},
       "why": {"en": "Good for building a savings habit, and you have a bank account.", "kn": "ಉಳಿತಾಯ ಅಭ್ಯಾಸಕ್ಕೆ ಒಳ್ಳೆಯದು, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."},
       "eligibility": {
         "min_age": 18, "max_age": 40,
         "profile_flags": {"has_bank_account": true}
       },
-      "eligibility_text": {"en": "TODO: copy exactly from official page", "kn": "TODO"},
+      "eligibility_text": {"en": "Indian citizens aged 18 to 40 with a savings bank account in a bank or the Department of Posts. Anyone who is or has been an income-tax payer cannot join (rule from 1 October 2022).", "kn": "TODO"},
       "documents": [
-        {"en": "Bank account (passbook or statement)", "kn": "ಬ್ಯಾಂಕ್ ಖಾತೆ (ಪಾಸ್‌ಬುಕ್ ಅಥವಾ ಸ್ಟೇಟ್‌ಮೆಂಟ್)"},
-        {"en": "TODO: confirm ID document required", "kn": "TODO"}
+        {"en": "Savings bank account in a bank or post office", "kn": "TODO"},
+        {"en": "APY Registration Form (available at bank branches and post offices)", "kn": "TODO"}
       ],
-      "how_to_apply": {"en": "TODO: steps from official page", "kn": "TODO"},
-      "source_url": "https://jansuraksha.gov.in",
-      "verified": false,
-      "last_checked": null
+      "how_to_apply": {"en": "Fill in the APY Registration Form and submit it at your bank branch or post office. You can also join online through eAPY. You pay the prescribed contribution from the age you join until age 60.", "kn": "TODO"},
+      "source_url": "https://pfrda.org.in/web/pfrda/schemes/atal-pension-yojana-apy",
+      "verified": true,
+      "last_checked": "2026-11-16"
     },
     {
       "id": "pmjay",
