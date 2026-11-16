@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArthaMitra - Add Income & Expense</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<header class="dashboard-header">
+    <div>
+        <h2>🌱 ArthaMitra</h2>
+        <p>Manage your money</p>
+    </div>
+    <button onclick="window.location.href='dashboard.html'">
+        Back to Dashboard
+    </button>
+</header>
+
+<main class="dashboard-container">
+    <section class="dashboard-section">
+        <h2>Add Income or Expense</h2>
+
+        <form id="financeForm">
+
+            <label for="entryType">Transaction Type</label>
+            <select id="entryType" required>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+
+            <label for="amount">Amount (₹)</label>
+            <input type="number" id="amount" min="1" step="0.01"
+                   placeholder="Enter amount" required>
+
+            <label for="category">Category</label>
+            <select id="category" required>
+                <option value="">Select category</option>
+                <option value="Salary">Salary</option>
+                <option value="Business">Business</option>
+                <option value="Agriculture">Agriculture</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Education">Education</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Bills">Bills</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="note">Description</label>
+            <input type="text" id="note"
+                   placeholder="Enter a short description">
+
+            <label for="date">Date</label>
+            <input type="date" id="date" required>
+
+            <button type="submit">Save Transaction</button>
+        </form>
+
+        <p id="financeMessage"></p>
+    </section>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/finance.js"></script>
+
+</body>
+</html>
