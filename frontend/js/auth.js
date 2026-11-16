@@ -1,113 +1,104 @@
 
-// ArthaMitra Authentication
-
 function showAuth(type) {
-  const loginForm = document.getElementById("loginForm");
-  const registerForm = document.getElementById("registerForm");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
 
-  loginForm.hidden = type !== "login";
-  registerForm.hidden = type !== "register";
+    loginForm.hidden = type !== "login";
+    registerForm.hidden = type !== "register";
 
-  document.getElementById("loginTab").classList.toggle("active", type === "login");
-  document.getElementById("registerTab").classList.toggle("active", type === "register");
+    document.getElementById("loginTab").classList.toggle("active", type === "login");
+    document.getElementById("registerTab").classList.toggle("active", type === "register");
 
-  showMessage("");
+    document.getElementById("message").textContent = "";
 }
 
 function showMessage(message, success = false) {
-  const element = document.getElementById("message");
-  element.textContent = message;
-  element.style.color = success ? "#176b4b" : "#b42318";
+    const element = document.getElementById("message");
+    element.textContent = message;
+    element.style.color = success ? "#176b4b" : "#b42318";
 }
 
 // LOGIN
 document.getElementById("loginForm").addEventListener("submit", async function(event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  const phone = document.getElementById("loginPhone").value.trim();
-  const pin = document.getElementById("loginPin").value.trim();
+    const phone = document.getElementById("loginPhone").value.trim();
+    const pin = document.getElementById("loginPin").value.trim();
 
-  if (!/^\d{10}$/.test(phone)) {
-    showMessage("Enter a valid 10-digit mobile number.");
-    return;
-  }
+    if (!/^\d{10}$/.test(phone)) {
+        showMessage("Please enter a valid 10-digit phone number.");
+        return;
+    }
 
-  if (!/^\d{4}$/.test(pin)) {
-    showMessage("PIN must contain exactly 4 digits.");
-    return;
-  }
+    if (!/^\d{4}$/.test(pin)) {
+        showMessage("PIN must contain exactly 4 digits.");
+        return;
+    }
 
-  try {
-    showMessage("Logging in...");
+    try {
+        showMessage("Logging in...", true);
 
-    const result = await api("POST", "/api/login", {
-      phone: phone,
-      pin: pin
-    });
+        await api("POST", "/api/login", {
+            phone: phone,
+            pin: pin
+        });
 
-    showMessage(
-      "Login successful! Welcome to ArthaMitra. Your account is connected.",
-      true
-    );
+        showMessage("Login successful! Redirecting...", true);
 
-    console.log("Login successful:", result.user);
+        window.location.href = "dashboard.html";
 
-  } catch (error) {
-    showMessage(error.message);
-  }
+    } catch (error) {
+        showMessage(error.message || "Login failed. Please try again.");
+    }
 });
 
 // REGISTER
 document.getElementById("registerForm").addEventListener("submit", async function(event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  const name = document.getElementById("regName").value.trim();
-  const phone = document.getElementById("regPhone").value.trim();
-  const pin = document.getElementById("regPin").value.trim();
-  const language = document.getElementById("regLanguage").value;
-  const age = Number(document.getElementById("regAge").value);
-  const gender = document.getElementById("regGender").value;
+    const name = document.getElementById("regName").value.trim();
+    const phone = document.getElementById("regPhone").value.trim();
+    const pin = document.getElementById("regPin").value.trim();
+    const language = document.getElementById("regLanguage").value;
+    const age = Number(document.getElementById("regAge").value);
+    const gender = document.getElementById("regGender").value;
+    const bank = document.getElementById("regBank").value;
+    const insurance = document.getElementById("regInsurance").value;
 
-  const bank = document.getElementById("regBank").value;
-  const insurance = document.getElementById("regInsurance").value;
+    if (!/^\d{10}$/.test(phone)) {
+        showMessage("Please enter a valid 10-digit phone number.");
+        return;
+    }
 
-  if (!/^\d{10}$/.test(phone)) {
-    showMessage("Enter a valid 10-digit mobile number.");
-    return;
-  }
+    if (!/^\d{4}$/.test(pin)) {
+        showMessage("PIN must contain exactly 4 digits.");
+        return;
+    }
 
-  if (!/^\d{4}$/.test(pin)) {
-    showMessage("PIN must contain exactly 4 digits.");
-    return;
-  }
+    if (!Number.isInteger(age) || age < 18 || age > 120) {
+        showMessage("Please enter a valid age.");
+        return;
+    }
 
-  if (!name || !age || !gender) {
-    showMessage("Please fill in all required details.");
-    return;
-  }
+    try {
+        showMessage("Creating your account...", true);
 
-  try {
-    showMessage("Creating your account...");
+        await api("POST", "/api/register", {
+            name: name,
+            phone: phone,
+            pin: pin,
+            language: language,
+            age: age,
+            gender: gender,
+            has_bank_account: bank,
+            has_insurance: insurance
+        });
 
-    const result = await api("POST", "/api/register", {
-      name: name,
-      phone: phone,
-      pin: pin,
-      language: language,
-      age: age,
-      gender: gender,
-      has_bank_account: bank === "yes",
-      has_insurance: insurance === "yes"
-    });
+        showMessage("Registration successful! Redirecting...", true);
 
-    showMessage(
-      "Registration successful! Welcome to ArthaMitra.",
-      true
-    );
+        window.location.href = "dashboard.html";
 
-    console.log("Registration successful:", result.user);
-
-  } catch (error) {
-    showMessage(error.message);
-  }
+    } catch (error) {
+        showMessage(error.message || "Registration failed. Please try again.");
+    }
 });
