@@ -2,15 +2,24 @@
 const financeForm = document.getElementById("financeForm");
 const financeMessage = document.getElementById("financeMessage");
 const dateInput = document.getElementById("date");
+const entryType = document.getElementById("entryType");
 
-// Set today's date automatically
+// Automatically select Income or Expense from dashboard
+const params = new URLSearchParams(window.location.search);
+const selectedType = params.get("type");
+
+if (selectedType === "income" || selectedType === "expense") {
+    entryType.value = selectedType;
+}
+
+// Set today's date
 dateInput.value = new Date().toLocaleDateString("en-CA");
 
-// Save income or expense
+// Save transaction
 financeForm.addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    const type = document.getElementById("entryType").value;
+    const type = entryType.value;
     const amount = Number(document.getElementById("amount").value);
     const category = document.getElementById("category").value;
     const note = document.getElementById("note").value.trim();
@@ -22,7 +31,7 @@ financeForm.addEventListener("submit", async function(event) {
     }
 
     try {
-        financeMessage.textContent = "Saving your transaction...";
+        financeMessage.textContent = "Saving transaction...";
 
         await api("POST", "/api/entries", {
             type: type,
@@ -40,6 +49,8 @@ financeForm.addEventListener("submit", async function(event) {
         financeForm.reset();
 
         dateInput.value = new Date().toLocaleDateString("en-CA");
+
+        entryType.value = type;
 
     } catch (error) {
         financeMessage.textContent =
