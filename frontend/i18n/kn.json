@@ -1,6 +1,6 @@
 
 {
-  "_note": "Kannada draft. Please have a native Kannada speaker review the wording.",
+  "_note": "Kannada translation draft. Please have a native Kannada speaker review the wording.",
   "app": {
     "name": "ಅರ್ಥಮಿತ್ರ",
     "tagline": "ನಿಮ್ಮ ಹಣ, ನಿಮ್ಮ ಭವಿಷ್ಯ"
@@ -86,7 +86,29 @@
     "home": "ಮುಖಪುಟ",
     "finance": "ಹಣಕಾಸು",
     "schemes": "ಯೋಜನೆಗಳು",
-    "profile": "ಪ್ರೊಫೈಲ್"
+    "profile": "ಪ್ರೊಫೈಲ್",
+    "load_error": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಮಾಹಿತಿ ಲೋಡ್ ಆಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+    "invalid_goal": "ದಯವಿಟ್ಟು ಗುರಿಯ ಸರಿಯಾದ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ.",
+    "creating_goal": "ನಿಮ್ಮ ಗುರಿಯನ್ನು ರಚಿಸಲಾಗುತ್ತಿದೆ...",
+    "goal_created": "ಉಳಿತಾಯದ ಗುರಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ! 🎉",
+    "goal_create_error": "ಉಳಿತಾಯದ ಗುರಿಯನ್ನು ರಚಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+    "no_goals": "ನೀವು ಇನ್ನೂ ಯಾವುದೇ ಉಳಿತಾಯದ ಗುರಿಗಳನ್ನು ರಚಿಸಿಲ್ಲ. ನಿಮ್ಮ ಮೊದಲ ಗುರಿಯನ್ನು ಪ್ರಾರಂಭಿಸಿ!",
+    "goal_default": "ಉಳಿತಾಯದ ಗುರಿ",
+    "saved_label": "ಉಳಿತಾಯ:",
+    "target_label": "ಗುರಿ:",
+    "progress": "ಪ್ರಗತಿ:",
+    "deadline_label": "ಕೊನೆಯ ದಿನಾಂಕ:",
+    "delete_goal": "ಅಳಿಸಿ",
+    "goals_load_error": "ಉಳಿತಾಯದ ಗುರಿಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+    "contribution_prompt": "ನೀವು ಎಷ್ಟು ಹಣವನ್ನು ಸೇರಿಸಲು ಬಯಸುತ್ತೀರಿ?",
+    "invalid_amount": "ದಯವಿಟ್ಟು ಸರಿಯಾದ ಮೊತ್ತವನ್ನು ನಮೂದಿಸಿ.",
+    "contribution_success": "ನಿಮ್ಮ ಉಳಿತಾಯದ ಗುರಿಗೆ ಹಣವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸೇರಿಸಲಾಗಿದೆ! 🎉",
+    "contribution_error": "ಹಣವನ್ನು ಸೇರಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+    "delete_confirmation": "ಈ ಗುರಿಯನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿದ್ದೀರಾ:",
+    "delete_success": "ಉಳಿತಾಯದ ಗುರಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಳಿಸಲಾಗಿದೆ.",
+    "delete_error": "ಗುರಿಯನ್ನು ಅಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+    "feature_coming": "ಈ ಸೌಲಭ್ಯವನ್ನು ಶೀಘ್ರದಲ್ಲೇ ಸೇರಿಸಲಾಗುತ್ತದೆ!",
+    "logout_error": "ಲಾಗ್ ಔಟ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
   },
   "entry": {
     "amount": "ಮೊತ್ತ",
