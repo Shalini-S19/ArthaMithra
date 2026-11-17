@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#103d32">
+
+    <title>ArthaMitra | Monthly Budget</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'DM Sans', sans-serif;
+            background: #f3f7f4;
+            color: #183d32;
+        }
+
+        header {
+            background: #103d32;
+            color: white;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        header p {
+            color: #c4ded2;
+            font-size: 13px;
+            margin: 5px 0 0;
+        }
+
+        .back-btn {
+            background: white;
+            color: #103d32;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .container {
+            width: min(950px, 92%);
+            margin: 35px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 29px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #71847a;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e3ece6;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 6px 20px #173d3208;
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin: 16px 0 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #dce7df;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        button {
+            border: none;
+            background: #176b4b;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .set-btn {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .budget-amount {
+            font-size: 32px;
+            font-weight: 800;
+            color: #176b4b;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .overview-item {
+            background: #f5faf6;
+            padding: 17px;
+            border-radius: 12px;
+        }
+
+        .overview-item p {
+            color: #71847a;
+            font-size: 13px;
+        }
+
+        .overview-item h3 {
+            font-size: 19px;
+            margin-bottom: 0;
+        }
+
+        .progress-bg {
+            height: 14px;
+            background: #e5eee8;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        #budgetProgress {
+            width: 0%;
+            height: 100%;
+            background: #26945e;
+            transition: width 0.3s;
+        }
+
+        #budgetAlert {
+            margin-top: 18px;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #829188;
+        }
+
+        @media(max-width: 600px) {
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .welcome h1 {
+                font-size: 24px;
+            }
+
+            header {
+                padding: 16px 5%;
+            }
+
+            .back-btn {
+                font-size: 12px;
+                padding: 9px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h2>🌱 ArthaMitra</h2>
+        <p>Your Financial Friend</p>
+    </div>
+
+    <a href="dashboard.html" class="back-btn">
+        ← Dashboard
+    </a>
+</header>
+
+<main class="container">
+
+    <section class="welcome">
+        <h1>My Monthly Budget 📊</h1>
+        <p>Plan your spending and save more every month.</p>
+    </section>
+
+    <section class="card">
+
+        <h2>🎯 Set Your Monthly Budget</h2>
+
+        <form id="budgetForm">
+
+            <label for="budgetAmount">
+                Monthly Budget Amount (₹)
+            </label>
+
+            <input
+                type="number"
+                id="budgetAmount"
+                min="1"
+                step="0.01"
+                placeholder="Enter your monthly budget"
+                required
+            >
+
+            <button type="submit" class="set-btn">
+                Save Monthly Budget
+            </button>
+
+        </form>
+
+        <p id="budgetMessage"></p>
+
+    </section>
+
+    <section class="card">
+
+        <h2>💰 Budget Overview</h2>
+
+        <p>Monthly Budget</p>
+        <div class="budget-amount" id="monthlyBudget">₹0</div>
+
+        <div class="overview-grid">
+
+            <div class="overview-item">
+                <p>Total Expenses</p>
+                <h3 id="monthlyExpenses">₹0</h3>
+            </div>
+
+            <div class="overview-item">
+                <p>Remaining Budget</p>
+                <h3 id="remainingBudget">₹0</h3>
+            </div>
+
+            <div class="overview-item">
+                <p>Amount Spent</p>
+                <h3 id="budgetPercentage">0%</h3>
+            </div>
+
+        </div>
+
+        <br>
+
+        <h3>Spending Progress</h3>
+
+        <div class="progress-bg">
+            <div id="budgetProgress"></div>
+        </div>
+
+        <div id="budgetAlert">
+            Set your budget to start tracking your expenses.
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    © 2026 ArthaMitra | Your Financial Friend 💚
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/budget.js"></script>
+
+</body>
+</html>
