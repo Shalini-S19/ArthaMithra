@@ -5,16 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#103d32">
-
     <title>ArthaMitra | Monthly Budget</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -30,25 +27,28 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        header h2 {
-            margin: 0;
+        header h2 { margin: 0; }
+        header p { color: #c4ded2; font-size: 13px; margin: 5px 0 0; }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        header p {
-            color: #c4ded2;
-            font-size: 13px;
-            margin: 5px 0 0;
-        }
-
-        .back-btn {
+        .back-btn, .language-select {
             background: white;
             color: #103d32;
             text-decoration: none;
-            padding: 10px 16px;
+            padding: 10px 14px;
             border-radius: 10px;
             font-weight: 700;
+            border: none;
+            font-family: inherit;
         }
 
         .container {
@@ -56,18 +56,9 @@
             margin: 35px auto;
         }
 
-        .welcome {
-            margin-bottom: 25px;
-        }
-
-        .welcome h1 {
-            font-size: 29px;
-            margin-bottom: 8px;
-        }
-
-        .welcome p {
-            color: #71847a;
-        }
+        .welcome { margin-bottom: 25px; }
+        .welcome h1 { font-size: 29px; margin-bottom: 8px; }
+        .welcome p { color: #71847a; }
 
         .card {
             background: white;
@@ -78,9 +69,7 @@
             box-shadow: 0 6px 20px #173d3208;
         }
 
-        .card h2 {
-            margin-top: 0;
-        }
+        .card h2 { margin-top: 0; }
 
         label {
             display: block;
@@ -108,10 +97,7 @@
             cursor: pointer;
         }
 
-        .set-btn {
-            width: 100%;
-            margin-top: 20px;
-        }
+        .set-btn { width: 100%; margin-top: 20px; }
 
         .budget-amount {
             font-size: 32px;
@@ -131,15 +117,8 @@
             border-radius: 12px;
         }
 
-        .overview-item p {
-            color: #71847a;
-            font-size: 13px;
-        }
-
-        .overview-item h3 {
-            font-size: 19px;
-            margin-bottom: 0;
-        }
+        .overview-item p { color: #71847a; font-size: 13px; }
+        .overview-item h3 { font-size: 19px; margin-bottom: 0; }
 
         .progress-bg {
             height: 14px;
@@ -155,11 +134,7 @@
             transition: width 0.3s;
         }
 
-        #budgetAlert {
-            margin-top: 18px;
-            font-weight: 700;
-            line-height: 1.5;
-        }
+        #budgetAlert { margin-top: 18px; font-weight: 700; line-height: 1.5; }
 
         footer {
             text-align: center;
@@ -168,26 +143,11 @@
         }
 
         @media(max-width: 600px) {
-            .overview-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .card {
-                padding: 20px;
-            }
-
-            .welcome h1 {
-                font-size: 24px;
-            }
-
-            header {
-                padding: 16px 5%;
-            }
-
-            .back-btn {
-                font-size: 12px;
-                padding: 9px;
-            }
+            .overview-grid { grid-template-columns: 1fr; }
+            .card { padding: 20px; }
+            .welcome h1 { font-size: 24px; }
+            header { padding: 16px 5%; }
+            .back-btn, .language-select { font-size: 12px; padding: 9px; }
         }
     </style>
 </head>
@@ -197,28 +157,36 @@
 <header>
     <div>
         <h2>🌱 ArthaMitra</h2>
-        <p>Your Financial Friend</p>
+        <p data-i18n="app.tagline">Your Money, Your Future</p>
     </div>
 
-    <a href="dashboard.html" class="back-btn">
-        ← Dashboard
-    </a>
+    <div class="header-actions">
+        <select class="language-select"
+                data-language-selector
+                aria-label="Select language"
+                onchange="setLang(this.value)">
+            <option value="en">English</option>
+            <option value="kn">ಕನ್ನಡ</option>
+        </select>
+
+        <a href="dashboard.html" class="back-btn" data-i18n="budget.back">
+            ← Dashboard
+        </a>
+    </div>
 </header>
 
 <main class="container">
 
     <section class="welcome">
-        <h1>My Monthly Budget 📊</h1>
-        <p>Plan your spending and save more every month.</p>
+        <h1 data-i18n="budget.title">My Monthly Budget 📊</h1>
+        <p data-i18n="budget.subtitle">Plan your spending and save more every month.</p>
     </section>
 
     <section class="card">
-
-        <h2>🎯 Set Your Monthly Budget</h2>
+        <h2 data-i18n="budget.set_title">🎯 Set Your Monthly Budget</h2>
 
         <form id="budgetForm">
-
-            <label for="budgetAmount">
+            <label for="budgetAmount" data-i18n="budget.amount_label">
                 Monthly Budget Amount (₹)
             </label>
 
@@ -228,65 +196,62 @@
                 min="1"
                 step="0.01"
                 placeholder="Enter your monthly budget"
+                data-i18n-placeholder="budget.amount_placeholder"
                 required
             >
 
-            <button type="submit" class="set-btn">
+            <button type="submit" class="set-btn" data-i18n="budget.save">
                 Save Monthly Budget
             </button>
-
         </form>
 
-        <p id="budgetMessage"></p>
-
+        <p id="budgetMessage" aria-live="polite"></p>
     </section>
 
     <section class="card">
+        <h2 data-i18n="budget.overview">💰 Budget Overview</h2>
 
-        <h2>💰 Budget Overview</h2>
-
-        <p>Monthly Budget</p>
+        <p data-i18n="budget.monthly_budget">Monthly Budget</p>
         <div class="budget-amount" id="monthlyBudget">₹0</div>
 
         <div class="overview-grid">
-
             <div class="overview-item">
-                <p>Total Expenses</p>
+                <p data-i18n="budget.total_expenses">Total Expenses</p>
                 <h3 id="monthlyExpenses">₹0</h3>
             </div>
 
             <div class="overview-item">
-                <p>Remaining Budget</p>
+                <p data-i18n="budget.remaining">Remaining Budget</p>
                 <h3 id="remainingBudget">₹0</h3>
             </div>
 
             <div class="overview-item">
-                <p>Amount Spent</p>
+                <p data-i18n="budget.spent">Amount Spent</p>
                 <h3 id="budgetPercentage">0%</h3>
             </div>
-
         </div>
 
         <br>
 
-        <h3>Spending Progress</h3>
+        <h3 data-i18n="budget.progress">Spending Progress</h3>
 
         <div class="progress-bg">
             <div id="budgetProgress"></div>
         </div>
 
-        <div id="budgetAlert">
+        <div id="budgetAlert" aria-live="polite"
+             data-i18n="budget.initial_alert">
             Set your budget to start tracking your expenses.
         </div>
-
     </section>
 
 </main>
 
-<footer>
+<footer data-i18n="budget.footer">
     © 2026 ArthaMitra | Your Financial Friend 💚
 </footer>
 
+<script src="js/i18n.js"></script>
 <script src="js/api.js"></script>
 <script src="js/budget.js"></script>
 
