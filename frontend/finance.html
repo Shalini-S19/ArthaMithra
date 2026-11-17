@@ -2,251 +2,255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ArthaMitra | Manage Money</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#103d32">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>ArthaMitra | Manage Money</title>
 
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<style>
-* {
-    box-sizing: border-box;
-}
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 
-body {
-    margin: 0;
-    background: #f3f7f4;
-    font-family: 'DM Sans', sans-serif;
-    color: #183d32;
-}
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-.finance-header {
-    background: #103d32;
-    color: white;
-    padding: 20px 6%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        body {
+            margin: 0;
+            background: #f3f7f4;
+            font-family: 'DM Sans', sans-serif;
+            color: #183d32;
+        }
 
-.finance-header h2 {
-    margin: 0;
-    font-size: 25px;
-}
+        .finance-header {
+            background: #103d32;
+            color: white;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.finance-header p {
-    margin: 5px 0 0;
-    color: #c4ded2;
-    font-size: 13px;
-}
+        .finance-header h2 {
+            margin: 0;
+            font-size: 25px;
+        }
 
-.back-btn {
-    background: white;
-    color: #103d32;
-    padding: 11px 18px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 700;
-}
+        .finance-header p {
+            margin: 5px 0 0;
+            color: #c4ded2;
+            font-size: 13px;
+        }
 
-.finance-container {
-    width: min(1050px, 92%);
-    margin: 35px auto 60px;
-}
+        .back-btn {
+            background: white;
+            color: #103d32;
+            padding: 11px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+        }
 
-.finance-welcome {
-    margin-bottom: 25px;
-}
+        .finance-container {
+            width: min(1050px, 92%);
+            margin: 35px auto 60px;
+        }
 
-.finance-welcome h1 {
-    font-size: 30px;
-    margin: 0 0 8px;
-}
+        .finance-welcome {
+            margin-bottom: 25px;
+        }
 
-.finance-welcome p {
-    color: #71847a;
-    margin: 0;
-}
+        .finance-welcome h1 {
+            font-size: 30px;
+            margin: 0 0 8px;
+        }
 
-.finance-card {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    margin-bottom: 25px;
-    border: 1px solid #e3ece6;
-    box-shadow: 0 8px 25px rgba(20,60,45,0.05);
-}
+        .finance-welcome p {
+            color: #71847a;
+            margin: 0;
+        }
 
-.card-heading {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 25px;
-}
+        .finance-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #e3ece6;
+            box-shadow: 0 8px 25px rgba(20,60,45,0.05);
+        }
 
-.card-icon {
-    width: 45px;
-    height: 45px;
-    display: grid;
-    place-items: center;
-    border-radius: 13px;
-    background: #e7f4eb;
-    font-size: 22px;
-}
+        .card-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
 
-.card-heading h2 {
-    margin: 0;
-    font-size: 21px;
-}
+        .card-icon {
+            width: 45px;
+            height: 45px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: #e7f4eb;
+            font-size: 22px;
+        }
 
-.card-heading p {
-    color: #829188;
-    font-size: 13px;
-    margin: 5px 0 0;
-}
+        .card-heading h2 {
+            margin: 0;
+            font-size: 21px;
+        }
 
-.type-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 24px;
-}
+        .card-heading p {
+            color: #829188;
+            font-size: 13px;
+            margin: 5px 0 0;
+        }
 
-.type-options button {
-    padding: 15px;
-    border: 1px solid #dce9e0;
-    background: #f8fbf9;
-    color: #486257;
-    border-radius: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 15px;
-}
+        .type-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
 
-.type-options button.active {
-    background: #e5f5e9;
-    color: #147348;
-    border: 2px solid #29965f;
-}
+        .type-options button {
+            padding: 15px;
+            border: 1px solid #dce9e0;
+            background: #f8fbf9;
+            color: #486257;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+        }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
+        .type-options button.active {
+            background: #e5f5e9;
+            color: #147348;
+            border: 2px solid #29965f;
+        }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-}
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
 
-.form-group.full {
-    grid-column: 1 / -1;
-}
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
 
-.form-group label {
-    font-weight: 700;
-    font-size: 14px;
-}
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
 
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #dce7df;
-    background: #fbfdfb;
-    border-radius: 11px;
-    font-family: inherit;
-    font-size: 15px;
-    outline: none;
-}
+        .form-group label {
+            font-weight: 700;
+            font-size: 14px;
+        }
 
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #26945e;
-    box-shadow: 0 0 0 3px #26945e18;
-}
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #dce7df;
+            background: #fbfdfb;
+            border-radius: 11px;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+        }
 
-.save-btn {
-    width: 100%;
-    margin-top: 24px;
-    padding: 16px;
-    background: #176b4b;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 800;
-    cursor: pointer;
-}
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #26945e;
+            box-shadow: 0 0 0 3px #26945e18;
+        }
 
-.save-btn:hover {
-    background: #10543a;
-}
+        .save-btn {
+            width: 100%;
+            margin-top: 24px;
+            padding: 16px;
+            background: #176b4b;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+        }
 
-#financeMessage {
-    margin-top: 15px;
-    font-weight: 600;
-}
+        .save-btn:hover {
+            background: #10543a;
+        }
 
-#entriesList {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+        .save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
 
-.goal-card {
-    background: #f8fbf9;
-}
+        #financeMessage {
+            margin-top: 15px;
+            font-weight: 600;
+        }
 
-.finance-footer {
-    text-align: center;
-    padding: 25px;
-    color: #829188;
-    font-size: 13px;
-}
+        #entriesList {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-@media(max-width:650px) {
-    .finance-header {
-        padding: 17px 5%;
-    }
+        .finance-footer {
+            text-align: center;
+            padding: 25px;
+            color: #829188;
+            font-size: 13px;
+        }
 
-    .finance-header h2 {
-        font-size: 20px;
-    }
+        @media(max-width: 650px) {
+            .finance-header {
+                padding: 17px 5%;
+            }
 
-    .back-btn {
-        padding: 9px 12px;
-        font-size: 12px;
-    }
+            .finance-header h2 {
+                font-size: 20px;
+            }
 
-    .finance-container {
-        margin-top: 25px;
-    }
+            .back-btn {
+                padding: 9px 12px;
+                font-size: 12px;
+            }
 
-    .finance-welcome h1 {
-        font-size: 24px;
-    }
+            .finance-container {
+                margin-top: 25px;
+            }
 
-    .finance-card {
-        padding: 20px;
-        border-radius: 16px;
-    }
+            .finance-welcome h1 {
+                font-size: 24px;
+            }
 
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
+            .finance-card {
+                padding: 20px;
+                border-radius: 16px;
+            }
 
-    .form-group.full {
-        grid-column: auto;
-    }
-}
-</style>
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -282,15 +286,20 @@ body {
         <form id="financeForm">
 
             <div class="type-options">
-                <button type="button" id="incomeTypeBtn" class="active"
+
+                <button type="button"
+                    id="incomeTypeBtn"
+                    class="active"
                     onclick="selectTransactionType('income')">
                     ↗ Income
                 </button>
 
-                <button type="button" id="expenseTypeBtn"
+                <button type="button"
+                    id="expenseTypeBtn"
                     onclick="selectTransactionType('expense')">
                     ↙ Expense
                 </button>
+
             </div>
 
             <select id="entryType" required hidden>
@@ -302,9 +311,14 @@ body {
 
                 <div class="form-group">
                     <label for="amount">Amount (₹)</label>
-                    <input type="number" id="amount"
-                        placeholder="e.g. 5000" min="1"
-                        step="0.01" required>
+                    <input
+                        type="number"
+                        id="amount"
+                        placeholder="e.g. 5000"
+                        min="1"
+                        step="0.01"
+                        required
+                    >
                 </div>
 
                 <div class="form-group">
@@ -326,8 +340,11 @@ body {
 
                 <div class="form-group full">
                     <label for="note">Description</label>
-                    <input type="text" id="note"
-                        placeholder="What was this transaction for?">
+                    <input
+                        type="text"
+                        id="note"
+                        placeholder="What was this transaction for?"
+                    >
                 </div>
 
                 <div class="form-group full">
@@ -344,6 +361,7 @@ body {
             <p id="financeMessage"></p>
 
         </form>
+
     </section>
 
     <section class="finance-card">
@@ -372,23 +390,26 @@ body {
 <script src="js/finance.js"></script>
 
 <script>
-function selectTransactionType(type) {
-    document.getElementById("entryType").value = type;
+    // Select Income or Expense
+    function selectTransactionType(type) {
 
-    document.getElementById("incomeTypeBtn")
-        .classList.toggle("active", type === "income");
+        document.getElementById("entryType").value = type;
 
-    document.getElementById("expenseTypeBtn")
-        .classList.toggle("active", type === "expense");
-}
+        document.getElementById("incomeTypeBtn")
+            .classList.toggle("active", type === "income");
 
-// Apply dashboard selection
-const params = new URLSearchParams(window.location.search);
-const initialType = params.get("type");
+        document.getElementById("expenseTypeBtn")
+            .classList.toggle("active", type === "expense");
+    }
 
-if (initialType === "income" || initialType === "expense") {
-    selectTransactionType(initialType);
-}
+    // Read the selected type from the URL
+    const pageParams = new URLSearchParams(window.location.search);
+    const initialType = pageParams.get("type");
+
+    // Automatically select the correct button
+    if (initialType === "income" || initialType === "expense") {
+        selectTransactionType(initialType);
+    }
 </script>
 
 </body>
