@@ -1,4 +1,8 @@
 
+// ======================================
+// ARTHAMITRA DASHBOARD
+// ======================================
+
 async function loadDashboard() {
     try {
         const profile = await api("GET", "/api/me");
@@ -37,11 +41,15 @@ async function loadDashboard() {
     }
 }
 
+// FORMAT MONEY
 function formatMoney(amount) {
     return "₹" + Number(amount || 0).toLocaleString("en-IN");
 }
 
+// ======================================
 // CREATE SAVINGS GOAL
+// ======================================
+
 const goalForm = document.getElementById("goalForm");
 
 goalForm.addEventListener("submit", async function(event) {
@@ -70,10 +78,10 @@ goalForm.addEventListener("submit", async function(event) {
 
         await api("POST", "/api/goals", body);
 
-        message.textContent = "Savings goal created successfully! 🎉";
+        message.textContent =
+            "Savings goal created successfully! 🎉";
 
         goalForm.reset();
-
         await loadGoals();
 
     } catch (error) {
@@ -86,12 +94,16 @@ goalForm.addEventListener("submit", async function(event) {
     }
 });
 
+// ======================================
 // LOAD SAVINGS GOALS
+// ======================================
+
 async function loadGoals() {
     const container = document.getElementById("goalsContainer");
 
     try {
         const result = await api("GET", "/api/goals");
+
         const goals = Array.isArray(result)
             ? result
             : (result.goals || []);
@@ -113,6 +125,7 @@ async function loadGoals() {
 
             const saved = Number(goal.saved || 0);
             const target = Number(goal.target || 0);
+
             const percent = target > 0
                 ? Math.min(100, Math.max(0, saved / target * 100))
                 : 0;
@@ -147,6 +160,7 @@ async function loadGoals() {
             const addButton = document.createElement("button");
             addButton.textContent = "➕ Add Money";
             addButton.disabled = percent >= 100;
+
             addButton.addEventListener("click", () => {
                 contributeToGoal(goal.id, goal.title);
             });
@@ -154,6 +168,7 @@ async function loadGoals() {
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "🗑️ Delete";
             deleteButton.className = "delete-goal";
+
             deleteButton.addEventListener("click", () => {
                 deleteGoal(goal.id, goal.title);
             });
@@ -185,10 +200,14 @@ async function loadGoals() {
     }
 }
 
-// ADD MONEY TO GOAL
+// ======================================
+// ADD MONEY TO SAVINGS GOAL
+// ======================================
+
 async function contributeToGoal(goalId, goalTitle) {
     const amountInput = prompt(
-        "How much money do you want to add to " + goalTitle + "? (₹)"
+        "How much money do you want to add to " +
+        goalTitle + "? (₹)"
     );
 
     if (amountInput === null) return;
@@ -204,7 +223,7 @@ async function contributeToGoal(goalId, goalTitle) {
         await api(
             "POST",
             "/api/goals/" + encodeURIComponent(goalId) + "/contribute",
-            { amount: amount }
+            { amount }
         );
 
         alert("Money added to your savings goal successfully! 🎉");
@@ -217,10 +236,14 @@ async function contributeToGoal(goalId, goalTitle) {
     }
 }
 
+// ======================================
 // DELETE SAVINGS GOAL
+// ======================================
+
 async function deleteGoal(goalId, goalTitle) {
     const confirmed = confirm(
-        "Are you sure you want to delete the goal: " + goalTitle + "?"
+        "Are you sure you want to delete the goal: " +
+        goalTitle + "?"
     );
 
     if (!confirmed) return;
@@ -241,12 +264,18 @@ async function deleteGoal(goalId, goalTitle) {
     }
 }
 
+// ======================================
 // DASHBOARD NAVIGATION
+// ======================================
+
 function openFeature(feature) {
     switch (feature) {
 
         case "home":
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
             break;
 
         case "income":
@@ -266,21 +295,18 @@ function openFeature(feature) {
             break;
 
         case "goals":
-            document.getElementById("goalsList").scrollIntoView({
-                behavior: "smooth"
-            });
+            document.getElementById("goalsList")
+                ?.scrollIntoView({ behavior: "smooth" });
             break;
 
+        // FIXED GOVERNMENT SCHEMES NAVIGATION
         case "schemes":
-            document.getElementById("schemes")?.scrollIntoView({
-                behavior: "smooth"
-            });
+            window.location.href = "schemes.html";
             break;
 
         case "lessons":
-            document.getElementById("lessons")?.scrollIntoView({
-                behavior: "smooth"
-            });
+            document.getElementById("lessons")
+                ?.scrollIntoView({ behavior: "smooth" });
             break;
 
         case "profile":
@@ -292,15 +318,25 @@ function openFeature(feature) {
     }
 }
 
+// ======================================
 // LOGOUT
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-    try {
-        await api("POST", "/api/logout");
-        window.location.href = "/";
-    } catch (error) {
-        alert("Unable to logout. Please try again.");
-    }
-});
+// ======================================
 
-// START DASHBOARD
+document.getElementById("logoutBtn").addEventListener(
+    "click",
+    async () => {
+        try {
+            await api("POST", "/api/logout");
+            window.location.href = "/";
+
+        } catch (error) {
+            alert("Unable to logout. Please try again.");
+        }
+    }
+);
+
+// ======================================
+// INITIALIZE DASHBOARD
+// ======================================
+
 loadDashboard();
