@@ -1,4 +1,8 @@
 
+function authText(key, fallback) {
+    return typeof t === "function" ? t("auth." + key, fallback) : fallback;
+}
+
 function showAuth(type) {
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
@@ -26,29 +30,29 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     const pin = document.getElementById("loginPin").value.trim();
 
     if (!/^\d{10}$/.test(phone)) {
-        showMessage("Please enter a valid 10-digit phone number.");
+        showMessage(authText("invalid_phone", "Please enter a valid 10-digit phone number."));
         return;
     }
 
     if (!/^\d{4}$/.test(pin)) {
-        showMessage("PIN must contain exactly 4 digits.");
+        showMessage(authText("invalid_pin", "PIN must contain exactly 4 digits."));
         return;
     }
 
     try {
-        showMessage("Logging in...", true);
+        showMessage(authText("logging_in", "Logging in..."), true);
 
         await api("POST", "/api/login", {
             phone: phone,
             pin: pin
         });
 
-        showMessage("Login successful! Redirecting...", true);
+        showMessage(authText("login_success", "Login successful! Redirecting..."), true);
 
         window.location.href = "dashboard.html";
 
     } catch (error) {
-        showMessage(error.message || "Login failed. Please try again.");
+        showMessage(error.message || authText("login_error", "Login failed. Please try again."));
     }
 });
 
@@ -66,22 +70,22 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     const insurance = document.getElementById("regInsurance").value;
 
     if (!/^\d{10}$/.test(phone)) {
-        showMessage("Please enter a valid 10-digit phone number.");
+        showMessage(authText("invalid_phone", "Please enter a valid 10-digit phone number."));
         return;
     }
 
     if (!/^\d{4}$/.test(pin)) {
-        showMessage("PIN must contain exactly 4 digits.");
+        showMessage(authText("invalid_pin", "PIN must contain exactly 4 digits."));
         return;
     }
 
     if (!Number.isInteger(age) || age < 18 || age > 120) {
-        showMessage("Please enter a valid age.");
+        showMessage(authText("invalid_age", "Please enter a valid age."));
         return;
     }
 
     try {
-        showMessage("Creating your account...", true);
+        showMessage(authText("registering", "Creating your account..."), true);
 
         await api("POST", "/api/register", {
             name: name,
@@ -94,11 +98,11 @@ document.getElementById("registerForm").addEventListener("submit", async functio
             has_insurance: insurance
         });
 
-        showMessage("Registration successful! Redirecting...", true);
+        showMessage(authText("register_success", "Registration successful! Redirecting..."), true);
 
         window.location.href = "dashboard.html";
 
     } catch (error) {
-        showMessage(error.message || "Registration failed. Please try again.");
+        showMessage(error.message || authText("register_error", "Registration failed. Please try again."));
     }
 });
