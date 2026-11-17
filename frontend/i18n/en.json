@@ -255,6 +255,18 @@
     "load_error": "Unable to load schemes. Please log in and try again.",
     "footer": "© 2026 ArthaMitra | Your Financial Friend 💚"
 }
+"auth": {
+    "invalid_phone": "Please enter a valid 10-digit phone number.",
+    "invalid_pin": "PIN must contain exactly 4 digits.",
+    "invalid_age": "Please enter a valid age.",
+    "logging_in": "Logging in...",
+    "login_success": "Login successful! Redirecting...",
+    "login_error": "Login failed. Please try again.",
+    "registering": "Creating your account...",
+    "register_success": "Registration successful! Redirecting...",
+    "register_error": "Registration failed. Please try again."
+}
+
 
 
 }
