@@ -8,9 +8,7 @@
     <title>Government Schemes | ArthaMitra</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -30,14 +28,29 @@
             gap: 12px;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 23px;
-        }
+        header h1 { margin: 0; font-size: 23px; }
 
         header a {
             color: white;
             text-decoration: none;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-select, select, button {
+            padding: 12px 16px;
+            border-radius: 9px;
+            border: 1px solid #cfe3d7;
+            font-size: 15px;
+        }
+
+        .language-select {
+            background: white;
+            color: #176b4b;
         }
 
         .container {
@@ -54,22 +67,13 @@
             box-shadow: 0 4px 18px rgba(0,0,0,0.04);
         }
 
-        .intro h2 {
-            margin-top: 0;
-        }
+        .intro h2 { margin-top: 0; }
 
         .controls {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
             margin-top: 18px;
-        }
-
-        select, button {
-            padding: 12px 16px;
-            border-radius: 9px;
-            border: 1px solid #cfe3d7;
-            font-size: 15px;
         }
 
         button {
@@ -145,13 +149,8 @@
         }
 
         @media(max-width: 600px) {
-            header {
-                padding: 18px;
-            }
-
-            .scheme-card, .intro {
-                padding: 18px;
-            }
+            header { padding: 18px; }
+            .scheme-card, .intro { padding: 18px; }
         }
     </style>
 </head>
@@ -159,70 +158,92 @@
 <body>
 
 <header>
-    <h1>🏛️ ArthaMitra – Government Schemes</h1>
-    <a href="dashboard.html">← Back to Dashboard</a>
+    <h1>🏛️ ArthaMitra – <span data-i18n="schemesPage.header">Government Schemes</span></h1>
+
+    <div class="header-actions">
+        <select class="language-select"
+                data-language-selector
+                aria-label="Select language"
+                onchange="setLang(this.value)">
+            <option value="en">English</option>
+            <option value="kn">ಕನ್ನಡ</option>
+        </select>
+
+        <a href="dashboard.html" data-i18n="schemesPage.back">
+            ← Back to Dashboard
+        </a>
+    </div>
 </header>
 
 <main class="container">
 
     <section class="intro">
-        <h2>Discover Government Schemes 💚</h2>
-        <p>
+        <h2 data-i18n="schemesPage.title">Discover Government Schemes 💚</h2>
+
+        <p data-i18n="schemesPage.subtitle">
             Explore government schemes, understand their benefits,
             check eligibility and find official application information.
         </p>
 
         <div class="controls">
-            <select id="language">
-                <option value="en">English</option>
-                <option value="kn">ಕನ್ನಡ</option>
-            </select>
-
             <select id="categoryFilter">
-                <option value="all">All Categories</option>
-                <option value="insurance">Insurance</option>
-                <option value="pension">Pension</option>
-                <option value="health">Health</option>
+                <option value="all" data-i18n-option="schemesPage.all">All Categories</option>
+                <option value="insurance" data-i18n-option="schemesPage.insurance">Insurance</option>
+                <option value="pension" data-i18n-option="schemesPage.pension">Pension</option>
+                <option value="health" data-i18n-option="schemesPage.health">Health</option>
             </select>
         </div>
     </section>
 
-    <div id="schemesContainer">
+    <div id="schemesContainer" data-i18n="schemesPage.loading">
         Loading government schemes...
     </div>
 
 </main>
 
-<footer>
+<footer data-i18n="schemesPage.footer">
     © 2026 ArthaMitra | Your Financial Friend 💚
 </footer>
 
+<script src="js/i18n.js"></script>
 <script src="js/api.js"></script>
 
 <script>
 let allSchemes = [];
 
 const container = document.getElementById("schemesContainer");
-const languageSelect = document.getElementById("language");
 const categoryFilter = document.getElementById("categoryFilter");
 
-function getText(value, language) {
-    if (!value) return "Information not available.";
+function schemeText(value, language) {
+    if (!value) {
+        return language === "kn"
+            ? "ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲ."
+            : "Information not available.";
+    }
+
     if (typeof value === "string") return value;
+
     return value[language] || value.en || "Information not available.";
+}
+
+function schemeLabel(key) {
+    return typeof t === "function" ? t(key) : key;
 }
 
 function safeUrl(url) {
     try {
         const parsed = new URL(url);
-        return parsed.protocol === "https:" ? parsed.href : "#";
+
+        return parsed.protocol === "https:"
+            ? parsed.href
+            : "#";
     } catch {
         return "#";
     }
 }
 
 function renderSchemes() {
-    const language = languageSelect.value;
+    const language = getCurrentLanguage();
     const category = categoryFilter.value;
 
     const filtered = allSchemes.filter(scheme =>
@@ -230,9 +251,10 @@ function renderSchemes() {
     );
 
     container.replaceChildren();
+    container.className = "";
 
     if (filtered.length === 0) {
-        container.textContent = "No schemes found in this category.";
+        container.textContent = schemeLabel("schemes.none");
         return;
     }
 
@@ -241,19 +263,29 @@ function renderSchemes() {
         card.className = "scheme-card";
 
         const name = document.createElement("h2");
-        name.textContent = getText(scheme.name, language);
+        name.textContent = schemeText(scheme.name, language);
 
         const categoryLabel = document.createElement("span");
         categoryLabel.className = "category";
-        categoryLabel.textContent = getText(scheme.category_label, language);
+
+        const categoryKeys = {
+            insurance: "schemesPage.insurance",
+            pension: "schemesPage.pension",
+            health: "schemesPage.health"
+        };
+
+        categoryLabel.textContent = schemeLabel(
+            categoryKeys[scheme.category] || "schemesPage.other"
+        );
 
         card.append(name, categoryLabel);
 
         const verified = document.createElement("p");
         verified.className = "status";
         verified.textContent = scheme.verified
-            ? "✓ Source marked as verified"
-            : "⚠️ Source verification pending";
+            ? schemeLabel("schemesPage.verified")
+            : schemeLabel("schemesPage.unverified");
+
         card.appendChild(verified);
 
         function addDetail(title, value) {
@@ -264,26 +296,46 @@ function renderSchemes() {
             heading.textContent = title;
 
             const paragraph = document.createElement("p");
-            paragraph.textContent = getText(value, language);
+            paragraph.textContent = schemeText(value, language);
 
             section.append(heading, paragraph);
             card.appendChild(section);
         }
 
-        addDetail("🎁 Benefits", scheme.benefit);
-        addDetail("👥 Eligibility", scheme.eligibility_text);
-        addDetail("📝 How to Apply", scheme.how_to_apply);
+        addDetail(
+            "🎁 " + schemeLabel("schemesPage.benefits"),
+            scheme.benefit
+        );
+
+        addDetail(
+            "👥 " + schemeLabel("schemesPage.eligibility"),
+            scheme.eligibility_text
+        );
+
+        if (scheme.why) {
+            addDetail(
+                "💡 " + schemeLabel("schemesPage.why"),
+                scheme.why
+            );
+        }
+
+        addDetail(
+            "📝 " + schemeLabel("schemes.how_to_apply"),
+            scheme.how_to_apply
+        );
 
         const documentsHeading = document.createElement("h3");
-        documentsHeading.textContent = "📄 Required Documents";
+        documentsHeading.textContent =
+            "📄 " + schemeLabel("schemes.documents");
+
         card.appendChild(documentsHeading);
 
         const documentsList = document.createElement("ul");
         documentsList.className = "documents";
 
-        (scheme.documents || []).forEach(documentItem => {
+        (scheme.documents || []).forEach(item => {
             const li = document.createElement("li");
-            li.textContent = getText(documentItem, language);
+            li.textContent = schemeText(item, language);
             documentsList.appendChild(li);
         });
 
@@ -294,18 +346,19 @@ function renderSchemes() {
         source.href = safeUrl(scheme.source_url);
         source.target = "_blank";
         source.rel = "noopener noreferrer";
-        source.textContent = "View Official Source ↗";
+        source.textContent = schemeLabel("schemesPage.official_source") + " ↗";
+
         card.appendChild(source);
 
         const applyButton = document.createElement("button");
-        applyButton.textContent = "Mark as Applied";
+        applyButton.textContent = schemeLabel("scheme_extra.mark_applied");
 
         const statusMessage = document.createElement("p");
         statusMessage.className = "status";
 
         applyButton.addEventListener("click", async () => {
             applyButton.disabled = true;
-            applyButton.textContent = "Saving...";
+            applyButton.textContent = schemeLabel("schemesPage.saving");
 
             try {
                 await api(
@@ -313,13 +366,19 @@ function renderSchemes() {
                     "/api/schemes/" + encodeURIComponent(scheme.id) + "/applied"
                 );
 
-                applyButton.textContent = "✓ Applied";
-                statusMessage.textContent = "Your application status has been saved.";
-            } catch (error) {
-                applyButton.disabled = false;
-                applyButton.textContent = "Mark as Applied";
+                applyButton.textContent = schemeLabel("scheme_extra.applied");
                 statusMessage.textContent =
-                    error.message || "Unable to save application status.";
+                    schemeLabel("schemesPage.applied_success");
+
+            } catch (error) {
+                console.error(error);
+
+                applyButton.disabled = false;
+                applyButton.textContent =
+                    schemeLabel("scheme_extra.mark_applied");
+
+                statusMessage.textContent =
+                    error.message || schemeLabel("schemesPage.applied_error");
             }
         });
 
@@ -340,14 +399,15 @@ async function loadSchemes() {
 
     } catch (error) {
         console.error("Schemes loading error:", error);
-        container.textContent =
-            "Unable to load government schemes. Please refresh the page.";
+
         container.className = "error";
+        container.textContent = schemeLabel("schemesPage.load_error");
     }
 }
 
-languageSelect.addEventListener("change", renderSchemes);
 categoryFilter.addEventListener("change", renderSchemes);
+
+document.addEventListener("languageChanged", renderSchemes);
 
 loadSchemes();
 </script>
