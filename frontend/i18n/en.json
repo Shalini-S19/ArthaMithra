@@ -50,5 +50,102 @@
     "yes": "Yes",
     "no": "No",
     "submit": "Create Account"
+  },
+  "dashboard": {
+    "hello": "Hello",
+    "welcome_message": "Let's make your money grow.",
+    "summary": "Your Financial Summary",
+    "income_week": "Total Income This Week",
+    "expense_week": "Total Expenses This Week",
+    "savings_week": "Money Saved This Week",
+    "quick_actions": "Quick Actions",
+    "add_income": "➕ Add Income",
+    "add_expense": "➖ Add Expense",
+    "my_budget": "📊 My Budget",
+    "savings_goals": "🎯 Savings Goals",
+    "my_goals": "🎯 My Savings Goals",
+    "create_goal": "Create a New Goal",
+    "goal_name": "Goal Name",
+    "goal_placeholder": "Example: Buy a new phone",
+    "target_amount": "Target Amount (₹)",
+    "target_placeholder": "Enter target amount",
+    "deadline": "Deadline (Optional)",
+    "create_goal_button": "Create Savings Goal",
+    "your_goals": "Your Goals",
+    "loading_goals": "Loading your goals...",
+    "schemes_title": "Government Schemes 🏛️",
+    "schemes_description": "Discover government schemes that may benefit you.",
+    "explore_schemes": "Explore Schemes",
+    "learning_title": "Financial Learning 📚",
+    "learning_description": "Improve your financial knowledge every day.",
+    "explore_lessons": "Explore Lessons",
+    "notifications": "Notifications 🔔",
+    "notifications_description": "Stay updated about your finances and savings goals.",
+    "loading_notifications": "Loading notifications...",
+    "home": "Home",
+    "finance": "Finance",
+    "schemes": "Schemes",
+    "profile": "Profile"
+  },
+  "entry": {
+    "amount": "Amount",
+    "category": "Category",
+    "note": "Note (Optional)",
+    "date": "Date",
+    "income": "Income",
+    "expense": "Expense",
+    "added": "Added!",
+    "invalid_amount": "Please enter an amount greater than 0"
+  },
+  "schemes": {
+    "title": "Schemes for You",
+    "why": "Why you are seeing this",
+    "documents": "Documents Required",
+    "how_to_apply": "How to Apply",
+    "official_link": "Official Website",
+    "none": "No schemes found yet.",
+    "income_note": "Adding your income can help us match schemes better."
+  },
+  "learn": {
+    "title": "Learn",
+    "lesson": "Today's Lesson"
+  },
+  "goals": {
+    "title": "Savings Goals",
+    "new_goal": "New Goal",
+    "target": "Target Amount",
+    "saved": "Saved So Far",
+    "deadline": "Deadline"
+  },
+  "voice": {
+    "tap_to_speak": "Tap and say the amount",
+    "not_supported": "Voice input is not supported on this phone. Please type instead."
+  },
+  "score": {
+    "title": "Financial Health Score",
+    "out_of": "out of 100",
+    "savings": "Savings",
+    "consistency": "Days Recorded",
+    "schemes": "Schemes Applied",
+    "tips": {
+      "save_more": "Try saving a little more each week.",
+      "log_more_days": "Record your income and expenses every day.",
+      "apply_schemes": "Apply for schemes you are eligible for.",
+      "great": "Great job! Keep it up."
+    }
+  },
+  "goal_status": {
+    "completed": "Goal completed!",
+    "overdue": "Deadline has passed",
+    "due_soon": "Deadline is approaching",
+    "on_track": "On track",
+    "days_left": "days left",
+    "add_money": "Add Money"
+  },
+  "scheme_extra": {
+    "applied": "Applied",
+    "mark_applied": "Mark as Applied",
+    "check_eligibility": "Check Your Eligibility",
+    "last_checked": "Last Checked"
   }
 }
