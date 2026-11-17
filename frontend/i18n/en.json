@@ -231,6 +231,30 @@
     "warning": "⚠️ You have used 80% or more of your budget. Spend carefully!",
     "good": "Great job! You are within your monthly budget. 💚",
     "footer": "© 2026 ArthaMitra | Your Financial Friend 💚"
+},
+"schemesPage": {
+    "header": "Government Schemes",
+    "back": "← Back to Dashboard",
+    "title": "Discover Government Schemes 💚",
+    "subtitle": "Explore government schemes, understand their benefits, check eligibility and find official application information.",
+    "all": "All Categories",
+    "insurance": "Insurance",
+    "pension": "Pension",
+    "health": "Health",
+    "other": "Other",
+    "loading": "Loading government schemes...",
+    "verified": "✓ Information verified",
+    "unverified": "Information verification pending",
+    "benefits": "Benefits",
+    "eligibility": "Eligibility",
+    "why": "Why this scheme may suit you",
+    "official_source": "View Official Source",
+    "saving": "Saving...",
+    "applied_success": "Application status saved successfully!",
+    "applied_error": "Unable to save application status. Please try again.",
+    "load_error": "Unable to load schemes. Please log in and try again.",
+    "footer": "© 2026 ArthaMitra | Your Financial Friend 💚"
 }
+
 
 }
