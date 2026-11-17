@@ -1,111 +1,54 @@
+
 {
   "app": {
     "name": "ArthaMitra",
-    "tagline": "Your money friend"
+    "tagline": "Your Money, Your Future"
   },
   "common": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "back": "Back",
-    "next": "Next",
-    "loading": "Loading...",
-    "error": "Something went wrong. Please try again.",
-    "rupee": "₹",
     "language": "Language",
-    "logout": "Log out"
+    "logout": "Logout",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "welcome": {
+    "subtitle": "Learn, save and grow with ArthaMitra.",
+    "feature1": "💰 Track your income and expenses",
+    "feature2": "🎯 Plan your savings goals",
+    "feature3": "🏛️ Discover government schemes",
+    "feature4": "🔔 Stay updated with reminders"
   },
   "login": {
-    "title": "Welcome",
-    "phone": "Phone number",
+    "tab": "Login",
+    "title": "Welcome Back!",
+    "phone": "Mobile Number",
+    "phone_placeholder": "10-digit mobile number",
     "pin": "4-digit PIN",
-    "login_btn": "Log in",
-    "register_link": "New here? Create account",
-    "wrong": "Wrong phone number or PIN"
+    "pin_placeholder": "Enter PIN",
+    "login_btn": "Login",
+    "register_link": "New here? Create an account",
+    "wrong": "Incorrect mobile number or PIN"
   },
   "register": {
-    "title": "Create account",
-    "name": "Your name",
+    "tab": "Register",
+    "title": "Create Account",
+    "name": "Full Name",
+    "name_placeholder": "Your name",
+    "phone": "Mobile Number",
+    "phone_placeholder": "10-digit mobile number",
+    "pin": "Create 4-digit PIN",
+    "pin_placeholder": "Create PIN",
     "age": "Age",
+    "age_placeholder": "Your age",
     "gender": "Gender",
-    "female": "Woman",
-    "male": "Man",
+    "select": "Select",
+    "female": "Female",
+    "male": "Male",
     "other": "Other",
+    "prefer_not": "Prefer not to say",
     "bank": "Do you have a bank account?",
-    "insurance": "Do you have any insurance?",
+    "insurance": "Do you have insurance?",
     "yes": "Yes",
     "no": "No",
-    "submit": "Create account"
-  },
-  "home": {
-    "welcome": "Hello",
-    "this_week": "This week",
-    "earned": "Earned",
-    "spent": "Spent",
-    "saved": "Saved",
-    "last_week": "Last week",
-    "add_earning": "Add today's earning",
-    "add_expense": "Add expense",
-    "no_data": "Nothing added yet. Add your first earning!"
-  },
-  "entry": {
-    "amount": "Amount",
-    "category": "Category",
-    "note": "Note (optional)",
-    "date": "Date",
-    "income": "Earning",
-    "expense": "Expense",
-    "added": "Added!",
-    "invalid_amount": "Enter an amount greater than 0"
-  },
-  "schemes": {
-    "title": "Schemes for you",
-    "why": "Why you see this",
-    "documents": "Documents you need",
-    "how_to_apply": "How to apply",
-    "official_link": "Official website",
-    "none": "No schemes found yet.",
-    "income_note": "Add your earnings so we can match schemes better."
-  },
-  "learn": {
-    "title": "Learn",
-    "lesson": "Today's lesson"
-  },
-  "goals": {
-    "title": "Savings goals",
-    "new_goal": "New goal",
-    "target": "Target amount",
-    "saved": "Saved so far",
-    "deadline": "Deadline"
-  },
-  "voice": {
-    "tap_to_speak": "Tap and say the amount",
-    "not_supported": "Voice is not supported on this phone. Please type."
-  },
-  "score": {
-    "title": "Money health score",
-    "out_of": "out of 100",
-    "savings": "Savings",
-    "consistency": "Days written",
-    "schemes": "Schemes applied",
-    "tips": {
-      "save_more": "Try to save a little more each week.",
-      "log_more_days": "Write down your earning and spending every day.",
-      "apply_schemes": "Apply for the schemes you qualify for.",
-      "great": "Great work! Keep it up."
-    }
-  },
-  "goal_status": {
-    "completed": "Goal reached!",
-    "overdue": "Deadline passed",
-    "due_soon": "Deadline is close",
-    "on_track": "On track",
-    "days_left": "days left",
-    "add_money": "Add money"
-  },
-  "scheme_extra": {
-    "applied": "I have applied",
-    "mark_applied": "Mark as applied",
-    "check_eligibility": "Check if you qualify",
-    "last_checked": "Last checked"
+    "submit": "Create Account"
   }
 }
