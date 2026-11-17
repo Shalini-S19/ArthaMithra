@@ -24,8 +24,10 @@ async function loadDashboard() {
     } catch (error) {
         console.error("Dashboard error:", error);
 
-        if (error.message.includes("401") ||
-            error.message.toLowerCase().includes("login")) {
+        if (
+            error.message.includes("401") ||
+            error.message.toLowerCase().includes("login")
+        ) {
             window.location.href = "/";
             return;
         }
@@ -35,10 +37,12 @@ async function loadDashboard() {
     }
 }
 
+// Format currency
 function formatMoney(amount) {
     return "₹" + Number(amount || 0).toLocaleString("en-IN");
 }
 
+// Load savings goals
 async function loadGoals() {
     const container = document.getElementById("goalsList");
 
@@ -62,7 +66,8 @@ async function loadGoals() {
             title.textContent = goal.title || "Savings goal";
 
             const target = document.createElement("p");
-            target.textContent = "Target: " + formatMoney(goal.target);
+            target.textContent =
+                "Target: " + formatMoney(goal.target);
 
             const progress = document.createElement("p");
             progress.textContent =
@@ -73,6 +78,7 @@ async function loadGoals() {
         });
 
     } catch (error) {
+        console.error("Goals error:", error);
         container.textContent = "Unable to load savings goals.";
     }
 }
@@ -80,27 +86,48 @@ async function loadGoals() {
 // Dashboard navigation
 function openFeature(feature) {
 
-    if (feature === "home") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
-    }
+    switch (feature) {
 
-    if (feature === "income") {
-        window.location.href = "finance.html?type=income";
-        return;
-    }
+        case "home":
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+            break;
 
-    if (feature === "expense") {
-        window.location.href = "finance.html?type=expense";
-        return;
-    }
+        case "income":
+            window.location.href = "finance.html?type=income";
+            break;
 
-    if (feature === "finance") {
-        window.location.href = "finance.html";
-        return;
-    }
+        case "expense":
+            window.location.href = "finance.html?type=expense";
+            break;
 
-    alert("The " + feature + " section will be added soon!");
+        case "finance":
+            window.location.href = "finance.html";
+            break;
+
+        case "budget":
+            window.location.href = "budget.html";
+            break;
+
+        case "goals":
+            window.location.href = "dashboard.html#goalsList";
+            break;
+
+        case "schemes":
+            document.getElementById("schemes")?.scrollIntoView({
+                behavior: "smooth"
+            });
+            break;
+
+        case "profile":
+            window.location.href = "index.html";
+            break;
+
+        default:
+            alert("This feature will be added soon!");
+    }
 }
 
 // Logout
