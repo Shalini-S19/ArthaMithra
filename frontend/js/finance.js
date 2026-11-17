@@ -13,60 +13,134 @@ if (selectedType === "income" || selectedType === "expense") {
     entryType.value = selectedType;
 }
 
-// Set today's date
-dateInput.value = new Date().toLocaleDateString("en-CA");
+// Store transaction history for language changes
+let savedEntries = [];
+
+// Translation helper
+function translate(key, fallback) {
+    if (typeof t === "function") {
+        const translated = t(key);
+
+        if (translated && translated !== key) {
+            return translated;
+        }
+    }
+
+    return fallback;
+}
+
+// Set today's date in YYYY-MM-DD format
+function getTodayDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+dateInput.value = getTodayDate();
 
 function formatMoney(amount) {
     return "₹" + Number(amount || 0).toLocaleString("en-IN");
 }
 
+// Translate category names
+function translateCategory(category) {
+    const categories = {
+        "Salary": "salary",
+        "Business": "business",
+        "Agriculture": "agriculture",
+        "Food": "food",
+        "Transport": "transport",
+        "Education": "education",
+        "Healthcare": "healthcare",
+        "Shopping": "shopping",
+        "Bills": "bills",
+        "Other": "other"
+    };
+
+    const key = categories[category];
+
+    if (key) {
+        return translate("finance." + key, category);
+    }
+
+    return category || translate("finance.other", "Other");
+}
+
+// Display transaction history
+function renderEntries() {
+    entriesList.replaceChildren();
+
+    if (savedEntries.length === 0) {
+        entriesList.textContent = translate(
+            "finance.empty",
+            "No transactions recorded yet."
+        );
+        return;
+    }
+
+    savedEntries.forEach(entry => {
+        const card = document.createElement("div");
+
+        card.style.padding = "15px";
+        card.style.marginBottom = "12px";
+        card.style.border = "1px solid #dce9e0";
+        card.style.borderRadius = "12px";
+        card.style.background = "#ffffff";
+
+        const title = document.createElement("h3");
+
+        const typeText = entry.type === "income"
+            ? translate("finance.income", "Income")
+            : translate("finance.expense", "Expense");
+
+        const icon = entry.type === "income" ? "💰" : "💸";
+
+        title.textContent =
+            icon + " " + typeText + " - " +
+            translateCategory(entry.category);
+
+        title.style.color =
+            entry.type === "income" ? "#176b4b" : "#b42318";
+
+        const amount = document.createElement("p");
+        amount.textContent = formatMoney(entry.amount);
+
+        const note = document.createElement("p");
+        note.textContent = entry.note || "";
+
+        const date = document.createElement("small");
+        date.textContent = entry.date || "";
+
+        card.append(title, amount, note, date);
+
+        entriesList.appendChild(card);
+    });
+}
+
 // Load transaction history
 async function loadEntries() {
-    entriesList.textContent = "Loading transactions...";
+    entriesList.textContent = translate(
+        "finance.loading",
+        "Loading transactions..."
+    );
 
     try {
         const result = await api("GET", "/api/entries?days=3650");
-        const entries = result.entries || [];
 
-        entriesList.replaceChildren();
+        savedEntries = Array.isArray(result)
+            ? result
+            : (result.entries || []);
 
-        if (entries.length === 0) {
-            entriesList.textContent = "No transactions found yet.";
-            return;
-        }
-
-        entries.forEach(entry => {
-            const card = document.createElement("div");
-            card.style.padding = "15px";
-            card.style.marginBottom = "12px";
-            card.style.border = "1px solid #dce9e0";
-            card.style.borderRadius = "12px";
-            card.style.background = "#ffffff";
-
-            const title = document.createElement("h3");
-            title.textContent =
-                (entry.type === "income" ? "💰 Income" : "💸 Expense")
-                + " - " + (entry.category || "Other");
-
-            title.style.color =
-                entry.type === "income" ? "#176b4b" : "#b42318";
-
-            const amount = document.createElement("p");
-            amount.textContent = formatMoney(entry.amount);
-
-            const note = document.createElement("p");
-            note.textContent = entry.note || "No description";
-
-            const date = document.createElement("small");
-            date.textContent = entry.date || "";
-
-            card.append(title, amount, note, date);
-            entriesList.appendChild(card);
-        });
+        renderEntries();
 
     } catch (error) {
-        entriesList.textContent =
-            "Unable to load transaction history. Please try again.";
+        entriesList.textContent = translate(
+            "finance.load_error",
+            "Unable to load transactions."
+        );
     }
 }
 
@@ -81,7 +155,12 @@ financeForm.addEventListener("submit", async function(event) {
     const date = dateInput.value;
 
     if (!Number.isFinite(amount) || amount <= 0) {
-        financeMessage.textContent = "Please enter a valid amount.";
+        financeMessage.textContent = translate(
+            "finance.invalid_amount",
+            "Please enter an amount greater than zero."
+        );
+
+        financeMessage.style.color = "#b42318";
         return;
     }
 
@@ -97,22 +176,33 @@ financeForm.addEventListener("submit", async function(event) {
             date: date
         });
 
-        financeMessage.textContent =
-            "Transaction saved successfully! 🎉";
+        financeMessage.textContent = translate(
+            "finance.save_success",
+            "Transaction saved successfully! 🎉"
+        );
+
+        financeMessage.style.color = "#176b4b";
 
         financeForm.reset();
 
-        dateInput.value = new Date().toLocaleDateString("en-CA");
+        dateInput.value = getTodayDate();
         entryType.value = type;
 
         await loadEntries();
 
     } catch (error) {
-        financeMessage.textContent =
-            error.message || "Unable to save transaction.";
+        financeMessage.textContent = translate(
+            "finance.save_error",
+            error.message || "Unable to save transaction."
+        );
 
         financeMessage.style.color = "#b42318";
     }
+});
+
+// Refresh transaction history when language changes
+document.addEventListener("languageChanged", function() {
+    renderEntries();
 });
 
 // Load history when page opens
