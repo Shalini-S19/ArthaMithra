@@ -208,5 +208,29 @@
     "mark_applied": "Mark as Applied",
     "check_eligibility": "Check Your Eligibility",
     "last_checked": "Last Checked"
-  }
+  },
+"budget": {
+    "back": "← Dashboard",
+    "title": "My Monthly Budget 📊",
+    "subtitle": "Plan your spending and save more every month.",
+    "set_title": "🎯 Set Your Monthly Budget",
+    "amount_label": "Monthly Budget Amount (₹)",
+    "amount_placeholder": "Enter your monthly budget",
+    "save": "Save Monthly Budget",
+    "overview": "💰 Budget Overview",
+    "monthly_budget": "Monthly Budget",
+    "total_expenses": "Total Expenses",
+    "remaining": "Remaining Budget",
+    "spent": "Amount Spent",
+    "progress": "Spending Progress",
+    "initial_alert": "Set your budget to start tracking your expenses.",
+    "invalid_amount": "Enter a valid budget amount.",
+    "save_success": "Monthly budget saved successfully! 🎉",
+    "load_error": "Unable to load expenses. Please log in and try again.",
+    "exceeded": "⚠️ Budget exceeded! Try to reduce your spending.",
+    "warning": "⚠️ You have used 80% or more of your budget. Spend carefully!",
+    "good": "Great job! You are within your monthly budget. 💚",
+    "footer": "© 2026 ArthaMitra | Your Financial Friend 💚"
+}
+
 }
