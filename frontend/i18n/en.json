@@ -209,7 +209,7 @@
     "check_eligibility": "Check Your Eligibility",
     "last_checked": "Last Checked"
   },
-"budget": {
+  "budget": {
     "back": "← Dashboard",
     "title": "My Monthly Budget 📊",
     "subtitle": "Plan your spending and save more every month.",
@@ -231,8 +231,8 @@
     "warning": "⚠️ You have used 80% or more of your budget. Spend carefully!",
     "good": "Great job! You are within your monthly budget. 💚",
     "footer": "© 2026 ArthaMitra | Your Financial Friend 💚"
-},
-"schemesPage": {
+  },
+  "schemesPage": {
     "header": "Government Schemes",
     "back": "← Back to Dashboard",
     "title": "Discover Government Schemes 💚",
@@ -254,8 +254,8 @@
     "applied_error": "Unable to save application status. Please try again.",
     "load_error": "Unable to load schemes. Please log in and try again.",
     "footer": "© 2026 ArthaMitra | Your Financial Friend 💚"
-}
-"auth": {
+  },
+  "auth": {
     "invalid_phone": "Please enter a valid 10-digit phone number.",
     "invalid_pin": "PIN must contain exactly 4 digits.",
     "invalid_age": "Please enter a valid age.",
@@ -265,8 +265,5 @@
     "registering": "Creating your account...",
     "register_success": "Registration successful! Redirecting...",
     "register_error": "Registration failed. Please try again."
-}
-
-
-
+  }
 }
