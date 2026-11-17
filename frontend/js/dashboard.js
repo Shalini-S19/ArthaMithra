@@ -1,6 +1,20 @@
 
 // ======================================
-// ARTHAMITRA DASHBOARD
+// ARTHAMITRA DASHBOARD - BILINGUAL
+// ======================================
+
+function tr(key, fallback) {
+    const value = typeof t === "function" ? t(key) : key;
+    return value === key ? fallback : value;
+}
+
+// FORMAT MONEY
+function formatMoney(amount) {
+    return "₹" + Number(amount || 0).toLocaleString("en-IN");
+}
+
+// ======================================
+// LOAD DASHBOARD
 // ======================================
 
 async function loadDashboard() {
@@ -37,13 +51,8 @@ async function loadDashboard() {
         }
 
         document.getElementById("notifications").textContent =
-            "Unable to load dashboard data. Please refresh.";
+            tr("dashboard.load_error", "Unable to load dashboard data. Please refresh.");
     }
-}
-
-// FORMAT MONEY
-function formatMoney(amount) {
-    return "₹" + Number(amount || 0).toLocaleString("en-IN");
 }
 
 // ======================================
@@ -52,7 +61,7 @@ function formatMoney(amount) {
 
 const goalForm = document.getElementById("goalForm");
 
-goalForm.addEventListener("submit", async function(event) {
+goalForm?.addEventListener("submit", async function(event) {
     event.preventDefault();
 
     const title = document.getElementById("goalTitle").value.trim();
@@ -61,13 +70,15 @@ goalForm.addEventListener("submit", async function(event) {
     const message = document.getElementById("goalMessage");
 
     if (!title || !Number.isFinite(target) || target <= 0) {
-        message.textContent = "Please enter valid goal details.";
+        message.textContent =
+            tr("dashboard.invalid_goal", "Please enter valid goal details.");
         message.style.color = "#b42318";
         return;
     }
 
     try {
-        message.textContent = "Creating your goal...";
+        message.textContent =
+            tr("dashboard.creating_goal", "Creating your goal...");
         message.style.color = "#176b4b";
 
         const body = { title, target };
@@ -79,7 +90,7 @@ goalForm.addEventListener("submit", async function(event) {
         await api("POST", "/api/goals", body);
 
         message.textContent =
-            "Savings goal created successfully! 🎉";
+            tr("dashboard.goal_created", "Savings goal created successfully! 🎉");
 
         goalForm.reset();
         await loadGoals();
@@ -88,7 +99,8 @@ goalForm.addEventListener("submit", async function(event) {
         console.error("Create goal error:", error);
 
         message.textContent =
-            error.message || "Unable to create savings goal.";
+            error.message ||
+            tr("dashboard.goal_create_error", "Unable to create savings goal.");
 
         message.style.color = "#b42318";
     }
@@ -100,6 +112,7 @@ goalForm.addEventListener("submit", async function(event) {
 
 async function loadGoals() {
     const container = document.getElementById("goalsContainer");
+    if (!container) return;
 
     try {
         const result = await api("GET", "/api/goals");
@@ -112,7 +125,10 @@ async function loadGoals() {
 
         if (goals.length === 0) {
             container.textContent =
-                "You haven't created any savings goals yet. Start your first goal above!";
+                tr(
+                    "dashboard.no_goals",
+                    "You haven't created any savings goals yet. Start your first goal above!"
+                );
             return;
         }
 
@@ -121,7 +137,8 @@ async function loadGoals() {
             card.className = "goal-card";
 
             const title = document.createElement("h3");
-            title.textContent = "🎯 " + (goal.title || "Savings Goal");
+            title.textContent =
+                "🎯 " + (goal.title || tr("dashboard.goal_default", "Savings Goal"));
 
             const saved = Number(goal.saved || 0);
             const target = Number(goal.target || 0);
@@ -132,8 +149,10 @@ async function loadGoals() {
 
             const amounts = document.createElement("p");
             amounts.textContent =
-                "Saved: " + formatMoney(saved) +
-                " / Target: " + formatMoney(target);
+                tr("dashboard.saved_label", "Saved:") + " " +
+                formatMoney(saved) + " / " +
+                tr("dashboard.target_label", "Target:") + " " +
+                formatMoney(target);
 
             const progressBg = document.createElement("div");
             progressBg.className = "goal-progress-bg";
@@ -146,19 +165,24 @@ async function loadGoals() {
 
             const progressText = document.createElement("p");
             progressText.textContent =
-                "Progress: " + Math.round(percent) + "%";
+                tr("dashboard.progress", "Progress:") + " " +
+                Math.round(percent) + "%";
 
             const deadline = document.createElement("p");
 
             if (goal.deadline) {
-                deadline.textContent = "Deadline: " + goal.deadline;
+                deadline.textContent =
+                    tr("dashboard.deadline_label", "Deadline:") +
+                    " " + goal.deadline;
             }
 
             const actions = document.createElement("div");
             actions.className = "goal-actions";
 
             const addButton = document.createElement("button");
-            addButton.textContent = "➕ Add Money";
+            addButton.textContent =
+                "➕ " + tr("goal_status.add_money", "Add Money");
+
             addButton.disabled = percent >= 100;
 
             addButton.addEventListener("click", () => {
@@ -166,7 +190,9 @@ async function loadGoals() {
             });
 
             const deleteButton = document.createElement("button");
-            deleteButton.textContent = "🗑️ Delete";
+            deleteButton.textContent =
+                "🗑️ " + tr("dashboard.delete_goal", "Delete");
+
             deleteButton.className = "delete-goal";
 
             deleteButton.addEventListener("click", () => {
@@ -177,7 +203,9 @@ async function loadGoals() {
 
             if (percent >= 100) {
                 const completed = document.createElement("p");
-                completed.textContent = "🎉 Goal completed!";
+                completed.textContent =
+                    "🎉 " + tr("goal_status.completed", "Goal completed!");
+
                 completed.style.color = "#176b4b";
                 card.appendChild(completed);
             }
@@ -196,7 +224,9 @@ async function loadGoals() {
 
     } catch (error) {
         console.error("Load goals error:", error);
-        container.textContent = "Unable to load savings goals.";
+
+        container.textContent =
+            tr("dashboard.goals_load_error", "Unable to load savings goals.");
     }
 }
 
@@ -206,8 +236,8 @@ async function loadGoals() {
 
 async function contributeToGoal(goalId, goalTitle) {
     const amountInput = prompt(
-        "How much money do you want to add to " +
-        goalTitle + "? (₹)"
+        tr("dashboard.contribution_prompt", "How much money do you want to add to") +
+        " " + goalTitle + "? (₹)"
     );
 
     if (amountInput === null) return;
@@ -215,7 +245,7 @@ async function contributeToGoal(goalId, goalTitle) {
     const amount = Number(amountInput);
 
     if (!Number.isFinite(amount) || amount <= 0) {
-        alert("Please enter a valid amount.");
+        alert(tr("dashboard.invalid_amount", "Please enter a valid amount."));
         return;
     }
 
@@ -226,13 +256,22 @@ async function contributeToGoal(goalId, goalTitle) {
             { amount }
         );
 
-        alert("Money added to your savings goal successfully! 🎉");
+        alert(
+            tr(
+                "dashboard.contribution_success",
+                "Money added to your savings goal successfully! 🎉"
+            )
+        );
 
         await loadGoals();
 
     } catch (error) {
         console.error("Contribution error:", error);
-        alert(error.message || "Unable to add money.");
+
+        alert(
+            error.message ||
+            tr("dashboard.contribution_error", "Unable to add money.")
+        );
     }
 }
 
@@ -242,8 +281,8 @@ async function contributeToGoal(goalId, goalTitle) {
 
 async function deleteGoal(goalId, goalTitle) {
     const confirmed = confirm(
-        "Are you sure you want to delete the goal: " +
-        goalTitle + "?"
+        tr("dashboard.delete_confirmation", "Are you sure you want to delete the goal:") +
+        " " + goalTitle + "?"
     );
 
     if (!confirmed) return;
@@ -254,13 +293,19 @@ async function deleteGoal(goalId, goalTitle) {
             "/api/goals/" + encodeURIComponent(goalId)
         );
 
-        alert("Savings goal deleted successfully.");
+        alert(
+            tr("dashboard.delete_success", "Savings goal deleted successfully.")
+        );
 
         await loadGoals();
 
     } catch (error) {
         console.error("Delete goal error:", error);
-        alert(error.message || "Unable to delete goal.");
+
+        alert(
+            error.message ||
+            tr("dashboard.delete_error", "Unable to delete goal.")
+        );
     }
 }
 
@@ -272,10 +317,7 @@ function openFeature(feature) {
     switch (feature) {
 
         case "home":
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
+            window.scrollTo({ top: 0, behavior: "smooth" });
             break;
 
         case "income":
@@ -299,7 +341,6 @@ function openFeature(feature) {
                 ?.scrollIntoView({ behavior: "smooth" });
             break;
 
-        // FIXED GOVERNMENT SCHEMES NAVIGATION
         case "schemes":
             window.location.href = "schemes.html";
             break;
@@ -314,7 +355,7 @@ function openFeature(feature) {
             break;
 
         default:
-            alert("This feature will be added soon!");
+            alert(tr("dashboard.feature_coming", "This feature will be added soon!"));
     }
 }
 
@@ -322,18 +363,25 @@ function openFeature(feature) {
 // LOGOUT
 // ======================================
 
-document.getElementById("logoutBtn").addEventListener(
-    "click",
-    async () => {
-        try {
-            await api("POST", "/api/logout");
-            window.location.href = "/";
+const logoutButton = document.getElementById("logoutBtn");
 
-        } catch (error) {
-            alert("Unable to logout. Please try again.");
-        }
+logoutButton?.addEventListener("click", async () => {
+    try {
+        await api("POST", "/api/logout");
+        window.location.href = "/";
+
+    } catch (error) {
+        alert(tr("dashboard.logout_error", "Unable to logout. Please try again."));
     }
-);
+});
+
+// ======================================
+// REFRESH DYNAMIC TEXT WHEN LANGUAGE CHANGES
+// ======================================
+
+document.addEventListener("languageChanged", () => {
+    loadGoals();
+});
 
 // ======================================
 // INITIALIZE DASHBOARD
