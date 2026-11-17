@@ -11,7 +11,7 @@
 <body>
 
 <header class="topbar">
-  <h2>🌱 ArthaMitra</h2>
+  <h2>🌱 <span data-i18n="app.name">ArthaMitra</span></h2>
   <div>
     <button type="button" onclick="setLang('en')">English</button>
     <button type="button" onclick="setLang('kn')">ಕನ್ನಡ</button>
@@ -21,14 +21,14 @@
 <main class="auth-container">
 
   <section class="welcome">
-    <h1 data-i18n="welcome">Your Money, Your Future.</h1>
-    <p data-i18n="subtitle">Learn, save and grow with ArthaMitra.</p>
+    <h1 data-i18n="app.tagline">Your Money, Your Financial Friend.</h1>
+    <p data-i18n="welcome.subtitle">Learn, save and grow with ArthaMitra.</p>
 
     <div class="features">
-      <p data-i18n="feature1">💰 Track your income and expenses</p>
-      <p data-i18n="feature2">🎯 Plan your savings goals</p>
-      <p data-i18n="feature3">🏛️ Discover government schemes</p>
-      <p data-i18n="feature4">🔔 Stay updated with reminders</p>
+      <p data-i18n="welcome.feature1">💰 Track your income and expenses</p>
+      <p data-i18n="welcome.feature2">🎯 Plan your savings goals</p>
+      <p data-i18n="welcome.feature3">🏛️ Discover government schemes</p>
+      <p data-i18n="welcome.feature4">🔔 Stay updated with reminders</p>
     </div>
   </section>
 
@@ -36,83 +36,83 @@
 
     <div class="tabs">
       <button id="loginTab" class="active" type="button"
-        onclick="showAuth('login')" data-i18n="login">Login</button>
+        onclick="showAuth('login')" data-i18n="login.tab">Login</button>
 
       <button id="registerTab" type="button"
-        onclick="showAuth('register')" data-i18n="register">Register</button>
+        onclick="showAuth('register')" data-i18n="register.tab">Register</button>
     </div>
 
     <form id="loginForm">
 
-      <h2 data-i18n="welcomeBack">Welcome Back!</h2>
+      <h2 data-i18n="login.title">Welcome Back!</h2>
 
-      <label data-i18n="mobile">Mobile Number</label>
+      <label data-i18n="login.phone">Mobile Number</label>
       <input id="loginPhone" type="tel" maxlength="10"
         required placeholder="10-digit mobile number"
-        data-i18n-placeholder="mobilePlaceholder">
+        data-i18n-placeholder="login.phone_placeholder">
 
-      <label data-i18n="pin">4-digit PIN</label>
+      <label data-i18n="login.pin">4-digit PIN</label>
       <input id="loginPin" type="password" maxlength="4"
         inputmode="numeric" required placeholder="Enter PIN"
-        data-i18n-placeholder="pinPlaceholder">
+        data-i18n-placeholder="login.pin_placeholder">
 
       <button class="primary-btn" type="submit"
-        data-i18n="login">Login</button>
+        data-i18n="login.login_btn">Login</button>
 
     </form>
 
     <form id="registerForm" hidden>
 
-      <h2 data-i18n="createAccount">Create Account</h2>
+      <h2 data-i18n="register.title">Create Account</h2>
 
-      <label data-i18n="fullName">Full Name</label>
+      <label data-i18n="register.name">Full Name</label>
       <input id="regName" required placeholder="Your name"
-        data-i18n-placeholder="namePlaceholder">
+        data-i18n-placeholder="register.name_placeholder">
 
-      <label data-i18n="mobile">Mobile Number</label>
+      <label data-i18n="register.phone">Mobile Number</label>
       <input id="regPhone" type="tel" maxlength="10"
         required placeholder="10-digit mobile number"
-        data-i18n-placeholder="mobilePlaceholder">
+        data-i18n-placeholder="register.phone_placeholder">
 
-      <label data-i18n="createPin">Create 4-digit PIN</label>
+      <label data-i18n="register.pin">Create 4-digit PIN</label>
       <input id="regPin" type="password" maxlength="4"
         inputmode="numeric" required placeholder="Create PIN"
-        data-i18n-placeholder="createPinPlaceholder">
+        data-i18n-placeholder="register.pin_placeholder">
 
-      <label data-i18n="language">Language</label>
-      <select id="regLanguage">
+      <label data-i18n="common.language">Language</label>
+      <select id="regLanguage" onchange="setLang(this.value)">
         <option value="en">English</option>
         <option value="kn">ಕನ್ನಡ</option>
       </select>
 
-      <label data-i18n="age">Age</label>
+      <label data-i18n="register.age">Age</label>
       <input id="regAge" type="number" min="18" max="120"
         required placeholder="Your age"
-        data-i18n-placeholder="agePlaceholder">
+        data-i18n-placeholder="register.age_placeholder">
 
-      <label data-i18n="gender">Gender</label>
+      <label data-i18n="register.gender">Gender</label>
       <select id="regGender" required>
-        <option value="" data-i18n-option="select">Select</option>
-        <option value="female" data-i18n-option="female">Female</option>
-        <option value="male" data-i18n-option="male">Male</option>
-        <option value="other" data-i18n-option="other">Other</option>
-        <option value="prefer_not_to_say" data-i18n-option="preferNot">Prefer not to say</option>
+        <option value="" data-i18n-option="register.select">Select</option>
+        <option value="female" data-i18n-option="register.female">Female</option>
+        <option value="male" data-i18n-option="register.male">Male</option>
+        <option value="other" data-i18n-option="register.other">Other</option>
+        <option value="prefer_not_to_say" data-i18n-option="register.prefer_not">Prefer not to say</option>
       </select>
 
-      <label data-i18n="bank">Do you have a bank account?</label>
+      <label data-i18n="register.bank">Do you have a bank account?</label>
       <select id="regBank">
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
+        <option value="yes" data-i18n-option="register.yes">Yes</option>
+        <option value="no" data-i18n-option="register.no">No</option>
       </select>
 
-      <label data-i18n="insurance">Do you have insurance?</label>
+      <label data-i18n="register.insurance">Do you have insurance?</label>
       <select id="regInsurance">
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
+        <option value="yes" data-i18n-option="register.yes">Yes</option>
+        <option value="no" data-i18n-option="register.no">No</option>
       </select>
 
       <button class="primary-btn" type="submit"
-        data-i18n="createAccount">Create Account</button>
+        data-i18n="register.submit">Create Account</button>
 
     </form>
 
