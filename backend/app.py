@@ -10,6 +10,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import db
 import matcher
 import scoring
+from messages import CATEGORY_LABELS, INCOME_NOTE, MESSAGES, TIPS, localize
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
@@ -27,8 +28,33 @@ SCHEME_IDS = {s["id"] for s in SCHEMES}
 
 
 # ---------- helpers ----------
-def err(msg, code=400):
-    return jsonify({"error": msg}), code
+def get_lang():
+    """Language for this request: ?lang=kn|en, else the logged-in user's language, else English."""
+    lang = request.args.get("lang")
+    if lang in ("en", "kn"):
+        return lang
+    return session.get("lang", "en")
+
+
+def err(code, status=400):
+    """Error reply in both languages. `error` is in the request language; error_en / error_kn are always there."""
+    en, kn = MESSAGES[code]
+    return jsonify({"error": kn if get_lang() == "kn" else en,
+                    "error_en": en, "error_kn": kn, "code": code}), status
+
+
+def reply(data):
+    """JSON reply. With ?lang=kn or ?lang=en, every English/Kannada pair becomes one string."""
+    lang = request.args.get("lang")
+    if lang in ("en", "kn"):
+        data = localize(data, lang)
+    return jsonify(data)
+
+
+def present_scheme(s, **extra):
+    d = dict(s, **extra)
+    d["category_label"] = CATEGORY_LABELS.get(s.get("category"), {"en": s.get("category", ""), "kn": s.get("category", "")})
+    return d
 
 
 def current_user():
@@ -44,7 +70,7 @@ def login_required(fn):
     @wraps(fn)
     def wrapper(*a, **k):
         if not current_user():
-            return err("Please log in", 401)
+            return err("login_required", 401)
         return fn(*a, **k)
     return wrapper
 
@@ -76,24 +102,24 @@ def register():
     phone = re.sub(r"\D", "", str(d.get("phone") or ""))[-10:]
     pin = str(d.get("pin") or "")
     if not name:
-        return err("Name is required")
+        return err("name_required")
     if len(phone) != 10:
-        return err("Enter a 10-digit phone number")
+        return err("phone_invalid")
     if not re.fullmatch(r"\d{4}", pin):
-        return err("PIN must be exactly 4 digits")
+        return err("pin_invalid")
     lang = d.get("language", "en")
     if lang not in ("en", "kn"):
-        return err("Language must be 'en' or 'kn'")
+        return err("lang_invalid")
     age = to_int(d.get("age"))
     if age is not None and not (0 < age < 120):
-        return err("Enter a valid age")
+        return err("age_invalid")
     gender = d.get("gender")
     if gender not in (None, "female", "male", "other"):
-        return err("Invalid gender value")
+        return err("gender_invalid")
 
     conn = db.get_db()
     if conn.execute("SELECT 1 FROM users WHERE phone = ?", (phone,)).fetchone():
-        return err("This phone number is already registered", 409)
+        return err("phone_taken", 409)
     cur = conn.execute(
         """INSERT INTO users (name, phone, pin_hash, language, age, gender, occupation,
                               family_size, has_bank_account, has_insurance, household_code)
@@ -106,6 +132,7 @@ def register():
     )
     conn.commit()
     session["user_id"] = cur.lastrowid
+    session["lang"] = lang
     return jsonify({"ok": True, "user": public_user(current_user())}), 201
 
 
@@ -116,8 +143,9 @@ def login():
     pin = str(d.get("pin") or "")
     u = db.get_db().execute("SELECT * FROM users WHERE phone = ?", (phone,)).fetchone()
     if not u or not check_password_hash(u["pin_hash"], pin):
-        return err("Wrong phone number or PIN", 401)
+        return err("login_failed", 401)
     session["user_id"] = u["id"]
+    session["lang"] = u["language"]
     return jsonify({"ok": True, "user": public_user(u)})
 
 
@@ -145,7 +173,7 @@ def update_me():
     if "age" in d:
         a = to_int(d["age"])
         if a is None or not (0 < a < 120):
-            return err("Enter a valid age")
+            return err("age_invalid")
         fields["age"] = a
     if "gender" in d and d["gender"] in ("female", "male", "other"):
         fields["gender"] = d["gender"]
@@ -158,11 +186,13 @@ def update_me():
     if "family_size" in d:
         fields["family_size"] = to_int(d["family_size"])
     if not fields:
-        return err("Nothing to update")
+        return err("nothing_to_update")
     sets = ", ".join(f"{k} = ?" for k in fields)  # keys come from the whitelist above
     conn = db.get_db()
     conn.execute(f"UPDATE users SET {sets} WHERE id = ?", (*fields.values(), u["id"]))
     conn.commit()
+    if "language" in fields:
+        session["lang"] = fields["language"]
     return jsonify({"ok": True, "user": public_user(current_user())})
 
 
@@ -173,18 +203,18 @@ def add_entry():
     d = request.get_json(silent=True) or {}
     etype = d.get("type")
     if etype not in ("income", "expense"):
-        return err("type must be 'income' or 'expense'")
+        return err("entry_type_invalid")
     try:
         amount = float(d.get("amount"))
     except (TypeError, ValueError):
-        return err("amount must be a number")
+        return err("amount_not_number")
     if amount <= 0 or amount > 10_000_000:
-        return err("amount must be greater than 0")
+        return err("amount_positive")
     day = d.get("date") or date.today().isoformat()
     try:
         date.fromisoformat(day)
     except ValueError:
-        return err("date must be YYYY-MM-DD")
+        return err("date_invalid")
     conn = db.get_db()
     cur = conn.execute(
         "INSERT INTO entries (user_id, type, amount, category, note, date) VALUES (?,?,?,?,?,?)",
@@ -246,7 +276,7 @@ def monthly_income(uid):
 
 @app.get("/api/schemes")
 def all_schemes():
-    return jsonify(SCHEMES)
+    return reply([present_scheme(x) for x in SCHEMES])
 
 
 def applied_ids(uid):
@@ -268,11 +298,10 @@ def scheme_matches():
     u = current_user()
     income, found = matched_for(u)
     done = applied_ids(u["id"])
-    out = [dict(s, applied=(s["id"] in done)) for s in found]
-    return jsonify({
+    out = [present_scheme(s, applied=(s["id"] in done)) for s in found]
+    return reply({
         "monthly_income": income,
-        "income_note": None if income is not None
-                       else "No income logged in the last 30 days, so income rules were not applied.",
+        "income_note": None if income is not None else INCOME_NOTE,
         "matches": out,
     })
 
@@ -281,7 +310,7 @@ def scheme_matches():
 @login_required
 def mark_applied(scheme_id):
     if scheme_id not in SCHEME_IDS:
-        return err("Unknown scheme", 404)
+        return err("unknown_scheme", 404)
     conn = db.get_db()
     conn.execute("INSERT OR IGNORE INTO scheme_applications (user_id, scheme_id) VALUES (?,?)",
                  (session["user_id"], scheme_id))
@@ -331,19 +360,19 @@ def create_goal():
     d = request.get_json(silent=True) or {}
     title = (d.get("title") or "").strip()
     if not title:
-        return err("title is required")
+        return err("goal_title_required")
     try:
         target = float(d.get("target"))
     except (TypeError, ValueError):
-        return err("target must be a number")
+        return err("target_not_number")
     if target <= 0 or target > 10_000_000:
-        return err("target must be greater than 0")
+        return err("target_positive")
     deadline = d.get("deadline") or None
     if deadline:
         try:
             date.fromisoformat(deadline)
         except ValueError:
-            return err("deadline must be YYYY-MM-DD")
+            return err("deadline_invalid")
     conn = db.get_db()
     cur = conn.execute("INSERT INTO goals (user_id, title, target, deadline) VALUES (?,?,?,?)",
                        (session["user_id"], title, target, deadline))
@@ -363,14 +392,14 @@ def list_goals():
 @login_required
 def contribute(goal_id):
     if not get_goal(goal_id):
-        return err("Goal not found", 404)
+        return err("goal_not_found", 404)
     d = request.get_json(silent=True) or {}
     try:
         amount = float(d.get("amount"))
     except (TypeError, ValueError):
-        return err("amount must be a number")
+        return err("amount_not_number")
     if amount <= 0 or amount > 10_000_000:
-        return err("amount must be greater than 0")
+        return err("amount_positive")
     conn = db.get_db()
     conn.execute("UPDATE goals SET saved = saved + ? WHERE id = ? AND user_id = ?",
                  (amount, goal_id, session["user_id"]))
@@ -382,7 +411,7 @@ def contribute(goal_id):
 @login_required
 def delete_goal(goal_id):
     if not get_goal(goal_id):
-        return err("Goal not found", 404)
+        return err("goal_not_found", 404)
     conn = db.get_db()
     conn.execute("DELETE FROM goals WHERE id = ? AND user_id = ?", (goal_id, session["user_id"]))
     conn.commit()
@@ -407,14 +436,16 @@ def health_score():
     _, found = matched_for(u)
     matched_ids = {s["id"] for s in found}
     applied = len(matched_ids & applied_ids(uid))
-    return jsonify(scoring.compute_score(t.get("income", 0), t.get("expense", 0),
-                                         days, applied, len(matched_ids)))
+    result = scoring.compute_score(t.get("income", 0), t.get("expense", 0),
+                                   days, applied, len(matched_ids))
+    result["tip_text"] = TIPS[result["tip"]]
+    return reply(result)
 
 
 # ---------- lessons ----------
 @app.get("/api/lessons")
 def lessons():
-    return jsonify(LESSONS)
+    return reply(LESSONS)
 
 
 # ---------- demo data (Render free tier loses files) ----------

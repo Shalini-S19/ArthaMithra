@@ -93,4 +93,38 @@ ok(c2.get("/api/score").status_code == 200, "score works for a user with no data
 L = c.get("/api/lessons").get_json()
 ok(len(L) == 5 and "en" in L[0]["title"] and "kn" in L[0]["title"], "5 lessons with English and Kannada")
 
+
+
+# ---------- Kannada support across the backend ----------
+anon = appmod.app.test_client()
+r = anon.get("/api/entries").get_json()
+ok(r["error_en"] == "Please log in" and "ಲಾಗಿನ್" in r["error_kn"], "errors carry English and Kannada")
+ok(r["error"] == r["error_en"], "error defaults to English")
+r = anon.get("/api/entries?lang=kn").get_json()
+ok(r["error"] == r["error_kn"], "?lang=kn makes 'error' Kannada")
+r = anon.post("/api/login", json={"phone": "9876543210", "pin": "0000"}).get_json()
+ok(r["code"] == "login_failed" and r["error_kn"], "login error has a code and Kannada text")
+
+sch = anon.get("/api/schemes").get_json()
+ok(isinstance(sch[0]["name"], dict) and "kn" in sch[0]["name"], "schemes keep both languages by default")
+ok(sch[0]["category_label"]["kn"] == "ವಿಮೆ", "scheme category has a Kannada label")
+kn = anon.get("/api/schemes?lang=kn").get_json()
+ok(isinstance(kn[0]["name"], str) and "ಯೋಜನೆ" in kn[0]["name"], "?lang=kn returns plain Kannada strings")
+ok(isinstance(kn[0]["documents"][0], str), "documents are plain strings with ?lang=kn")
+en = anon.get("/api/schemes?lang=en").get_json()
+ok(en[0]["name"].startswith("Pradhan"), "?lang=en returns plain English strings")
+L = anon.get("/api/lessons?lang=kn").get_json()
+ok(isinstance(L[0]["title"], str) and L[0]["title"] != anon.get("/api/lessons?lang=en").get_json()[0]["title"], "lessons switch language")
+
+sc = c.get("/api/score?lang=kn").get_json()
+ok(isinstance(sc["tip_text"], str) and sc["tip"] in ("save_more", "log_more_days", "apply_schemes", "great"), "score tip text in Kannada")
+nm = c2.get("/api/schemes/matches?lang=kn").get_json()
+ok(isinstance(nm["income_note"], str) and "ಗಳಿಕೆ" in nm["income_note"], "income note in Kannada")
+
+# a Kannada user gets Kannada errors without asking
+ck = appmod.app.test_client()
+ck.post("/api/register", json={"name": "Kn", "phone": "9000000001", "pin": "1111", "language": "kn"})
+r = ck.post("/api/entries", json={"type": "income", "amount": -1}).get_json()
+ok(r["error"] == r["error_kn"], "user with language=kn gets Kannada errors automatically")
+
 print("\nAll tests passed.")

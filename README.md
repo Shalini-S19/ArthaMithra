@@ -34,3 +34,10 @@ Set `SECRET_KEY` to a long random value on the server. Start command: `gunicorn 
 | DELETE | /api/goals/<id> | |
 | GET | /api/score | score 0-100, parts, tip (save_more, log_more_days, apply_schemes, great) |
 | GET | /api/lessons | 5 lessons, English and Kannada |
+
+## Kannada from the backend
+- **Errors** always carry both languages: `{"error": "...", "error_en": "...", "error_kn": "...", "code": "login_failed"}`. `error` is in the request language: `?lang=kn`, else the logged-in user's language, else English.
+- **Add `?lang=kn` (or `?lang=en`)** to `/api/schemes`, `/api/schemes/matches`, `/api/lessons` and `/api/score`. Every English/Kannada pair then comes back as one plain string. Without `?lang`, the pairs `{"en": ..., "kn": ...}` stay as they are.
+- Schemes include `category_label` (insurance, pension, health, welfare) in both languages.
+- `/api/score` includes `tip_text`. `income_note` in `/api/schemes/matches` is now a pair (or a string with `?lang`).
+- All backend text lives in `backend/messages.py`. Kannada there is a draft: have a Kannada speaker check it.

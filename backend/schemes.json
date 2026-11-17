@@ -1,86 +1,189 @@
 {
-  "_readme": "STARTER DATA. Every scheme below has verified=false. Member 2 and Member 3 must copy the eligibility, benefit and documents EXACTLY from the official page (source_url), have the Kannada checked, then set verified=true and fill last_checked. Do not show unverified schemes in the final demo.",
+  "_readme": "Schemes copied from official sources. verified=true means the rules were read from the official page on last_checked. kn_reviewed=false means the Kannada is a draft that a Kannada speaker must still check.",
   "schemes": [
     {
-          
       "id": "pmjjby",
-      "name": {"en": "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)", "kn": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಜೀವನ ಜ್ಯೋತಿ ಬಿಮಾ ಯೋಜನೆ"},
-      "category": "insurance",
-      "benefit": {"en": "Rs 2 lakh life insurance cover for death due to any reason. One-year cover, renewable every year. Premium: Rs 436 per year, deducted from your account.", "kn": "ಕಡಿಮೆ ವೆಚ್ಚದ ಜೀವ ವಿಮೆ."},
-      "why": {"en": "No insurance on file, and you have a bank account.", "kn": "ನಿಮಗೆ ವಿಮೆ ಇಲ್ಲ, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."},
-      "eligibility": {
-        "min_age": 18, "max_age": 50,
-        "profile_flags": {"has_bank_account": true, "has_insurance": false}
+      "name": {
+        "en": "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)",
+        "kn": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಜೀವನ ಜ್ಯೋತಿ ಬಿಮಾ ಯೋಜನೆ"
       },
-      "eligibility_text": {"en": "Bank or post office account holders aged 18 (completed) to 50 who give consent to join and enable auto-debit. You can join through one bank or post office account only. Cover ends at age 55, with yearly renewal.", "kn": "TODO"},
+      "category": "insurance",
+      "benefit": {
+        "en": "Rs 2 lakh life insurance cover for death due to any reason. One-year cover, renewable every year. Premium: Rs 436 per year, deducted from your account.",
+        "kn": "ಯಾವುದೇ ಕಾರಣದಿಂದ ಮರಣ ಹೊಂದಿದರೆ ₹2 ಲಕ್ಷ ಜೀವ ವಿಮೆ. ಒಂದು ವರ್ಷದ ರಕ್ಷಣೆ, ಪ್ರತಿ ವರ್ಷ ನವೀಕರಿಸಬಹುದು. ಪ್ರೀಮಿಯಂ: ವರ್ಷಕ್ಕೆ ₹436, ನಿಮ್ಮ ಖಾತೆಯಿಂದ ಕಡಿತವಾಗುತ್ತದೆ."
+      },
+      "why": {
+        "en": "No insurance on file, and you have a bank account.",
+        "kn": "ನಿಮಗೆ ವಿಮೆ ಇಲ್ಲ, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."
+      },
+      "eligibility": {
+        "min_age": 18,
+        "max_age": 50,
+        "profile_flags": {
+          "has_bank_account": true,
+          "has_insurance": false
+        }
+      },
+      "eligibility_text": {
+        "en": "Bank or post office account holders aged 18 (completed) to 50 who give consent to join and enable auto-debit. You can join through one bank or post office account only. Cover ends at age 55, with yearly renewal.",
+        "kn": "18 ರಿಂದ 50 ವರ್ಷದ ಬ್ಯಾಂಕ್ ಅಥವಾ ಅಂಚೆ ಕಚೇರಿ ಖಾತೆದಾರರು, ಸೇರಲು ಒಪ್ಪಿಗೆ ನೀಡಿ ಆಟೋ-ಡೆಬಿಟ್ ಸಕ್ರಿಯಗೊಳಿಸಿದರೆ ಸೇರಬಹುದು. ಒಂದು ಖಾತೆಯ ಮೂಲಕ ಮಾತ್ರ ಸೇರಬಹುದು. 55 ವರ್ಷಕ್ಕೆ ರಕ್ಷಣೆ ಕೊನೆಗೊಳ್ಳುತ್ತದೆ, ಪ್ರತಿ ವರ್ಷ ನವೀಕರಣ."
+      },
       "documents": [
-        {"en": "Bank or post office account with enough balance for the yearly premium", "kn": "TODO"},
-        {"en": "Aadhaar (the main KYC for the bank or post office account)", "kn": "TODO"},
-        {"en": "Enrolment and auto-debit consent form (the bank or post office gives the prescribed form)", "kn": "TODO"}
+        {
+          "en": "Bank or post office account with enough balance for the yearly premium",
+          "kn": "ವಾರ್ಷಿಕ ಪ್ರೀಮಿಯಂಗೆ ಸಾಕಷ್ಟು ಹಣವಿರುವ ಬ್ಯಾಂಕ್ ಅಥವಾ ಅಂಚೆ ಕಚೇರಿ ಖಾತೆ"
+        },
+        {
+          "en": "Aadhaar (the main KYC for the bank or post office account)",
+          "kn": "ಆಧಾರ್ (ಖಾತೆಗೆ ಮುಖ್ಯ ಕೆವೈಸಿ)"
+        },
+        {
+          "en": "Enrolment and auto-debit consent form (the bank or post office gives the prescribed form)",
+          "kn": "ನೋಂದಣಿ ಮತ್ತು ಆಟೋ-ಡೆಬಿಟ್ ಒಪ್ಪಿಗೆ ಅರ್ಜಿ (ನಿಗದಿತ ಅರ್ಜಿಯನ್ನು ಬ್ಯಾಂಕ್ ಅಥವಾ ಅಂಚೆ ಕಚೇರಿ ನೀಡುತ್ತದೆ)"
+        }
       ],
-      "how_to_apply": {"en": "Give your consent and auto-debit option on the prescribed form to your bank or post office. The premium of Rs 436 per year is then deducted from your account in one payment. The cover runs 1 June to 31 May, and joining late costs less premium.", "kn": "TODO"},
+      "how_to_apply": {
+        "en": "Give your consent and auto-debit option on the prescribed form to your bank or post office. The premium of Rs 436 per year is then deducted from your account in one payment. The cover runs 1 June to 31 May, and joining late costs less premium.",
+        "kn": "ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ಅಥವಾ ಅಂಚೆ ಕಚೇರಿಗೆ ನಿಗದಿತ ಅರ್ಜಿಯಲ್ಲಿ ಒಪ್ಪಿಗೆ ಮತ್ತು ಆಟೋ-ಡೆಬಿಟ್ ಆಯ್ಕೆ ನೀಡಿ. ವರ್ಷಕ್ಕೆ ₹436 ಪ್ರೀಮಿಯಂ ಒಂದೇ ಕಂತಿನಲ್ಲಿ ನಿಮ್ಮ ಖಾತೆಯಿಂದ ಕಡಿತವಾಗುತ್ತದೆ. ರಕ್ಷಣೆ ಜೂನ್ 1 ರಿಂದ ಮೇ 31 ರವರೆಗೆ. ತಡವಾಗಿ ಸೇರಿದರೆ ಪ್ರೀಮಿಯಂ ಕಡಿಮೆ."
+      },
       "source_url": "https://www.jansuraksha.gov.in/Files/PMJJBY/ENGLISH/Rules.pdf",
       "verified": true,
-      "last_checked": "2026-11-16"
+      "last_checked": "2026-11-16",
+      "kn_reviewed": false
     },
-        {
+    {
       "id": "pmsby",
-      "name": {"en": "Pradhan Mantri Suraksha Bima Yojana (PMSBY)", "kn": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಸುರಕ್ಷಾ ಬಿಮಾ ಯೋಜನೆ"},
-      "category": "insurance",
-      "benefit": {"en": "Accident cover for one year, renewable every year. Rs 2 lakh for death or total disability from an accident, and Rs 1 lakh for loss of sight of one eye or loss of use of one hand or foot. Premium: Rs 20 per year, deducted from your account.", "kn": "ಕಡಿಮೆ ವೆಚ್ಚದ ಅಪಘಾತ ವಿಮೆ."},
-      "why": {"en": "No insurance on file, and you have a bank account.", "kn": "ನಿಮಗೆ ವಿಮೆ ಇಲ್ಲ, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."},
-      "eligibility": {
-        "min_age": 18, "max_age": 70,
-        "profile_flags": {"has_bank_account": true, "has_insurance": false}
+      "name": {
+        "en": "Pradhan Mantri Suraksha Bima Yojana (PMSBY)",
+        "kn": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಸುರಕ್ಷಾ ಬಿಮಾ ಯೋಜನೆ"
       },
-      "eligibility_text": {"en": "Bank or post office account holders aged 18 (completed) to 70 who give consent to join and enable auto-debit. You can join through one bank or post office account only. Cover ends at age 70.", "kn": "TODO"},
+      "category": "insurance",
+      "benefit": {
+        "en": "Accident cover for one year, renewable every year. Rs 2 lakh for death or total disability from an accident, and Rs 1 lakh for loss of sight of one eye or loss of use of one hand or foot. Premium: Rs 20 per year, deducted from your account.",
+        "kn": "ಒಂದು ವರ್ಷದ ಅಪಘಾತ ವಿಮೆ, ಪ್ರತಿ ವರ್ಷ ನವೀಕರಿಸಬಹುದು. ಅಪಘಾತದಿಂದ ಮರಣ ಅಥವಾ ಪೂರ್ಣ ಅಂಗವೈಕಲ್ಯಕ್ಕೆ ₹2 ಲಕ್ಷ; ಒಂದು ಕಣ್ಣಿನ ದೃಷ್ಟಿ ಅಥವಾ ಒಂದು ಕೈ/ಕಾಲಿನ ಬಳಕೆ ಕಳೆದುಕೊಂಡರೆ ₹1 ಲಕ್ಷ. ಪ್ರೀಮಿಯಂ: ವರ್ಷಕ್ಕೆ ₹20, ನಿಮ್ಮ ಖಾತೆಯಿಂದ ಕಡಿತವಾಗುತ್ತದೆ."
+      },
+      "why": {
+        "en": "No insurance on file, and you have a bank account.",
+        "kn": "ನಿಮಗೆ ವಿಮೆ ಇಲ್ಲ, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."
+      },
+      "eligibility": {
+        "min_age": 18,
+        "max_age": 70,
+        "profile_flags": {
+          "has_bank_account": true,
+          "has_insurance": false
+        }
+      },
+      "eligibility_text": {
+        "en": "Bank or post office account holders aged 18 (completed) to 70 who give consent to join and enable auto-debit. You can join through one bank or post office account only. Cover ends at age 70.",
+        "kn": "18 ರಿಂದ 70 ವರ್ಷದ ಬ್ಯಾಂಕ್ ಅಥವಾ ಅಂಚೆ ಕಚೇರಿ ಖಾತೆದಾರರು, ಸೇರಲು ಒಪ್ಪಿಗೆ ನೀಡಿ ಆಟೋ-ಡೆಬಿಟ್ ಸಕ್ರಿಯಗೊಳಿಸಿದರೆ ಸೇರಬಹುದು. ಒಂದು ಖಾತೆಯ ಮೂಲಕ ಮಾತ್ರ ಸೇರಬಹುದು. 70 ವರ್ಷಕ್ಕೆ ರಕ್ಷಣೆ ಕೊನೆಗೊಳ್ಳುತ್ತದೆ."
+      },
       "documents": [
-        {"en": "Bank or post office account with enough balance for the yearly premium", "kn": "TODO"},
-        {"en": "Aadhaar (the main KYC for the bank or post office account)", "kn": "TODO"},
-        {"en": "Enrolment and auto-debit consent form (the bank or post office gives the prescribed form)", "kn": "TODO"}
+        {
+          "en": "Bank or post office account with enough balance for the yearly premium",
+          "kn": "ವಾರ್ಷಿಕ ಪ್ರೀಮಿಯಂಗೆ ಸಾಕಷ್ಟು ಹಣವಿರುವ ಬ್ಯಾಂಕ್ ಅಥವಾ ಅಂಚೆ ಕಚೇರಿ ಖಾತೆ"
+        },
+        {
+          "en": "Aadhaar (the main KYC for the bank or post office account)",
+          "kn": "ಆಧಾರ್ (ಖಾತೆಗೆ ಮುಖ್ಯ ಕೆವೈಸಿ)"
+        },
+        {
+          "en": "Enrolment and auto-debit consent form (the bank or post office gives the prescribed form)",
+          "kn": "ನೋಂದಣಿ ಮತ್ತು ಆಟೋ-ಡೆಬಿಟ್ ಒಪ್ಪಿಗೆ ಅರ್ಜಿ (ನಿಗದಿತ ಅರ್ಜಿಯನ್ನು ಬ್ಯಾಂಕ್ ಅಥವಾ ಅಂಚೆ ಕಚೇರಿ ನೀಡುತ್ತದೆ)"
+        }
       ],
-      "how_to_apply": {"en": "Give your consent and auto-debit option on the prescribed form to your bank or post office. The premium of Rs 20 per year is then deducted from your account in one payment. The cover runs 1 June to 31 May. If you join later, you pay the full annual premium.", "kn": "TODO"},
+      "how_to_apply": {
+        "en": "Give your consent and auto-debit option on the prescribed form to your bank or post office. The premium of Rs 20 per year is then deducted from your account in one payment. The cover runs 1 June to 31 May. If you join later, you pay the full annual premium.",
+        "kn": "ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ಅಥವಾ ಅಂಚೆ ಕಚೇರಿಗೆ ನಿಗದಿತ ಅರ್ಜಿಯಲ್ಲಿ ಒಪ್ಪಿಗೆ ಮತ್ತು ಆಟೋ-ಡೆಬಿಟ್ ಆಯ್ಕೆ ನೀಡಿ. ವರ್ಷಕ್ಕೆ ₹20 ಪ್ರೀಮಿಯಂ ಒಂದೇ ಕಂತಿನಲ್ಲಿ ಕಡಿತವಾಗುತ್ತದೆ. ರಕ್ಷಣೆ ಜೂನ್ 1 ರಿಂದ ಮೇ 31 ರವರೆಗೆ. ತಡವಾಗಿ ಸೇರಿದರೆ ಪೂರ್ಣ ವಾರ್ಷಿಕ ಪ್ರೀಮಿಯಂ ಕಟ್ಟಬೇಕು."
+      },
       "source_url": "https://www.jansuraksha.gov.in/Files/PMSBY/ENGLISH/Rules.pdf",
       "verified": true,
-      "last_checked": "2026-11-16"
+      "last_checked": "2026-11-16",
+      "kn_reviewed": false
     },
-        {
+    {
       "id": "apy",
-      "name": {"en": "Atal Pension Yojana (APY)", "kn": "ಅಟಲ್ ಪಿಂಚಣಿ ಯೋಜನೆ"},
-      "category": "pension",
-      "benefit": {"en": "Guaranteed monthly pension of Rs 1,000, 2,000, 3,000, 4,000 or 5,000 (you choose) after age 60, until death. Your spouse gets the same pension after you, and then your nominee gets the savings built up to age 60.", "kn": "ಸಣ್ಣ ನಿಯಮಿತ ಉಳಿತಾಯದಿಂದ ವೃದ್ಧಾಪ್ಯ ಪಿಂಚಣಿ."},
-      "why": {"en": "Good for building a savings habit, and you have a bank account.", "kn": "ಉಳಿತಾಯ ಅಭ್ಯಾಸಕ್ಕೆ ಒಳ್ಳೆಯದು, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."},
-      "eligibility": {
-        "min_age": 18, "max_age": 40,
-        "profile_flags": {"has_bank_account": true}
+      "name": {
+        "en": "Atal Pension Yojana (APY)",
+        "kn": "ಅಟಲ್ ಪಿಂಚಣಿ ಯೋಜನೆ"
       },
-      "eligibility_text": {"en": "Indian citizens aged 18 to 40 with a savings bank account in a bank or the Department of Posts. Anyone who is or has been an income-tax payer cannot join (rule from 1 October 2022).", "kn": "TODO"},
+      "category": "pension",
+      "benefit": {
+        "en": "Guaranteed monthly pension of Rs 1,000, 2,000, 3,000, 4,000 or 5,000 (you choose) after age 60, until death. Your spouse gets the same pension after you, and then your nominee gets the savings built up to age 60.",
+        "kn": "60 ವರ್ಷದ ನಂತರ ಜೀವನಪರ್ಯಂತ ತಿಂಗಳಿಗೆ ₹1,000, ₹2,000, ₹3,000, ₹4,000 ಅಥವಾ ₹5,000 ಖಾತರಿ ಪಿಂಚಣಿ (ನೀವೇ ಆಯ್ಕೆ ಮಾಡಿ). ನಿಮ್ಮ ನಂತರ ಪತಿ ಅಥವಾ ಪತ್ನಿಗೆ ಅದೇ ಪಿಂಚಣಿ, ಅವರ ನಂತರ ನಾಮಿನಿಗೆ 60 ವರ್ಷದವರೆಗೆ ಕೂಡಿದ ಹಣ."
+      },
+      "why": {
+        "en": "Good for building a savings habit, and you have a bank account.",
+        "kn": "ಉಳಿತಾಯ ಅಭ್ಯಾಸಕ್ಕೆ ಒಳ್ಳೆಯದು, ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆ."
+      },
+      "eligibility": {
+        "min_age": 18,
+        "max_age": 40,
+        "profile_flags": {
+          "has_bank_account": true
+        }
+      },
+      "eligibility_text": {
+        "en": "Indian citizens aged 18 to 40 with a savings bank account in a bank or the Department of Posts. Anyone who is or has been an income-tax payer cannot join (rule from 1 October 2022).",
+        "kn": "18 ರಿಂದ 40 ವರ್ಷದ ಭಾರತೀಯ ನಾಗರಿಕರು, ಬ್ಯಾಂಕ್ ಅಥವಾ ಅಂಚೆ ಇಲಾಖೆಯಲ್ಲಿ ಉಳಿತಾಯ ಖಾತೆ ಇರಬೇಕು. ಆದಾಯ ತೆರಿಗೆ ಪಾವತಿಸುವವರು ಅಥವಾ ಪಾವತಿಸಿದವರು ಸೇರುವಂತಿಲ್ಲ (2022 ಅಕ್ಟೋಬರ್ 1 ರಿಂದ ನಿಯಮ)."
+      },
       "documents": [
-        {"en": "Savings bank account in a bank or post office", "kn": "TODO"},
-        {"en": "APY Registration Form (available at bank branches and post offices)", "kn": "TODO"}
+        {
+          "en": "Savings bank account in a bank or post office",
+          "kn": "ಬ್ಯಾಂಕ್ ಅಥವಾ ಅಂಚೆ ಕಚೇರಿಯಲ್ಲಿ ಉಳಿತಾಯ ಖಾತೆ"
+        },
+        {
+          "en": "APY Registration Form (available at bank branches and post offices)",
+          "kn": "ಎಪಿವೈ ನೋಂದಣಿ ಅರ್ಜಿ (ಬ್ಯಾಂಕ್ ಶಾಖೆ ಮತ್ತು ಅಂಚೆ ಕಚೇರಿಗಳಲ್ಲಿ ಸಿಗುತ್ತದೆ)"
+        }
       ],
-      "how_to_apply": {"en": "Fill in the APY Registration Form and submit it at your bank branch or post office. You can also join online through eAPY. You pay the prescribed contribution from the age you join until age 60.", "kn": "TODO"},
+      "how_to_apply": {
+        "en": "Fill in the APY Registration Form and submit it at your bank branch or post office. You can also join online through eAPY. You pay the prescribed contribution from the age you join until age 60.",
+        "kn": "ಎಪಿವೈ ನೋಂದಣಿ ಅರ್ಜಿ ತುಂಬಿ ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ಶಾಖೆ ಅಥವಾ ಅಂಚೆ ಕಚೇರಿಯಲ್ಲಿ ಸಲ್ಲಿಸಿ. ಇ-ಎಪಿವೈ ಮೂಲಕ ಆನ್‌ಲೈನ್‌ನಲ್ಲೂ ಸೇರಬಹುದು. ಸೇರಿದ ವಯಸ್ಸಿನಿಂದ 60 ವರ್ಷದವರೆಗೆ ನಿಗದಿತ ಕಂತು ಕಟ್ಟಬೇಕು."
+      },
       "source_url": "https://pfrda.org.in/web/pfrda/schemes/atal-pension-yojana-apy",
       "verified": true,
-      "last_checked": "2026-11-16"
+      "last_checked": "2026-11-16",
+      "kn_reviewed": false
     },
     {
       "id": "pmjay",
-      "name": {"en": "Ayushman Bharat PM-JAY (health cover)", "kn": "ಆಯುಷ್ಮಾನ್ ಭಾರತ್ ಪಿಎಂ-ಜೆಎವೈ (ಆರೋಗ್ಯ ವಿಮೆ)"},
-      "category": "health",
-      "benefit": {"en": "Free hospital treatment cover of up to Rs 5 lakh per family per year for families who qualify.", "kn": "ಆಸ್ಪತ್ರೆ ಚಿಕಿತ್ಸೆಗೆ ಆರೋಗ್ಯ ವಿಮೆ."},
-      "why": {"en": "Health cover for families who qualify. Check if your family is on the list.", "kn": "ಅರ್ಹ ಕುಟುಂಬಗಳಿಗೆ ಆರೋಗ್ಯ ರಕ್ಷಣೆ. ನಿಮ್ಮ ಕುಟುಂಬ ಪಟ್ಟಿಯಲ್ಲಿದೆಯೇ ನೋಡಿ."},
-      "eligibility": {
-        "profile_flags": {"has_insurance": false}
+      "name": {
+        "en": "Ayushman Bharat PM-JAY (health cover)",
+        "kn": "ಆಯುಷ್ಮಾನ್ ಭಾರತ್ ಪಿಎಂ-ಜೆಎವೈ (ಆರೋಗ್ಯ ವಿಮೆ)"
       },
-      "eligibility_text": {"en": "Eligibility is decided by official criteria, not by income alone. All senior citizens aged 70 and above are covered regardless of income (approved by the Union Cabinet on 11 September 2024). Check if you qualify on the PM-JAY website ('Am I Eligible'), or at a nearby Common Service Centre.", "kn": "TODO"},
+      "category": "health",
+      "benefit": {
+        "en": "Free hospital treatment cover of up to Rs 5 lakh per family per year for families who qualify.",
+        "kn": "ಅರ್ಹ ಕುಟುಂಬಗಳಿಗೆ ವರ್ಷಕ್ಕೆ ₹5 ಲಕ್ಷದವರೆಗೆ ಆಸ್ಪತ್ರೆ ಚಿಕಿತ್ಸೆ ಉಚಿತ."
+      },
+      "why": {
+        "en": "Health cover for families who qualify. Check if your family is on the list.",
+        "kn": "ಅರ್ಹ ಕುಟುಂಬಗಳಿಗೆ ಆರೋಗ್ಯ ರಕ್ಷಣೆ. ನಿಮ್ಮ ಕುಟುಂಬ ಪಟ್ಟಿಯಲ್ಲಿದೆಯೇ ನೋಡಿ."
+      },
+      "eligibility": {
+        "profile_flags": {
+          "has_insurance": false
+        }
+      },
+      "eligibility_text": {
+        "en": "Eligibility is decided by official criteria, not by income alone. All senior citizens aged 70 and above are covered regardless of income (approved by the Union Cabinet on 11 September 2024). Check if you qualify on the PM-JAY website ('Am I Eligible'), or at a nearby Common Service Centre.",
+        "kn": "ಅರ್ಹತೆಯನ್ನು ಅಧಿಕೃತ ಮಾನದಂಡಗಳಿಂದ ನಿರ್ಧರಿಸಲಾಗುತ್ತದೆ, ಆದಾಯದಿಂದ ಮಾತ್ರ ಅಲ್ಲ. 70 ವರ್ಷ ಮತ್ತು ಮೇಲ್ಪಟ್ಟ ಎಲ್ಲಾ ಹಿರಿಯ ನಾಗರಿಕರಿಗೆ ಆದಾಯ ಲೆಕ್ಕಿಸದೆ ರಕ್ಷಣೆ ಇದೆ (2024 ಸೆಪ್ಟೆಂಬರ್ 11 ರಂದು ಕೇಂದ್ರ ಸಂಪುಟ ಅನುಮೋದನೆ). ನೀವು ಅರ್ಹರೇ ಎಂದು ಪಿಎಂ-ಜೆಎವೈ ವೆಬ್‌ಸೈಟ್‌ನಲ್ಲಿ ('Am I Eligible') ಅಥವಾ ಹತ್ತಿರದ ಕಾಮನ್ ಸರ್ವಿಸ್ ಸೆಂಟರ್‌ನಲ್ಲಿ ನೋಡಿ."
+      },
       "documents": [
-        {"en": "TODO: copy from an official page", "kn": "TODO"}
+        {
+          "en": "Ask at the Common Service Centre which documents to bring (official list not confirmed yet)",
+          "kn": "ಯಾವ ದಾಖಲೆಗಳನ್ನು ತರಬೇಕೆಂದು ಕಾಮನ್ ಸರ್ವಿಸ್ ಸೆಂಟರ್‌ನಲ್ಲಿ ಕೇಳಿ (ಅಧಿಕೃತ ಪಟ್ಟಿ ಇನ್ನೂ ಖಚಿತವಾಗಿಲ್ಲ)"
+        }
       ],
-      "how_to_apply": {"en": "Check if you qualify on the PM-JAY website ('Am I Eligible') or at a nearby Common Service Centre (CSC).", "kn": "TODO"},
+      "how_to_apply": {
+        "en": "Check if you qualify on the PM-JAY website ('Am I Eligible') or at a nearby Common Service Centre (CSC).",
+        "kn": "ಪಿಎಂ-ಜೆಎವೈ ವೆಬ್‌ಸೈಟ್‌ನಲ್ಲಿ ('Am I Eligible') ಅಥವಾ ಹತ್ತಿರದ ಕಾಮನ್ ಸರ್ವಿಸ್ ಸೆಂಟರ್ (ಸಿಎಸ್‌ಸಿ) ನಲ್ಲಿ ನೀವು ಅರ್ಹರೇ ಎಂದು ನೋಡಿ."
+      },
       "source_url": "https://india.gov.in/spotlight/details/ayushman-bharat-pradhan-mantri-jan-arogya-yojana",
-            "verified": false,
-      "last_checked": null
+      "verified": false,
+      "last_checked": null,
+      "kn_reviewed": false
     }
   ]
 }
