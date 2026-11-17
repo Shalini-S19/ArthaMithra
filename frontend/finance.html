@@ -2,91 +2,359 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArthaMitra - Income & Expenses</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArthaMitra | Manage Money</title>
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f3f7f4;
+    font-family: 'DM Sans', sans-serif;
+    color: #183d32;
+}
+
+.finance-header {
+    background: #103d32;
+    color: white;
+    padding: 20px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.finance-header h2 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.finance-header p {
+    margin: 5px 0 0;
+    color: #c4ded2;
+    font-size: 13px;
+}
+
+.back-btn {
+    background: white;
+    color: #103d32;
+    padding: 11px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.finance-container {
+    width: min(1050px, 92%);
+    margin: 35px auto 60px;
+}
+
+.finance-welcome {
+    margin-bottom: 25px;
+}
+
+.finance-welcome h1 {
+    font-size: 30px;
+    margin: 0 0 8px;
+}
+
+.finance-welcome p {
+    color: #71847a;
+    margin: 0;
+}
+
+.finance-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    border: 1px solid #e3ece6;
+    box-shadow: 0 8px 25px rgba(20,60,45,0.05);
+}
+
+.card-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.card-icon {
+    width: 45px;
+    height: 45px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: #e7f4eb;
+    font-size: 22px;
+}
+
+.card-heading h2 {
+    margin: 0;
+    font-size: 21px;
+}
+
+.card-heading p {
+    color: #829188;
+    font-size: 13px;
+    margin: 5px 0 0;
+}
+
+.type-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.type-options button {
+    padding: 15px;
+    border: 1px solid #dce9e0;
+    background: #f8fbf9;
+    color: #486257;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.type-options button.active {
+    background: #e5f5e9;
+    color: #147348;
+    border: 2px solid #29965f;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #dce7df;
+    background: #fbfdfb;
+    border-radius: 11px;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #26945e;
+    box-shadow: 0 0 0 3px #26945e18;
+}
+
+.save-btn {
+    width: 100%;
+    margin-top: 24px;
+    padding: 16px;
+    background: #176b4b;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #10543a;
+}
+
+#financeMessage {
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+#entriesList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.goal-card {
+    background: #f8fbf9;
+}
+
+.finance-footer {
+    text-align: center;
+    padding: 25px;
+    color: #829188;
+    font-size: 13px;
+}
+
+@media(max-width:650px) {
+    .finance-header {
+        padding: 17px 5%;
+    }
+
+    .finance-header h2 {
+        font-size: 20px;
+    }
+
+    .back-btn {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+
+    .finance-container {
+        margin-top: 25px;
+    }
+
+    .finance-welcome h1 {
+        font-size: 24px;
+    }
+
+    .finance-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full {
+        grid-column: auto;
+    }
+}
+</style>
 </head>
 
 <body>
 
-<header class="dashboard-header">
+<header class="finance-header">
     <div>
         <h2>🌱 ArthaMitra</h2>
-        <p>Manage your money</p>
+        <p>Your Financial Friend</p>
     </div>
 
-    <button onclick="window.location.href='dashboard.html'">
-        Back to Dashboard
-    </button>
+    <a href="dashboard.html" class="back-btn">
+        ← Dashboard
+    </a>
 </header>
 
-<main class="dashboard-container">
+<main class="finance-container">
 
-    <!-- Add Income or Expense -->
-    <section class="dashboard-section">
+    <div class="finance-welcome">
+        <h1>Manage Your Money 💚</h1>
+        <p>Track every rupee. Build a better financial future.</p>
+    </div>
 
-        <h2>💰 Add Income or Expense</h2>
+    <section class="finance-card">
+
+        <div class="card-heading">
+            <div class="card-icon">💰</div>
+            <div>
+                <h2>Add Transaction</h2>
+                <p>Record your income or expenses</p>
+            </div>
+        </div>
 
         <form id="financeForm">
 
-            <label for="entryType">Transaction Type</label>
-            <select id="entryType" required>
+            <div class="type-options">
+                <button type="button" id="incomeTypeBtn" class="active"
+                    onclick="selectTransactionType('income')">
+                    ↗ Income
+                </button>
+
+                <button type="button" id="expenseTypeBtn"
+                    onclick="selectTransactionType('expense')">
+                    ↙ Expense
+                </button>
+            </div>
+
+            <select id="entryType" required hidden>
                 <option value="income">Income</option>
                 <option value="expense">Expense</option>
             </select>
 
-            <label for="amount">Amount (₹)</label>
-            <input
-                type="number"
-                id="amount"
-                min="1"
-                step="0.01"
-                placeholder="Enter amount"
-                required
-            >
+            <div class="form-grid">
 
-            <label for="category">Category</label>
-            <select id="category" required>
-                <option value="">Select category</option>
-                <option value="Salary">Salary</option>
-                <option value="Business">Business</option>
-                <option value="Agriculture">Agriculture</option>
-                <option value="Food">Food</option>
-                <option value="Transport">Transport</option>
-                <option value="Education">Education</option>
-                <option value="Healthcare">Healthcare</option>
-                <option value="Shopping">Shopping</option>
-                <option value="Bills">Bills</option>
-                <option value="Other">Other</option>
-            </select>
+                <div class="form-group">
+                    <label for="amount">Amount (₹)</label>
+                    <input type="number" id="amount"
+                        placeholder="e.g. 5000" min="1"
+                        step="0.01" required>
+                </div>
 
-            <label for="note">Description</label>
-            <input
-                type="text"
-                id="note"
-                placeholder="Enter a short description"
-            >
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" required>
+                        <option value="">Choose category</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Business">Business</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Education">Education</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
 
-            <label for="date">Date</label>
-            <input type="date" id="date" required>
+                <div class="form-group full">
+                    <label for="note">Description</label>
+                    <input type="text" id="note"
+                        placeholder="What was this transaction for?">
+                </div>
 
-            <button type="submit">Save Transaction</button>
+                <div class="form-group full">
+                    <label for="date">Transaction Date</label>
+                    <input type="date" id="date" required>
+                </div>
+
+            </div>
+
+            <button type="submit" class="save-btn">
+                + Save Transaction
+            </button>
+
+            <p id="financeMessage"></p>
 
         </form>
-
-        <p id="financeMessage"></p>
-
     </section>
 
-    <!-- Transaction History -->
-    <section class="dashboard-section">
+    <section class="finance-card">
 
-        <h2>📋 Transaction History</h2>
-
-        <p>Your recent income and expenses</p>
+        <div class="card-heading">
+            <div class="card-icon">📋</div>
+            <div>
+                <h2>Transaction History</h2>
+                <p>Your recorded income and expenses</p>
+            </div>
+        </div>
 
         <div id="entriesList">
             <p>Loading transactions...</p>
@@ -96,8 +364,32 @@
 
 </main>
 
+<footer class="finance-footer">
+    © 2026 ArthaMitra | Your Financial Friend 💚
+</footer>
+
 <script src="js/api.js"></script>
 <script src="js/finance.js"></script>
+
+<script>
+function selectTransactionType(type) {
+    document.getElementById("entryType").value = type;
+
+    document.getElementById("incomeTypeBtn")
+        .classList.toggle("active", type === "income");
+
+    document.getElementById("expenseTypeBtn")
+        .classList.toggle("active", type === "expense");
+}
+
+// Apply dashboard selection
+const params = new URLSearchParams(window.location.search);
+const initialType = params.get("type");
+
+if (initialType === "income" || initialType === "expense") {
+    selectTransactionType(initialType);
+}
+</script>
 
 </body>
 </html>
