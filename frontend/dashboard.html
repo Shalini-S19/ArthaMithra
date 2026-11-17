@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#123c32">
+
+    <title>ArthaMitra | Dashboard</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <style>
+        .goals-wrapper {
+            display: grid;
+            gap: 18px;
+        }
+
+        .goal-form {
+            background: #f5faf6;
+            padding: 20px;
+            border-radius: 14px;
+            margin: 15px 0;
+        }
+
+        .goal-form label {
+            display: block;
+            font-weight: 600;
+            margin: 12px 0 6px;
+        }
+
+        .goal-form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dce8df;
+            border-radius: 9px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .goal-form button,
+        .goal-actions button {
+            background: #176b4b;
+            color: white;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .goal-card {
+            background: white;
+            border: 1px solid #e0ebe3;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 14px;
+        }
+
+        .goal-card h3 {
+            margin-top: 0;
+            color: #176b4b;
+        }
+
+        .goal-progress-bg {
+            height: 12px;
+            background: #e6eee8;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .goal-progress-fill {
+            height: 100%;
+            background: #26945e;
+            border-radius: 20px;
+        }
+
+        .goal-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .goal-actions .delete-goal {
+            background: #b42318;
+        }
+
+        .goal-message {
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .notification-item {
+            padding: 14px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            background: #eaf7ef;
+            color: #176b4b;
+            border: 1px solid #cce9d6;
+            line-height: 1.5;
+        }
+
+        .notification-item.warning {
+            background: #fff4e5;
+            color: #9a5700;
+            border-color: #f2d29e;
+        }
+
+        .dashboard-section {
+            scroll-margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .goal-actions {
+                flex-direction: column;
+            }
+
+            .goal-actions button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="dashboard-header">
+
+        <div>
+            <h2>🌱 ArthaMitra</h2>
+            <p>Your Financial Friend</p>
+        </div>
+
+        <button id="logoutBtn" type="button">
+            Logout
+        </button>
+
+    </header>
+
+
+    <main class="dashboard-container">
+
+        <!-- WELCOME -->
+        <section class="welcome-card">
+
+            <h1>
+                Hello, <span id="userName">Friend</span>! 👋
+            </h1>
+
+            <p>Let's make your money grow.</p>
+
+        </section>
+
+
+        <!-- FINANCIAL SUMMARY -->
+        <section class="summary-section">
+
+            <h2>Your Financial Summary</h2>
+
+            <div class="summary-grid">
+
+                <article class="summary-card">
+                    <span>💰</span>
+                    <p>Total Income This Week</p>
+                    <h2 id="totalIncome">₹0</h2>
+                </article>
+
+                <article class="summary-card">
+                    <span>💸</span>
+                    <p>Total Expenses This Week</p>
+                    <h2 id="totalExpense">₹0</h2>
+                </article>
+
+                <article class="summary-card">
+                    <span>🐷</span>
+                    <p>Money Saved This Week</p>
+                    <h2 id="totalSavings">₹0</h2>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+        <section class="quick-section">
+
+            <h2>Quick Actions</h2>
+
+            <div class="quick-grid">
+
+                <button onclick="openFeature('income')">
+                    ➕ Add Income
+                </button>
+
+                <button onclick="openFeature('expense')">
+                    ➖ Add Expense
+                </button>
+
+                <button onclick="openFeature('budget')">
+                    📊 My Budget
+                </button>
+
+                <button onclick="openFeature('goals')">
+                    🎯 Savings Goals
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- SAVINGS GOALS -->
+        <section class="dashboard-section" id="goalsList">
+
+            <h2>🎯 My Savings Goals</h2>
+
+            <div class="goal-form">
+
+                <h3>Create a New Goal</h3>
+
+                <form id="goalForm">
+
+                    <label for="goalTitle">
+                        Goal Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="goalTitle"
+                        placeholder="Example: Buy a new phone"
+                        maxlength="100"
+                        required
+                    >
+
+                    <label for="goalTarget">
+                        Target Amount (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="goalTarget"
+                        placeholder="Enter target amount"
+                        min="1"
+                        step="0.01"
+                        required
+                    >
+
+                    <label for="goalDeadline">
+                        Deadline (Optional)
+                    </label>
+
+                    <input
+                        type="date"
+                        id="goalDeadline"
+                    >
+
+                    <button type="submit">
+                        Create Savings Goal
+                    </button>
+
+                    <p
+                        id="goalMessage"
+                        class="goal-message"
+                        aria-live="polite"
+                    ></p>
+
+                </form>
+
+            </div>
+
+            <h3>Your Goals</h3>
+
+            <div id="goalsContainer">
+                <p>Loading your goals...</p>
+            </div>
+
+        </section>
+
+
+        <!-- GOVERNMENT SCHEMES -->
+        <section
+            class="dashboard-section"
+            id="schemes"
+        >
+
+            <h2>Government Schemes 🏛️</h2>
+
+            <p>
+                Discover government schemes that may benefit you.
+            </p>
+
+            <button onclick="openFeature('schemes')">
+                Explore Schemes
+            </button>
+
+        </section>
+
+
+        <!-- FINANCIAL LEARNING -->
+        <section
+            class="dashboard-section"
+            id="lessons"
+        >
+
+            <h2>Financial Learning 📚</h2>
+
+            <p>
+                Improve your financial knowledge every day.
+            </p>
+
+            <button onclick="openFeature('lessons')">
+                Explore Lessons
+            </button>
+
+        </section>
+
+
+        <!-- NOTIFICATIONS -->
+        <section class="dashboard-section" id="notificationSection">
+
+            <h2>Notifications 🔔</h2>
+
+            <p>
+                Stay updated about your finances and savings goals.
+            </p>
+
+            <div
+                id="notifications"
+                aria-live="polite"
+            >
+                <p>Loading notifications...</p>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+
+        <button onclick="openFeature('home')">
+            🏠
+            <span>Home</span>
+        </button>
+
+        <button onclick="openFeature('finance')">
+            💰
+            <span>Finance</span>
+        </button>
+
+        <button onclick="openFeature('schemes')">
+            🏛️
+            <span>Schemes</span>
+        </button>
+
+        <button onclick="openFeature('profile')">
+            👤
+            <span>Profile</span>
+        </button>
+
+    </nav>
+
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/notifications.js"></script>
+
+</body>
+</html>

@@ -1,20 +1,91 @@
-<div class="dashboard">
 
-  <h1>Welcome to ArthaMitra!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#123c32">
+  <title>ArthaMitra - Your Financial Friend</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h2>🌱 ArthaMitra</h2>
+    <div>
+      <button onclick="setLang('en')">English</button>
+      <button onclick="setLang('kn')">ಕನ್ನಡ</button>
+    </div>
+  </header>
 
-  <div class="summary-card">
-    <h3>Total Income</h3>
-    <h2 id="income">₹0</h2>
-  </div>
+  <main class="auth-container">
+    <section class="welcome">
+      <h1>Your Money, Your Future.</h1>
+      <p>Learn, save and grow with ArthaMitra.</p>
+      <div class="features">
+        <p>💰 Track your income and expenses</p>
+        <p>🎯 Plan your savings goals</p>
+        <p>🏛️ Discover government schemes</p>
+        <p>🔔 Stay updated with reminders</p>
+      </div>
+    </section>
 
-  <div class="summary-card">
-    <h3>Total Expenses</h3>
-    <h2 id="expense">₹0</h2>
-  </div>
+    <section class="auth-card">
+      <div class="tabs">
+        <button id="loginTab" class="active" onclick="showAuth('login')">Login</button>
+        <button id="registerTab" onclick="showAuth('register')">Register</button>
+      </div>
 
-  <div class="summary-card">
-    <h3>Remaining Balance</h3>
-    <h2 id="balance">₹0</h2>
-  </div>
+      <form id="loginForm">
+        <h2>Welcome Back!</h2>
+        <label>Mobile Number</label>
+        <input id="loginPhone" type="tel" maxlength="10" required placeholder="10-digit mobile number">
+        <label>4-digit PIN</label>
+        <input id="loginPin" type="password" maxlength="4" inputmode="numeric" required placeholder="Enter PIN">
+        <button class="primary-btn" type="submit">Login</button>
+      </form>
 
-</div>
+      <form id="registerForm" hidden>
+        <h2>Create Account</h2>
+        <label>Full Name</label>
+        <input id="regName" required placeholder="Your name">
+        <label>Mobile Number</label>
+        <input id="regPhone" type="tel" maxlength="10" required placeholder="10-digit mobile number">
+        <label>Create 4-digit PIN</label>
+        <input id="regPin" type="password" maxlength="4" inputmode="numeric" required placeholder="Create PIN">
+        <label>Language</label>
+        <select id="regLanguage">
+          <option value="en">English</option>
+          <option value="kn">Kannada</option>
+        </select>
+        <label>Age</label>
+        <input id="regAge" type="number" min="18" max="120" required placeholder="Your age">
+        <label>Gender</label>
+        <select id="regGender" required>
+          <option value="">Select</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="other">Other</option>
+          <option value="prefer_not_to_say">Prefer not to say</option>
+        </select>
+        <label>Do you have a bank account?</label>
+        <select id="regBank">
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+        <label>Do you have insurance?</label>
+        <select id="regInsurance">
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+        <button class="primary-btn" type="submit">Create Account</button>
+      </form>
+
+      <p id="message" role="status"></p>
+    </section>
+  </main>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
