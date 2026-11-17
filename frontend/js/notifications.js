@@ -186,3 +186,101 @@ async function loadNotifications() {
 }
 
 loadNotifications();
+
+async function loadNotifications() {
+    const container = document.getElementById("notifications");
+    if (!container) return;
+
+    container.replaceChildren();
+
+    function addNotification(message, type = "info") {
+        const item = document.createElement("div");
+        item.className = "notification-item";
+        item.textContent = message;
+        item.style.padding = "12px";
+        item.style.marginBottom = "10px";
+        item.style.borderRadius = "8px";
+        item.style.background = type === "warning" ? "#fff3cd" : "#e8f5e9";
+        container.appendChild(item);
+    }
+
+    try {
+        const [entriesResult, goalsResult] = await Promise.all([
+            api("GET", "/api/entries?days=3650"),
+            api("GET", "/api/goals")
+        ]);
+
+        const entries = Array.isArray(entriesResult)
+            ? entriesResult
+            : (entriesResult.entries || []);
+
+        const goals = Array.isArray(goalsResult)
+            ? goalsResult
+            : (goalsResult.goals || []);
+
+        const today = new Date().toISOString().slice(0, 10);
+        const month = today.slice(0, 7);
+
+        const todayIncome = entries.some(entry =>
+            entry.type === "income" && entry.date === today
+        );
+
+        const todayExpense = entries.some(entry =>
+            entry.type === "expense" && entry.date === today
+        );
+
+        if (!todayIncome) {
+            addNotification("💰 Remember to record your income today.");
+        }
+
+        if (!todayExpense) {
+            addNotification("📝 Remember to record your expenses today.");
+        }
+
+        const budget = Number(
+            localStorage.getItem("arthamitra_budget_" + month) || 0
+        );
+
+        const monthlyExpenses = entries
+            .filter(entry =>
+                entry.type === "expense" &&
+                String(entry.date).startsWith(month)
+            )
+            .reduce((total, entry) => total + Number(entry.amount || 0), 0);
+
+        if (budget > 0) {
+            const percentage = monthlyExpenses / budget * 100;
+
+            if (percentage >= 100) {
+                addNotification("🚨 You have exceeded your monthly budget!", "warning");
+            } else if (percentage >= 80) {
+                addNotification("⚠️ You have used 80% or more of your monthly budget.", "warning");
+            }
+        }
+
+        goals.forEach(goal => {
+            if (!goal.deadline) return;
+
+            const daysLeft = Math.ceil(
+                (new Date(goal.deadline) - new Date(today)) / 86400000
+            );
+
+            if (daysLeft < 0) {
+                addNotification("⏰ Deadline passed for your goal: " + goal.title, "warning");
+            } else if (daysLeft <= 7) {
+                addNotification("⏳ Your goal deadline is approaching: " + goal.title, "warning");
+            }
+        });
+
+        if (container.children.length === 0) {
+            addNotification("🎉 You're all caught up! No new reminders.");
+        }
+
+    } catch (error) {
+        console.error("Notification error:", error);
+        addNotification("Unable to load notifications. Please refresh.", "warning");
+    }
+}
+
+loadNotifications();
+
