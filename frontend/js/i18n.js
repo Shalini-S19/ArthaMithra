@@ -1,9 +1,26 @@
 
 let strings = {};
-let currentLang = "en";
+let currentLang = localStorage.getItem("lang") || "en";
 
-// Change application language
+function lookup(path) {
+    return path.split(".").reduce(
+        (obj, key) => obj?.[key],
+        strings
+    );
+}
+
+function t(path, fallback = "") {
+    const value = lookup(path);
+    return value !== undefined && value !== null
+        ? value
+        : (fallback || path);
+}
+
 async function setLang(lang) {
+    if (!["en", "kn"].includes(lang)) {
+        lang = "en";
+    }
+
     try {
         const response = await fetch(`/i18n/${lang}.json`);
 
@@ -16,50 +33,53 @@ async function setLang(lang) {
         strings = translations;
         currentLang = lang;
 
-        // Update page language
         document.documentElement.lang = lang;
 
-        // Translate normal text
         document.querySelectorAll("[data-i18n]").forEach(el => {
-            const value = lookup(el.dataset.i18n);
+            const value = t(el.dataset.i18n);
 
-            if (value !== undefined) {
+            if (value !== el.dataset.i18n) {
                 el.textContent = value;
             }
         });
 
-        // Translate placeholders
         document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-            const value = lookup(el.dataset.i18nPlaceholder);
-
-            if (value !== undefined) {
-                el.placeholder = value;
-            }
+            el.placeholder = t(el.dataset.i18nPlaceholder);
         });
 
-        // Translate dropdown options
         document.querySelectorAll("[data-i18n-option]").forEach(el => {
-            const value = lookup(el.dataset.i18nOption);
-
-            if (value !== undefined) {
-                el.textContent = value;
-            }
+            el.textContent = t(el.dataset.i18nOption);
         });
 
-        // Keep language selector updated
-        const selector = document.getElementById("dashboardLanguage");
+        document.querySelectorAll("[data-i18n-title]").forEach(el => {
+            el.title = t(el.dataset.i18nTitle);
+        });
 
-        if (selector) {
+        document.querySelectorAll("[data-i18n-value]").forEach(el => {
+            el.value = t(el.dataset.i18nValue);
+        });
+
+        document.querySelectorAll("[data-language-selector]").forEach(selector => {
             selector.value = lang;
+        });
+
+        const dashboardSelector = document.getElementById("dashboardLanguage");
+
+        if (dashboardSelector) {
+            dashboardSelector.value = lang;
         }
 
-        // Remember selected language
+        const financeSelector = document.getElementById("financeLanguage");
+
+        if (financeSelector) {
+            financeSelector.value = lang;
+        }
+
         localStorage.setItem("lang", lang);
 
-        // Notify other JavaScript files
         document.dispatchEvent(
             new CustomEvent("languageChanged", {
-                detail: { lang: lang }
+                detail: { lang }
             })
         );
 
@@ -71,27 +91,17 @@ async function setLang(lang) {
     }
 }
 
-// Find translated text using nested keys
-function lookup(path) {
-    return path.split(".").reduce(
-        (obj, key) => obj?.[key],
-        strings
-    );
-}
-
-// Get translated text
-function t(path) {
-    return lookup(path) || path;
-}
-
-// Get current language
 function getCurrentLanguage() {
     return currentLang;
 }
 
-// Load saved language when page opens
-document.addEventListener("DOMContentLoaded", () => {
+async function initializeLanguage() {
     const savedLang = localStorage.getItem("lang") || "en";
+    await setLang(savedLang);
+}
 
-    setLang(savedLang);
-});
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeLanguage);
+} else {
+    initializeLanguage();
+}
