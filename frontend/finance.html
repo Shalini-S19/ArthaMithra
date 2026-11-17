@@ -34,6 +34,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 15px;
         }
 
         .finance-header h2 {
@@ -45,6 +46,20 @@
             margin: 5px 0 0;
             color: #c4ded2;
             font-size: 13px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .language-select {
+            padding: 10px;
+            border-radius: 9px;
+            border: none;
+            font-family: inherit;
+            cursor: pointer;
         }
 
         .back-btn {
@@ -218,10 +233,15 @@
         @media(max-width: 650px) {
             .finance-header {
                 padding: 17px 5%;
+                flex-wrap: wrap;
             }
 
             .finance-header h2 {
                 font-size: 20px;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
             }
 
             .back-btn {
@@ -257,20 +277,36 @@
 
 <header class="finance-header">
     <div>
-        <h2>🌱 ArthaMitra</h2>
-        <p>Your Financial Friend</p>
+        <h2>🌱 <span data-i18n="app.name">ArthaMitra</span></h2>
+        <p data-i18n="app.tagline">Your Money, Your Future</p>
     </div>
 
-    <a href="dashboard.html" class="back-btn">
-        ← Dashboard
-    </a>
+    <div class="header-actions">
+
+        <select
+            id="financeLanguage"
+            class="language-select"
+            aria-label="Select language"
+            onchange="setLang(this.value)"
+        >
+            <option value="en">English</option>
+            <option value="kn">ಕನ್ನಡ</option>
+        </select>
+
+        <a href="dashboard.html" class="back-btn">
+            ← <span data-i18n="dashboard.home">Dashboard</span>
+        </a>
+
+    </div>
 </header>
 
 <main class="finance-container">
 
     <div class="finance-welcome">
-        <h1>Manage Your Money 💚</h1>
-        <p>Track every rupee. Build a better financial future.</p>
+        <h1 data-i18n="finance.title">Manage Your Money 💚</h1>
+        <p data-i18n="finance.subtitle">
+            Track every rupee. Build a better financial future.
+        </p>
     </div>
 
     <section class="finance-card">
@@ -278,8 +314,10 @@
         <div class="card-heading">
             <div class="card-icon">💰</div>
             <div>
-                <h2>Add Transaction</h2>
-                <p>Record your income or expenses</p>
+                <h2 data-i18n="finance.add_transaction">Add Transaction</h2>
+                <p data-i18n="finance.record_description">
+                    Record your income or expenses
+                </p>
             </div>
         </div>
 
@@ -287,30 +325,39 @@
 
             <div class="type-options">
 
-                <button type="button"
+                <button
+                    type="button"
                     id="incomeTypeBtn"
                     class="active"
-                    onclick="selectTransactionType('income')">
+                    onclick="selectTransactionType('income')"
+                    data-i18n="entry.income"
+                >
                     ↗ Income
                 </button>
 
-                <button type="button"
+                <button
+                    type="button"
                     id="expenseTypeBtn"
-                    onclick="selectTransactionType('expense')">
+                    onclick="selectTransactionType('expense')"
+                    data-i18n="entry.expense"
+                >
                     ↙ Expense
                 </button>
 
             </div>
 
             <select id="entryType" required hidden>
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
+                <option value="income" data-i18n-option="entry.income">Income</option>
+                <option value="expense" data-i18n-option="entry.expense">Expense</option>
             </select>
 
             <div class="form-grid">
 
                 <div class="form-group">
-                    <label for="amount">Amount (₹)</label>
+                    <label for="amount" data-i18n="entry.amount">
+                        Amount (₹)
+                    </label>
+
                     <input
                         type="number"
                         id="amount"
@@ -322,43 +369,59 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="category">Category</label>
+                    <label for="category" data-i18n="entry.category">
+                        Category
+                    </label>
+
                     <select id="category" required>
-                        <option value="">Choose category</option>
-                        <option value="Salary">Salary</option>
-                        <option value="Business">Business</option>
-                        <option value="Agriculture">Agriculture</option>
-                        <option value="Food">Food</option>
-                        <option value="Transport">Transport</option>
-                        <option value="Education">Education</option>
-                        <option value="Healthcare">Healthcare</option>
-                        <option value="Shopping">Shopping</option>
-                        <option value="Bills">Bills</option>
-                        <option value="Other">Other</option>
+                        <option value="" data-i18n-option="finance.choose_category">
+                            Choose category
+                        </option>
+                        <option value="Salary" data-i18n-option="finance.salary">Salary</option>
+                        <option value="Business" data-i18n-option="finance.business">Business</option>
+                        <option value="Agriculture" data-i18n-option="finance.agriculture">Agriculture</option>
+                        <option value="Food" data-i18n-option="finance.food">Food</option>
+                        <option value="Transport" data-i18n-option="finance.transport">Transport</option>
+                        <option value="Education" data-i18n-option="finance.education">Education</option>
+                        <option value="Healthcare" data-i18n-option="finance.healthcare">Healthcare</option>
+                        <option value="Shopping" data-i18n-option="finance.shopping">Shopping</option>
+                        <option value="Bills" data-i18n-option="finance.bills">Bills</option>
+                        <option value="Other" data-i18n-option="finance.other">Other</option>
                     </select>
                 </div>
 
                 <div class="form-group full">
-                    <label for="note">Description</label>
+                    <label for="note" data-i18n="finance.description">
+                        Description
+                    </label>
+
                     <input
                         type="text"
                         id="note"
                         placeholder="What was this transaction for?"
+                        data-i18n-placeholder="finance.description_placeholder"
                     >
                 </div>
 
                 <div class="form-group full">
-                    <label for="date">Transaction Date</label>
+                    <label for="date" data-i18n="finance.transaction_date">
+                        Transaction Date
+                    </label>
+
                     <input type="date" id="date" required>
                 </div>
 
             </div>
 
-            <button type="submit" class="save-btn">
+            <button
+                type="submit"
+                class="save-btn"
+                data-i18n="finance.save_transaction"
+            >
                 + Save Transaction
             </button>
 
-            <p id="financeMessage"></p>
+            <p id="financeMessage" aria-live="polite"></p>
 
         </form>
 
@@ -369,13 +432,15 @@
         <div class="card-heading">
             <div class="card-icon">📋</div>
             <div>
-                <h2>Transaction History</h2>
-                <p>Your recorded income and expenses</p>
+                <h2 data-i18n="finance.history">Transaction History</h2>
+                <p data-i18n="finance.history_description">
+                    Your recorded income and expenses
+                </p>
             </div>
         </div>
 
         <div id="entriesList">
-            <p>Loading transactions...</p>
+            <p data-i18n="finance.loading">Loading transactions...</p>
         </div>
 
     </section>
@@ -383,16 +448,39 @@
 </main>
 
 <footer class="finance-footer">
-    © 2026 ArthaMitra | Your Financial Friend 💚
+    © 2026 ArthaMitra |
+    <span data-i18n="app.tagline">Your Money, Your Future</span> 💚
 </footer>
 
+<script src="js/i18n.js"></script>
 <script src="js/api.js"></script>
 <script src="js/finance.js"></script>
 
 <script>
+    // Keep the selected language visible
+    document.addEventListener("DOMContentLoaded", () => {
+        const savedLang = localStorage.getItem("lang") || "en";
+        const selector = document.getElementById("financeLanguage");
+
+        if (selector) {
+            selector.value = savedLang;
+        }
+
+        // Set today's date if no date has been selected
+        const dateInput = document.getElementById("date");
+
+        if (dateInput && !dateInput.value) {
+            const today = new Date();
+            const localDate = new Date(
+                today.getTime() - today.getTimezoneOffset() * 60000
+            ).toISOString().split("T")[0];
+
+            dateInput.value = localDate;
+        }
+    });
+
     // Select Income or Expense
     function selectTransactionType(type) {
-
         document.getElementById("entryType").value = type;
 
         document.getElementById("incomeTypeBtn")
@@ -402,11 +490,10 @@
             .classList.toggle("active", type === "expense");
     }
 
-    // Read the selected type from the URL
+    // Read selected type from URL
     const pageParams = new URLSearchParams(window.location.search);
     const initialType = pageParams.get("type");
 
-    // Automatically select the correct button
     if (initialType === "income" || initialType === "expense") {
         selectTransactionType(initialType);
     }
