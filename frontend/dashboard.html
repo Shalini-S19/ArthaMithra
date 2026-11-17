@@ -5,31 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#123c32">
-
     <title>ArthaMitra | Dashboard</title>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
 
     <style>
-        .goals-wrapper {
-            display: grid;
-            gap: 18px;
-        }
-
+        .goals-wrapper { display: grid; gap: 18px; }
         .goal-form {
             background: #f5faf6;
             padding: 20px;
             border-radius: 14px;
             margin: 15px 0;
         }
-
         .goal-form label {
             display: block;
             font-weight: 600;
             margin: 12px 0 6px;
         }
-
         .goal-form input {
             width: 100%;
             padding: 12px;
@@ -38,9 +31,7 @@
             font-size: 15px;
             box-sizing: border-box;
         }
-
-        .goal-form button,
-        .goal-actions button {
+        .goal-form button, .goal-actions button {
             background: #176b4b;
             color: white;
             border: none;
@@ -50,7 +41,6 @@
             font-weight: 600;
             margin-top: 12px;
         }
-
         .goal-card {
             background: white;
             border: 1px solid #e0ebe3;
@@ -58,12 +48,7 @@
             padding: 20px;
             margin-bottom: 14px;
         }
-
-        .goal-card h3 {
-            margin-top: 0;
-            color: #176b4b;
-        }
-
+        .goal-card h3 { margin-top: 0; color: #176b4b; }
         .goal-progress-bg {
             height: 12px;
             background: #e6eee8;
@@ -71,28 +56,14 @@
             overflow: hidden;
             margin: 12px 0;
         }
-
         .goal-progress-fill {
             height: 100%;
             background: #26945e;
             border-radius: 20px;
         }
-
-        .goal-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .goal-actions .delete-goal {
-            background: #b42318;
-        }
-
-        .goal-message {
-            font-weight: 600;
-            margin-top: 12px;
-        }
-
+        .goal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .goal-actions .delete-goal { background: #b42318; }
+        .goal-message { font-weight: 600; margin-top: 12px; }
         .notification-item {
             padding: 14px;
             margin-bottom: 10px;
@@ -102,275 +73,238 @@
             border: 1px solid #cce9d6;
             line-height: 1.5;
         }
-
         .notification-item.warning {
             background: #fff4e5;
             color: #9a5700;
             border-color: #f2d29e;
         }
+        .dashboard-section { scroll-margin-top: 20px; }
 
-        .dashboard-section {
-            scroll-margin-top: 20px;
+        .language-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .language-control select {
+            padding: 9px;
+            border-radius: 8px;
+            border: 1px solid #dce8df;
         }
 
         @media (max-width: 600px) {
-            .goal-actions {
-                flex-direction: column;
-            }
-
-            .goal-actions button {
-                width: 100%;
-            }
+            .goal-actions { flex-direction: column; }
+            .goal-actions button { width: 100%; }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
     <header class="dashboard-header">
-
         <div>
-            <h2>🌱 ArthaMitra</h2>
-            <p>Your Financial Friend</p>
+            <h2>🌱 <span data-i18n="app.name">ArthaMitra</span></h2>
+            <p data-i18n="app.tagline">Your Financial Friend</p>
         </div>
 
-        <button id="logoutBtn" type="button">
-            Logout
-        </button>
+        <div class="language-control">
+            <select id="dashboardLanguage"
+                    aria-label="Select language"
+                    onchange="setLang(this.value)">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
 
+            <button id="logoutBtn" type="button" data-i18n="common.logout">
+                Logout
+            </button>
+        </div>
     </header>
-
 
     <main class="dashboard-container">
 
-        <!-- WELCOME -->
         <section class="welcome-card">
-
             <h1>
-                Hello, <span id="userName">Friend</span>! 👋
+                <span data-i18n="dashboard.hello">Hello</span>,
+                <span id="userName">Friend</span>! 👋
             </h1>
-
-            <p>Let's make your money grow.</p>
-
+            <p data-i18n="dashboard.welcome_message">
+                Let's make your money grow.
+            </p>
         </section>
 
-
-        <!-- FINANCIAL SUMMARY -->
         <section class="summary-section">
-
-            <h2>Your Financial Summary</h2>
+            <h2 data-i18n="dashboard.summary">Your Financial Summary</h2>
 
             <div class="summary-grid">
-
                 <article class="summary-card">
                     <span>💰</span>
-                    <p>Total Income This Week</p>
+                    <p data-i18n="dashboard.income_week">Total Income This Week</p>
                     <h2 id="totalIncome">₹0</h2>
                 </article>
 
                 <article class="summary-card">
                     <span>💸</span>
-                    <p>Total Expenses This Week</p>
+                    <p data-i18n="dashboard.expense_week">Total Expenses This Week</p>
                     <h2 id="totalExpense">₹0</h2>
                 </article>
 
                 <article class="summary-card">
                     <span>🐷</span>
-                    <p>Money Saved This Week</p>
+                    <p data-i18n="dashboard.savings_week">Money Saved This Week</p>
                     <h2 id="totalSavings">₹0</h2>
                 </article>
-
             </div>
-
         </section>
 
-
-        <!-- QUICK ACTIONS -->
         <section class="quick-section">
-
-            <h2>Quick Actions</h2>
+            <h2 data-i18n="dashboard.quick_actions">Quick Actions</h2>
 
             <div class="quick-grid">
-
-                <button onclick="openFeature('income')">
+                <button onclick="openFeature('income')"
+                        data-i18n="dashboard.add_income">
                     ➕ Add Income
                 </button>
 
-                <button onclick="openFeature('expense')">
+                <button onclick="openFeature('expense')"
+                        data-i18n="dashboard.add_expense">
                     ➖ Add Expense
                 </button>
 
-                <button onclick="openFeature('budget')">
+                <button onclick="openFeature('budget')"
+                        data-i18n="dashboard.my_budget">
                     📊 My Budget
                 </button>
 
-                <button onclick="openFeature('goals')">
+                <button onclick="openFeature('goals')"
+                        data-i18n="dashboard.savings_goals">
                     🎯 Savings Goals
                 </button>
-
             </div>
-
         </section>
 
-
-        <!-- SAVINGS GOALS -->
         <section class="dashboard-section" id="goalsList">
-
-            <h2>🎯 My Savings Goals</h2>
+            <h2 data-i18n="dashboard.my_goals">🎯 My Savings Goals</h2>
 
             <div class="goal-form">
-
-                <h3>Create a New Goal</h3>
+                <h3 data-i18n="dashboard.create_goal">Create a New Goal</h3>
 
                 <form id="goalForm">
-
-                    <label for="goalTitle">
+                    <label for="goalTitle" data-i18n="dashboard.goal_name">
                         Goal Name
                     </label>
 
-                    <input
-                        type="text"
-                        id="goalTitle"
-                        placeholder="Example: Buy a new phone"
-                        maxlength="100"
-                        required
-                    >
+                    <input type="text" id="goalTitle"
+                           data-i18n-placeholder="dashboard.goal_placeholder"
+                           placeholder="Example: Buy a new phone"
+                           maxlength="100" required>
 
-                    <label for="goalTarget">
+                    <label for="goalTarget" data-i18n="dashboard.target_amount">
                         Target Amount (₹)
                     </label>
 
-                    <input
-                        type="number"
-                        id="goalTarget"
-                        placeholder="Enter target amount"
-                        min="1"
-                        step="0.01"
-                        required
-                    >
+                    <input type="number" id="goalTarget"
+                           data-i18n-placeholder="dashboard.target_placeholder"
+                           placeholder="Enter target amount"
+                           min="1" step="0.01" required>
 
-                    <label for="goalDeadline">
+                    <label for="goalDeadline" data-i18n="dashboard.deadline">
                         Deadline (Optional)
                     </label>
 
-                    <input
-                        type="date"
-                        id="goalDeadline"
-                    >
+                    <input type="date" id="goalDeadline">
 
-                    <button type="submit">
+                    <button type="submit" data-i18n="dashboard.create_goal_button">
                         Create Savings Goal
                     </button>
 
-                    <p
-                        id="goalMessage"
-                        class="goal-message"
-                        aria-live="polite"
-                    ></p>
-
+                    <p id="goalMessage" class="goal-message"
+                       aria-live="polite"></p>
                 </form>
-
             </div>
 
-            <h3>Your Goals</h3>
+            <h3 data-i18n="dashboard.your_goals">Your Goals</h3>
 
             <div id="goalsContainer">
-                <p>Loading your goals...</p>
+                <p data-i18n="dashboard.loading_goals">Loading your goals...</p>
             </div>
-
         </section>
 
+        <section class="dashboard-section" id="schemes">
+            <h2 data-i18n="dashboard.schemes_title">Government Schemes 🏛️</h2>
 
-        <!-- GOVERNMENT SCHEMES -->
-        <section
-            class="dashboard-section"
-            id="schemes"
-        >
-
-            <h2>Government Schemes 🏛️</h2>
-
-            <p>
+            <p data-i18n="dashboard.schemes_description">
                 Discover government schemes that may benefit you.
             </p>
 
-            <button onclick="openFeature('schemes')">
+            <button onclick="openFeature('schemes')"
+                    data-i18n="dashboard.explore_schemes">
                 Explore Schemes
             </button>
-
         </section>
 
+        <section class="dashboard-section" id="lessons">
+            <h2 data-i18n="dashboard.learning_title">Financial Learning 📚</h2>
 
-        <!-- FINANCIAL LEARNING -->
-        <section
-            class="dashboard-section"
-            id="lessons"
-        >
-
-            <h2>Financial Learning 📚</h2>
-
-            <p>
+            <p data-i18n="dashboard.learning_description">
                 Improve your financial knowledge every day.
             </p>
 
-            <button onclick="openFeature('lessons')">
+            <button onclick="openFeature('lessons')"
+                    data-i18n="dashboard.explore_lessons">
                 Explore Lessons
             </button>
-
         </section>
 
-
-        <!-- NOTIFICATIONS -->
         <section class="dashboard-section" id="notificationSection">
+            <h2 data-i18n="dashboard.notifications">Notifications 🔔</h2>
 
-            <h2>Notifications 🔔</h2>
-
-            <p>
+            <p data-i18n="dashboard.notifications_description">
                 Stay updated about your finances and savings goals.
             </p>
 
-            <div
-                id="notifications"
-                aria-live="polite"
-            >
-                <p>Loading notifications...</p>
+            <div id="notifications" aria-live="polite">
+                <p data-i18n="dashboard.loading_notifications">
+                    Loading notifications...
+                </p>
             </div>
-
         </section>
 
     </main>
 
-
-    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
-
         <button onclick="openFeature('home')">
-            🏠
-            <span>Home</span>
+            🏠 <span data-i18n="dashboard.home">Home</span>
         </button>
 
         <button onclick="openFeature('finance')">
-            💰
-            <span>Finance</span>
+            💰 <span data-i18n="dashboard.finance">Finance</span>
         </button>
 
         <button onclick="openFeature('schemes')">
-            🏛️
-            <span>Schemes</span>
+            🏛️ <span data-i18n="dashboard.schemes">Schemes</span>
         </button>
 
         <button onclick="openFeature('profile')">
-            👤
-            <span>Profile</span>
+            👤 <span data-i18n="dashboard.profile">Profile</span>
         </button>
-
     </nav>
 
-
-    <!-- JAVASCRIPT FILES -->
+    <!-- Load translation before dashboard scripts -->
+    <script src="js/i18n.js"></script>
     <script src="js/api.js"></script>
     <script src="js/dashboard.js"></script>
     <script src="js/notifications.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedLanguage = localStorage.getItem("lang") || "en";
+            const languageSelect = document.getElementById("dashboardLanguage");
+
+            if (languageSelect) {
+                languageSelect.value = savedLanguage;
+            }
+        });
+    </script>
 
 </body>
 </html>
