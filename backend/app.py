@@ -18,6 +18,7 @@ FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
 # Set SECRET_KEY in the environment on the server. The fallback is for local dev only.
 app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
+app.json.ensure_ascii = False
 app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax")
 app.teardown_appcontext(db.close_db)
 
