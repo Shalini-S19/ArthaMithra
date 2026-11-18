@@ -11,7 +11,7 @@
     "no": "No"
   },
   "welcome": {
-    "subtitle": "Learn, save and grow with ArthaMitra.",
+    "subtitle": "Learn, save and grow with ArthaMithra.",
     "feature1": "💰 Track your income and expenses",
     "feature2": "🎯 Plan your savings goals",
     "feature3": "🏛️ Discover government schemes",
@@ -82,6 +82,8 @@
     "notifications": "Notifications 🔔",
     "notifications_description": "Stay updated about your finances and savings goals.",
     "loading_notifications": "Loading notifications...",
+    "chart_title": "📊 Income vs Expenses",
+    "chart_description": "Your financial activity over the last 7 days",
     "home": "Home",
     "finance": "Finance",
     "schemes": "Schemes",
@@ -129,7 +131,7 @@
     "description_placeholder": "What was this transaction for?",
     "transaction_date": "Transaction Date",
     "save_transaction": "+ Save Transaction",
-    "history": "Transaction History",
+    "history": "🧾 Recent Transactions",
     "history_description": "Your recorded income and expenses",
     "loading": "Loading transactions...",
     "empty": "No transactions recorded yet.",
@@ -267,14 +269,13 @@
     "register_error": "Registration failed. Please try again."
   },
   "notifications": {
-  "income_reminder": "💰 Remember to record your income for today.",
-  "expense_reminder": "💸 Remember to record your expenses for today.",
-  "budget_exceeded": "🚨 Your monthly budget has been exceeded! Review your spending.",
-  "budget_warning": "⚠️ You have spent 80% or more of your monthly budget.",
-  "goal_overdue": "⏰ The deadline for this savings goal has passed.",
-  "goal_approaching": "🎯 Your savings goal deadline is approaching.",
-  "all_caught_up": "🎉 You're all caught up! No new reminders.",
-  "load_error": "Unable to load notifications. Please refresh."
-}
-  
+    "income_reminder": "💰 Remember to record your income for today.",
+    "expense_reminder": "💸 Remember to record your expenses for today.",
+    "budget_exceeded": "🚨 Your monthly budget has been exceeded! Review your spending.",
+    "budget_warning": "⚠️ You have spent 80% or more of your monthly budget.",
+    "goal_overdue": "⏰ The deadline for this savings goal has passed.",
+    "goal_approaching": "🎯 Your savings goal deadline is approaching.",
+    "all_caught_up": "🎉 You're all caught up! No new reminders.",
+    "load_error": "Unable to load notifications. Please refresh."
+  }
 }
