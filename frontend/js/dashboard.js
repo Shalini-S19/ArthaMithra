@@ -1,277 +1,479 @@
 
 // ======================================
-// ARTHAMITRA NOTIFICATIONS
+// ARTHAMITRA DASHBOARD
 // ======================================
 
 "use strict";
 
-const notificationContainer =
-    document.getElementById("notifications");
-
 // ======================================
-// TRANSLATIONS
+// TRANSLATION HELPER
 // ======================================
 
-function notificationText(key, fallback) {
+function dashboardText(key, fallback) {
     if (typeof t !== "function") return fallback;
+    return t("dashboard." + key, fallback) || fallback;
+}
 
-    return t("notifications." + key, fallback) || fallback;
+function goalText(key, fallback) {
+    if (typeof t !== "function") return fallback;
+    return t("goal_status." + key, fallback) || fallback;
 }
 
 // ======================================
-// DATE HELPERS
+// FORMAT HELPERS
 // ======================================
 
-function getTodayKey() {
-    const date = new Date();
-
-    return [
-        date.getFullYear(),
-        String(date.getMonth() + 1).padStart(2, "0"),
-        String(date.getDate()).padStart(2, "0")
-    ].join("-");
+function formatMoney(amount) {
+    return "₹" + Number(amount || 0).toLocaleString("en-IN", {
+        maximumFractionDigits: 2
+    });
 }
 
-function getMonthKey() {
-    const date = new Date();
-
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-}
-
-function getBudgetKey() {
-    const date = new Date();
-
-    return `arthamitra_budget_${date.getFullYear()}_${String(date.getMonth() + 1).padStart(2, "0")}`;
-}
-
-// ======================================
-// RESPONSE HELPERS
-// ======================================
-
-function getEntries(payload) {
-    if (Array.isArray(payload)) return payload;
-    if (Array.isArray(payload?.entries)) return payload.entries;
-
-    return [];
-}
-
-function getGoals(payload) {
+function getGoalList(payload) {
     if (Array.isArray(payload)) return payload;
     if (Array.isArray(payload?.goals)) return payload.goals;
-
     return [];
 }
 
-// ======================================
-// DISPLAY NOTIFICATION
-// ======================================
+function showGoalMessage(message, isError = false) {
+    const element = document.getElementById("goalMessage");
+    if (!element) return;
 
-function addNotification(message, type = "info") {
-    if (!notificationContainer) return;
-
-    const item = document.createElement("div");
-
-    item.className = "notification-item";
-    item.textContent = message;
-
-    item.style.padding = "14px";
-    item.style.marginBottom = "10px";
-    item.style.borderRadius = "12px";
-
-    item.style.background =
-        type === "warning" ? "#fff4e5" : "#eaf7ef";
-
-    item.style.color =
-        type === "warning" ? "#9a5700" : "#176b4b";
-
-    item.style.border =
-        "1px solid " +
-        (type === "warning" ? "#f2d29e" : "#cce9d6");
-
-    notificationContainer.appendChild(item);
+    element.textContent = message;
+    element.style.color = isError ? "#b42318" : "#176b4b";
 }
 
 // ======================================
-// DAILY REMINDERS
+// LOAD DASHBOARD
 // ======================================
 
-function checkDailyReminders(entries) {
-    const today = getTodayKey();
+async function loadDashboard() {
+    try {
+        const profile = await api("GET", "/api/me");
+        const user = profile.user || profile;
 
-    const hasIncome = entries.some(entry =>
-        entry.type === "income" &&
-        String(entry.date || "").slice(0, 10) === today
-    );
+        const nameElement = document.getElementById("userName");
 
-    const hasExpense = entries.some(entry =>
-        entry.type === "expense" &&
-        String(entry.date || "").slice(0, 10) === today
-    );
+        if (nameElement) {
+            nameElement.textContent = user.name || "Friend";
+        }
 
-    if (!hasIncome) {
-        addNotification(
-            notificationText(
-                "income_reminder",
-                "💰 Remember to record your income for today."
-            )
-        );
-    }
+        const summary = await api("GET", "/api/summary");
+        const week = summary.this_week || {};
 
-    if (!hasExpense) {
-        addNotification(
-            notificationText(
-                "expense_reminder",
-                "💸 Remember to record your expenses for today."
-            )
-        );
+        document.getElementById("totalIncome").textContent =
+            formatMoney(week.earned);
+
+        document.getElementById("totalExpense").textContent =
+            formatMoney(week.spent);
+
+        document.getElementById("totalSavings").textContent =
+            formatMoney(week.saved);
+
+        await loadGoals();
+
+    } catch (error) {
+        console.error("Dashboard loading error:", error);
+
+        const container = document.getElementById("goalsContainer");
+
+        if (container) {
+            container.textContent = dashboardText(
+                "load_error",
+                "Unable to load dashboard. Please try again."
+            );
+        }
     }
 }
 
 // ======================================
-// MONTHLY BUDGET ALERTS
+// CREATE SAVINGS GOAL
 // ======================================
 
-function checkMonthlyBudget(entries) {
-    const budget =
-        Number(localStorage.getItem(getBudgetKey())) || 0;
+const goalForm = document.getElementById("goalForm");
 
-    if (budget <= 0) return;
+if (goalForm) {
+    goalForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
 
-    const month = getMonthKey();
-
-    const expenses = entries
-        .filter(entry =>
-            entry.type === "expense" &&
-            String(entry.date || "").startsWith(month)
-        )
-        .reduce(
-            (total, entry) =>
-                total + Number(entry.amount || 0),
-            0
+        const title = document.getElementById("goalTitle").value.trim();
+        const target = Number(
+            document.getElementById("goalTarget").value
         );
-
-    const percentage = expenses / budget * 100;
-
-    if (percentage >= 100) {
-        addNotification(
-            notificationText(
-                "budget_exceeded",
-                "🚨 Your monthly budget has been exceeded! Review your spending."
-            ),
-            "warning"
-        );
-
-    } else if (percentage >= 80) {
-        addNotification(
-            notificationText(
-                "budget_warning",
-                "⚠️ You have spent 80% or more of your monthly budget."
-            ),
-            "warning"
-        );
-    }
-}
-
-// ======================================
-// SAVINGS GOAL DEADLINE ALERTS
-// ======================================
-
-function checkGoalDeadlines(goals) {
-    const today = new Date();
-
-    today.setHours(0, 0, 0, 0);
-
-    goals.forEach(goal => {
-        if (!goal.deadline) return;
 
         const deadline =
-            new Date(goal.deadline + "T00:00:00");
+            document.getElementById("goalDeadline").value;
 
-        if (Number.isNaN(deadline.getTime())) return;
+        if (!title || !Number.isFinite(target) || target <= 0) {
+            showGoalMessage(
+                dashboardText(
+                    "invalid_goal",
+                    "Please enter valid goal details."
+                ),
+                true
+            );
+            return;
+        }
 
-        const saved = Number(goal.saved || 0);
-        const target = Number(goal.target || 0);
-
-        if (target > 0 && saved >= target) return;
-
-        const daysLeft = Math.ceil(
-            (deadline.getTime() - today.getTime()) /
-            86400000
+        const submitButton = goalForm.querySelector(
+            'button[type="submit"]'
         );
 
-        if (daysLeft < 0) {
-            addNotification(
-                notificationText(
-                    "goal_overdue",
-                    "⏰ The deadline for this savings goal has passed."
-                ) + " " + goal.title,
-                "warning"
+        if (submitButton) submitButton.disabled = true;
+
+        showGoalMessage(
+            dashboardText("creating_goal", "Creating your goal...")
+        );
+
+        try {
+            await api("POST", "/api/goals", {
+                title,
+                target,
+                deadline: deadline || null
+            });
+
+            goalForm.reset();
+
+            showGoalMessage(
+                dashboardText(
+                    "goal_created",
+                    "Savings goal created successfully! 🎉"
+                )
             );
 
-        } else if (daysLeft <= 7) {
-            addNotification(
-                notificationText(
-                    "goal_approaching",
-                    "🎯 Your savings goal deadline is approaching."
-                ) + " " + goal.title,
-                "warning"
+            await loadGoals();
+
+        } catch (error) {
+            console.error("Goal creation error:", error);
+
+            showGoalMessage(
+                dashboardText(
+                    "goal_create_error",
+                    "Unable to create savings goal."
+                ),
+                true
+            );
+
+        } finally {
+            if (submitButton) submitButton.disabled = false;
+        }
+    });
+}
+
+// ======================================
+// LOAD SAVINGS GOALS
+// ======================================
+
+async function loadGoals() {
+    const container = document.getElementById("goalsContainer");
+    if (!container) return;
+
+    container.textContent = dashboardText(
+        "loading_goals",
+        "Loading your goals..."
+    );
+
+    try {
+        const response = await api("GET", "/api/goals");
+        const goals = getGoalList(response);
+
+        container.replaceChildren();
+
+        if (goals.length === 0) {
+            const emptyMessage = document.createElement("p");
+
+            emptyMessage.textContent = dashboardText(
+                "no_goals",
+                "You have not created any savings goals yet."
+            );
+
+            container.appendChild(emptyMessage);
+            return;
+        }
+
+        goals.forEach(goal => {
+            container.appendChild(createGoalCard(goal));
+        });
+
+    } catch (error) {
+        console.error("Goals loading error:", error);
+
+        container.textContent = dashboardText(
+            "goals_load_error",
+            "Unable to load savings goals."
+        );
+    }
+}
+
+// ======================================
+// CREATE GOAL CARD
+// ======================================
+
+function createGoalCard(goal) {
+    const card = document.createElement("article");
+    card.className = "goal-card";
+
+    const target = Number(goal.target || 0);
+    const saved = Number(goal.saved || 0);
+
+    const percentage = target > 0
+        ? Math.min(100, Math.round(saved / target * 100))
+        : 0;
+
+    const title = document.createElement("h3");
+    title.textContent = goal.title || "Savings Goal";
+
+    const savedText = document.createElement("p");
+    savedText.textContent =
+        dashboardText("saved_label", "Saved:") + " " +
+        formatMoney(saved);
+
+    const targetText = document.createElement("p");
+    targetText.textContent =
+        dashboardText("target_label", "Target:") + " " +
+        formatMoney(target);
+
+    const progressText = document.createElement("p");
+    progressText.textContent =
+        dashboardText("progress", "Progress:") + " " +
+        percentage + "%";
+
+    const progressBackground = document.createElement("div");
+    progressBackground.className = "goal-progress-bg";
+
+    const progressFill = document.createElement("div");
+    progressFill.className = "goal-progress-fill";
+    progressFill.style.width = percentage + "%";
+
+    progressBackground.appendChild(progressFill);
+
+    const deadlineText = document.createElement("p");
+
+    if (goal.deadline) {
+        deadlineText.textContent =
+            dashboardText("deadline_label", "Deadline:") + " " +
+            goal.deadline;
+    }
+
+    const statusText = document.createElement("p");
+    statusText.className = "goal-message";
+
+    const statusKey = goal.status || "on_track";
+
+    const statusFallbacks = {
+        completed: "Goal completed!",
+        overdue: "Deadline has passed",
+        due_soon: "Deadline approaching",
+        on_track: "You're on track"
+    };
+
+    statusText.textContent = goalText(
+        statusKey,
+        statusFallbacks[statusKey] || "You're on track"
+    );
+
+    const actions = document.createElement("div");
+    actions.className = "goal-actions";
+
+    if (saved < target) {
+        const addButton = document.createElement("button");
+        addButton.type = "button";
+        addButton.textContent = goalText("add_money", "Add Money");
+
+        addButton.addEventListener("click", function() {
+            contributeToGoal(goal.id);
+        });
+
+        actions.appendChild(addButton);
+    }
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "delete-goal";
+    deleteButton.textContent = dashboardText("delete_goal", "Delete");
+
+    deleteButton.addEventListener("click", function() {
+        deleteGoal(goal.id, goal.title);
+    });
+
+    actions.appendChild(deleteButton);
+
+    card.append(
+        title,
+        savedText,
+        targetText,
+        progressText,
+        progressBackground
+    );
+
+    if (goal.deadline) {
+        card.appendChild(deadlineText);
+    }
+
+    card.append(statusText, actions);
+
+    return card;
+}
+
+// ======================================
+// ADD MONEY TO GOAL
+// ======================================
+
+async function contributeToGoal(goalId) {
+    const amountText = prompt(
+        dashboardText(
+            "contribution_prompt",
+            "How much money would you like to add?"
+        )
+    );
+
+    if (amountText === null) return;
+
+    const amount = Number(amountText);
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+        alert(
+            dashboardText(
+                "invalid_amount",
+                "Please enter a valid amount."
+            )
+        );
+        return;
+    }
+
+    try {
+        await api(
+            "POST",
+            "/api/goals/" + encodeURIComponent(goalId) + "/contribute",
+            { amount }
+        );
+
+        alert(
+            dashboardText(
+                "contribution_success",
+                "Money added to your savings goal! 🎉"
+            )
+        );
+
+        await loadGoals();
+
+    } catch (error) {
+        console.error("Contribution error:", error);
+
+        alert(
+            dashboardText(
+                "contribution_error",
+                "Unable to add money."
+            )
+        );
+    }
+}
+
+// ======================================
+// DELETE GOAL
+// ======================================
+
+async function deleteGoal(goalId, title) {
+    const confirmation = confirm(
+        dashboardText(
+            "delete_confirmation",
+            "Are you sure you want to delete this goal:"
+        ) + " " + title + "?"
+    );
+
+    if (!confirmation) return;
+
+    try {
+        await api(
+            "DELETE",
+            "/api/goals/" + encodeURIComponent(goalId)
+        );
+
+        alert(
+            dashboardText(
+                "delete_success",
+                "Savings goal deleted successfully."
+            )
+        );
+
+        await loadGoals();
+
+    } catch (error) {
+        console.error("Goal deletion error:", error);
+
+        alert(
+            dashboardText(
+                "delete_error",
+                "Unable to delete the goal."
+            )
+        );
+    }
+}
+
+// ======================================
+// NAVIGATION
+// ======================================
+
+function openFeature(feature) {
+    const pages = {
+        home: "dashboard.html",
+        income: "finance.html?type=income",
+        expense: "finance.html?type=expense",
+        finance: "finance.html",
+        budget: "budget.html",
+        goals: "dashboard.html#goalsList",
+        schemes: "schemes.html",
+        lessons: "learn.html",
+        profile: "profile.html"
+    };
+
+    if (pages[feature]) {
+        window.location.href = pages[feature];
+    } else {
+        alert(
+            dashboardText(
+                "feature_coming",
+                "This feature is coming soon!"
+            )
+        );
+    }
+}
+
+// ======================================
+// LOGOUT
+// ======================================
+
+const logoutButton = document.getElementById("logoutBtn");
+
+if (logoutButton) {
+    logoutButton.addEventListener("click", async function() {
+        try {
+            await api("POST", "/api/logout");
+            window.location.href = "index.html";
+
+        } catch (error) {
+            console.error("Logout error:", error);
+
+            alert(
+                dashboardText(
+                    "logout_error",
+                    "Unable to log out. Please try again."
+                )
             );
         }
     });
 }
 
 // ======================================
-// LOAD NOTIFICATIONS
-// ======================================
-
-async function loadNotifications() {
-    if (!notificationContainer) return;
-
-    notificationContainer.replaceChildren();
-
-    try {
-        const [entriesResponse, goalsResponse] =
-            await Promise.all([
-                api("GET", "/api/entries?days=3650"),
-                api("GET", "/api/goals")
-            ]);
-
-        const entries = getEntries(entriesResponse);
-        const goals = getGoals(goalsResponse);
-
-        checkDailyReminders(entries);
-        checkMonthlyBudget(entries);
-        checkGoalDeadlines(goals);
-
-        if (notificationContainer.children.length === 0) {
-            notificationContainer.textContent =
-                notificationText(
-                    "all_caught_up",
-                    "🎉 You're all caught up! No new reminders."
-                );
-        }
-
-    } catch (error) {
-        console.error("Notification loading error:", error);
-
-        notificationContainer.textContent =
-            notificationText(
-                "load_error",
-                "Unable to load notifications. Please refresh."
-            );
-    }
-}
-
-// ======================================
 // LANGUAGE CHANGE
 // ======================================
 
-document.addEventListener("languageChanged", () => {
-    loadNotifications();
+document.addEventListener("languageChanged", function() {
+    loadGoals();
 });
 
 // ======================================
-// INITIALIZE
+// INITIALIZE DASHBOARD
 // ======================================
 
-loadNotifications();
+loadDashboard();
