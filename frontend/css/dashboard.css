@@ -1,56 +1,48 @@
 
 /* =====================================
-   ARTHAMITHRA ORIGINAL DASHBOARD DESIGN
+   ARTHAMITHRA DASHBOARD
 ===================================== */
-
-.dashboard-header {
-    background: #123c32;
-    color: white;
-    padding: 18px 6%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.dashboard-header p {
-    color: #c5ded2;
-    font-size: 13px;
-    margin-top: 5px;
-}
-
-.dashboard-header button {
-    background: white;
-    color: #123c32;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 16px;
-    cursor: pointer;
-}
 
 .dashboard-container {
     width: min(1100px, 92%);
     margin: 25px auto 100px;
 }
 
-/* Welcome card */
+/* WELCOME CARD - FIXED */
 
-.welcome-card {
-    background: linear-gradient(120deg, #176b4b, #123c32);
-    color: white;
+.dashboard-section.welcome-card {
+    background: linear-gradient(120deg, #176b4b, #123c32) !important;
+    color: #ffffff !important;
     padding: 30px;
     border-radius: 18px;
     margin-bottom: 28px;
 }
 
-.welcome-card h1 {
+.dashboard-section.welcome-card h1 {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #ffffff !important;
     font-size: 27px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
-/* Sections */
+.dashboard-section.welcome-card h1 span {
+    color: #ffffff !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.dashboard-section.welcome-card p {
+    color: #ffffff !important;
+    font-size: 16px;
+    margin: 0;
+}
+
+/* DASHBOARD SECTIONS */
 
 .dashboard-section {
-    background: white;
+    background: #ffffff;
     padding: 22px;
     border-radius: 15px;
     border: 1px solid #e5eee8;
@@ -69,7 +61,7 @@
     margin-bottom: 14px;
 }
 
-/* Summary cards */
+/* SUMMARY CARDS */
 
 .summary-grid {
     display: grid;
@@ -78,20 +70,15 @@
 }
 
 .summary-card {
-    background: white;
+    background: #ffffff;
     border-radius: 14px;
     padding: 22px;
     box-shadow: 0 4px 16px #173d3210;
     border: 1px solid #e5eee8;
 }
 
-.summary-card span {
-    font-size: 25px;
-}
-
-.summary-card h2 {
-    color: #176b4b;
-    font-size: 23px;
+.summary-card h3 {
+    color: #123c32;
 }
 
 .summary-card p {
@@ -100,7 +87,7 @@
     margin: 12px 0;
 }
 
-/* Quick actions */
+/* QUICK ACTIONS */
 
 .quick-grid,
 .quick-actions {
@@ -112,7 +99,7 @@
 .quick-grid button,
 .quick-actions button,
 .dashboard-section > button {
-    background: white;
+    background: #ffffff;
     color: #176b4b;
     border: 1px solid #cfe1d5;
     padding: 17px 10px;
@@ -128,7 +115,7 @@
     background: #e8f4ec;
 }
 
-/* Income and expense chart */
+/* CHART */
 
 #weeklyChart {
     position: relative;
@@ -142,7 +129,7 @@
     height: 100% !important;
 }
 
-/* Recent transactions */
+/* TRANSACTIONS */
 
 #recentTransactionsList > div {
     transition: 0.2s ease;
@@ -153,7 +140,7 @@
     box-shadow: 0 4px 12px rgba(18, 60, 50, 0.08);
 }
 
-/* Savings goals */
+/* SAVINGS GOALS */
 
 #goalForm {
     display: grid;
@@ -178,7 +165,7 @@
 #goalForm button {
     grid-column: 1 / -1;
     background: #176b4b;
-    color: white;
+    color: #ffffff;
     border: none;
     padding: 14px;
     border-radius: 10px;
@@ -225,7 +212,7 @@
     border: none;
     border-radius: 8px;
     background: #176b4b;
-    color: white;
+    color: #ffffff;
     cursor: pointer;
 }
 
@@ -233,7 +220,7 @@
     background: #b42318;
 }
 
-/* Notifications */
+/* NOTIFICATIONS */
 
 #goalsList,
 #notifications,
@@ -242,14 +229,14 @@
     line-height: 1.7;
 }
 
-/* Bottom navigation */
+/* BOTTOM NAVIGATION */
 
 .bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background: white;
+    background: #ffffff;
     border-top: 1px solid #dce9e0;
     display: flex;
     justify-content: space-around;
@@ -274,10 +261,9 @@
     font-size: 11px;
 }
 
-/* Mobile responsive */
+/* MOBILE RESPONSIVE */
 
 @media (max-width: 650px) {
-
     .summary-grid {
         grid-template-columns: 1fr;
     }
@@ -287,11 +273,11 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .welcome-card {
+    .dashboard-section.welcome-card {
         padding: 23px;
     }
 
-    .welcome-card h1 {
+    .dashboard-section.welcome-card h1 {
         font-size: 23px;
     }
 
