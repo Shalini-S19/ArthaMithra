@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#123c32">
+    <title>ArthaMithra | My Profile</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: #f3f8f4;
+            color: #193b30;
+            font-family: Arial, sans-serif;
+        }
+
+        .profile-header {
+            background: #123c32;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .profile-header h2 { margin: 0; }
+
+        .profile-header button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .profile-container {
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 4px 18px rgba(0,0,0,.06);
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: #dff2e5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            margin: 0 auto 15px;
+        }
+
+        .profile-heading { text-align: center; }
+
+        .profile-heading h1 {
+            margin: 8px 0;
+            color: #176b4b;
+        }
+
+        .profile-heading p { color: #66766d; }
+
+        .profile-form label {
+            display: block;
+            font-weight: 600;
+            margin: 15px 0 7px;
+        }
+
+        .profile-form input,
+        .profile-form select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d6e4da;
+            border-radius: 9px;
+            font-size: 15px;
+            background: white;
+        }
+
+        .profile-form input:disabled {
+            background: #edf2ee;
+            color: #66766d;
+        }
+
+        .profile-form button,
+        .logout-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #176b4b;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .logout-button { background: #b42318; }
+
+        button:disabled { opacity: .6; cursor: not-allowed; }
+
+        #profileMessage {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #176b4b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            padding: 14px 5px;
+            position: sticky;
+            bottom: 0;
+            border-top: 1px solid #dce8df;
+        }
+
+        .bottom-nav a {
+            color: #176b4b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media(max-width: 500px) {
+            .profile-card { padding: 18px; }
+            .profile-header { padding: 15px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="profile-header">
+    <div>
+        <h2>🌱 ArthaMithra</h2>
+        <p id="tagline">Your Financial Friend</p>
+    </div>
+
+    <select id="languageSelect" aria-label="Select language">
+        <option value="en">English</option>
+        <option value="kn">ಕನ್ನಡ</option>
+    </select>
+</header>
+
+<main class="profile-container">
+
+    <a href="dashboard.html" class="back-link" id="backLink">
+        ← Back to Dashboard
+    </a>
+
+    <section class="profile-card">
+
+        <div class="profile-heading">
+            <div class="profile-avatar">👤</div>
+            <h1 id="pageTitle">My Profile</h1>
+            <p id="profileSubtitle">Manage your personal information</p>
+        </div>
+
+        <form id="profileForm" class="profile-form">
+
+            <label id="nameLabel" for="userName">Full Name</label>
+            <input id="userName" type="text" disabled>
+
+            <label id="phoneLabel" for="userPhone">Mobile Number</label>
+            <input id="userPhone" type="tel" disabled>
+
+            <label id="ageLabel" for="userAge">Age</label>
+            <input id="userAge" type="number" min="1" max="119">
+
+            <label id="genderLabel" for="userGender">Gender</label>
+            <select id="userGender">
+                <option value="">Select</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label id="occupationLabel" for="userOccupation">Occupation</label>
+            <input id="userOccupation" type="text" maxlength="100">
+
+            <label id="familyLabel" for="familySize">Family Size</label>
+            <input id="familySize" type="number" min="1" max="100">
+
+            <label id="bankLabel" for="bankAccount">Do you have a bank account?</label>
+            <select id="bankAccount">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <label id="insuranceLabel" for="insurance">Do you have insurance?</label>
+            <select id="insurance">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <button type="submit" id="saveButton">
+                Save Changes
+            </button>
+
+            <p id="profileMessage" role="status"></p>
+
+        </form>
+
+    </section>
+
+    <button class="logout-button" id="logoutButton">
+        Logout
+    </button>
+
+</main>
+
+<nav class="bottom-nav">
+    <a href="dashboard.html" id="homeNav">🏠 Home</a>
+    <a href="finance.html" id="financeNav">💰 Finance</a>
+    <a href="schemes.html" id="schemesNav">🏛️ Schemes</a>
+    <a href="profile.html" id="profileNav">👤 Profile</a>
+</nav>
+
+<script src="js/api.js"></script>
+
+<script>
+"use strict";
+
+const translations = {
+    en: {
+        tagline: "Your Financial Friend",
+        back: "← Back to Dashboard",
+        title: "My Profile",
+        subtitle: "Manage your personal information",
+        name: "Full Name",
+        phone: "Mobile Number",
+        age: "Age",
+        gender: "Gender",
+        occupation: "Occupation",
+        family: "Family Size",
+        bank: "Do you have a bank account?",
+        insurance: "Do you have insurance?",
+        select: "Select",
+        female: "Female",
+        male: "Male",
+        other: "Other",
+        yes: "Yes",
+        no: "No",
+        save: "Save Changes",
+        saving: "Saving...",
+        success: "Profile updated successfully! 🎉",
+        error: "Unable to update profile.",
+        loading: "Loading profile...",
+        loadError: "Unable to load profile. Please log in again.",
+        invalidAge: "Please enter a valid age.",
+        invalidFamily: "Please enter a valid family size.",
+        logout: "Logout",
+        logoutError: "Unable to log out. Please try again.",
+        home: "🏠 Home",
+        finance: "💰 Finance",
+        schemes: "🏛️ Schemes",
+        profile: "👤 Profile"
+    },
+
+    kn: {
+        tagline: "ನಿಮ್ಮ ಆರ್ಥಿಕ ಸ್ನೇಹಿತ",
+        back: "← ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಹಿಂತಿರುಗಿ",
+        title: "ನನ್ನ ಪ್ರೊಫೈಲ್",
+        subtitle: "ನಿಮ್ಮ ವೈಯಕ್ತಿಕ ಮಾಹಿತಿಯನ್ನು ನಿರ್ವಹಿಸಿ",
+        name: "ಪೂರ್ಣ ಹೆಸರು",
+        phone: "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+        age: "ವಯಸ್ಸು",
+        gender: "ಲಿಂಗ",
+        occupation: "ಉದ್ಯೋಗ",
+        family: "ಕುಟುಂಬದ ಸದಸ್ಯರ ಸಂಖ್ಯೆ",
+        bank: "ನಿಮ್ಮಲ್ಲಿ ಬ್ಯಾಂಕ್ ಖಾತೆ ಇದೆಯೇ?",
+        insurance: "ನಿಮ್ಮಲ್ಲಿ ವಿಮೆ ಇದೆಯೇ?",
+        select: "ಆಯ್ಕೆಮಾಡಿ",
+        female: "ಮಹಿಳೆ",
+        male: "ಪುರುಷ",
+        other: "ಇತರೆ",
+        yes: "ಹೌದು",
+        no: "ಇಲ್ಲ",
+        save: "ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ",
+        saving: "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+        success: "ಪ್ರೊಫೈಲ್ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ! 🎉",
+        error: "ಪ್ರೊಫೈಲ್ ನವೀಕರಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+        loading: "ಪ್ರೊಫೈಲ್ ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+        loadError: "ಪ್ರೊಫೈಲ್ ಲೋಡ್ ಆಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಲಾಗಿನ್ ಮಾಡಿ.",
+        invalidAge: "ದಯವಿಟ್ಟು ಸರಿಯಾದ ವಯಸ್ಸನ್ನು ನಮೂದಿಸಿ.",
+        invalidFamily: "ದಯವಿಟ್ಟು ಸರಿಯಾದ ಕುಟುಂಬದ ಸದಸ್ಯರ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ.",
+        logout: "ಲಾಗ್ ಔಟ್",
+        logoutError: "ಲಾಗ್ ಔಟ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+        home: "🏠 ಮುಖಪುಟ",
+        finance: "💰 ಹಣಕಾಸು",
+        schemes: "🏛️ ಯೋಜನೆಗಳು",
+        profile: "👤 ಪ್ರೊಫೈಲ್"
+    }
+};
+
+const form = document.getElementById("profileForm");
+const message = document.getElementById("profileMessage");
+const saveButton = document.getElementById("saveButton");
+const languageSelect = document.getElementById("languageSelect");
+
+let currentUser = null;
+
+function translatePage(lang) {
+    const t = translations[lang] || translations.en;
+
+    document.documentElement.lang = lang;
+
+    const ids = {
+        tagline: "tagline",
+        back: "backLink",
+        title: "pageTitle",
+        subtitle: "profileSubtitle",
+        name: "nameLabel",
+        phone: "phoneLabel",
+        age: "ageLabel",
+        gender: "genderLabel",
+        occupation: "occupationLabel",
+        family: "familyLabel",
+        bank: "bankLabel",
+        insurance: "insuranceLabel",
+        save: "saveButton",
+        logout: "logoutButton",
+        home: "homeNav",
+        finance: "financeNav",
+        schemes: "schemesNav",
+        profile: "profileNav"
+    };
+
+    Object.entries(ids).forEach(([key, id]) => {
+        document.getElementById(id).textContent = t[key];
+    });
+
+    const gender = document.getElementById("userGender");
+    gender.options[0].text = t.select;
+    gender.options[1].text = t.female;
+    gender.options[2].text = t.male;
+    gender.options[3].text = t.other;
+
+    ["bankAccount", "insurance"].forEach(id => {
+        const select = document.getElementById(id);
+        select.options[0].text = t.yes;
+        select.options[1].text = t.no;
+    });
+
+    languageSelect.value = lang;
+    localStorage.setItem("lang", lang);
+}
+
+async function loadProfile() {
+    message.textContent = translations[localStorage.getItem("lang") || "en"].loading;
+
+    try {
+        const response = await api("GET", "/api/me");
+        currentUser = response.user || response;
+
+        document.getElementById("userName").value =
+            currentUser.name || "";
+
+        document.getElementById("userPhone").value =
+            currentUser.phone || "";
+
+        document.getElementById("userAge").value =
+            currentUser.age || "";
+
+        document.getElementById("userGender").value =
+            currentUser.gender || "";
+
+        document.getElementById("userOccupation").value =
+            currentUser.occupation || "";
+
+        document.getElementById("familySize").value =
+            currentUser.family_size || "";
+
+        document.getElementById("bankAccount").value =
+            currentUser.has_bank_account ? "yes" : "no";
+
+        document.getElementById("insurance").value =
+            currentUser.has_insurance ? "yes" : "no";
+
+        const lang = currentUser.language || localStorage.getItem("lang") || "en";
+
+        translatePage(lang);
+        message.textContent = "";
+
+    } catch (error) {
+        console.error("Profile loading error:", error);
+
+        message.textContent =
+            translations[localStorage.getItem("lang") || "en"].loadError;
+        message.style.color = "#b42318";
+    }
+}
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const lang = languageSelect.value;
+    const t = translations[lang];
+
+    const ageValue = document.getElementById("userAge").value;
+    const familyValue = document.getElementById("familySize").value;
+
+    const age = ageValue === "" ? null : Number(ageValue);
+    const familySize = familyValue === "" ? null : Number(familyValue);
+
+    if (age !== null && (!Number.isInteger(age) || age < 1 || age >= 120)) {
+        message.textContent = t.invalidAge;
+        message.style.color = "#b42318";
+        return;
+    }
+
+    if (familySize !== null &&
+        (!Number.isInteger(familySize) || familySize < 1 || familySize > 100)) {
+        message.textContent = t.invalidFamily;
+        message.style.color = "#b42318";
+        return;
+    }
+
+    saveButton.disabled = true;
+    saveButton.textContent = t.saving;
+
+    message.textContent = "";
+
+    try {
+        const updated = await api("PATCH", "/api/me", {
+            language: lang,
+            age: age,
+            gender: document.getElementById("userGender").value || undefined,
+            occupation: document.getElementById("userOccupation").value.trim(),
+            family_size: familySize,
+            has_bank_account:
+                document.getElementById("bankAccount").value === "yes",
+            has_insurance:
+                document.getElementById("insurance").value === "yes"
+        });
+
+        currentUser = updated.user || currentUser;
+
+        localStorage.setItem("lang", lang);
+        translatePage(lang);
+
+        message.textContent = t.success;
+        message.style.color = "#176b4b";
+
+    } catch (error) {
+        console.error("Profile update error:", error);
+
+        message.textContent = t.error;
+        message.style.color = "#b42318";
+
+    } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = t.save;
+    }
+});
+
+languageSelect.addEventListener("change", function() {
+    translatePage(this.value);
+});
+
+document.getElementById("logoutButton").addEventListener("click", async function() {
+    const lang = languageSelect.value;
+
+    try {
+        await api("POST", "/api/logout");
+        window.location.href = "index.html";
+    } catch (error) {
+        console.error("Logout error:", error);
+        alert(translations[lang].logoutError);
+    }
+});
+
+translatePage(localStorage.getItem("lang") || "en");
+loadProfile();
+</script>
+
+</body>
+</html>
