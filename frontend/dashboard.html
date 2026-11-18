@@ -18,40 +18,62 @@
 <header class="topbar">
     <h2>🌱 ArthaMithra</h2>
 
-    <select id="dashboardLanguage" onchange="setLang(this.value)">
-        <option value="en">English</option>
-        <option value="kn">ಕನ್ನಡ</option>
-    </select>
+    <div style="display:flex;align-items:center;gap:10px;">
+        <select id="dashboardLanguage"
+                data-language-selector
+                onchange="setLang(this.value)">
+            <option value="en">English</option>
+            <option value="kn">ಕನ್ನಡ</option>
+        </select>
+
+        <button id="logoutButton"
+                type="button"
+                onclick="logoutUser()">
+            🚪 <span data-i18n="common.logout">Logout</span>
+        </button>
+    </div>
 </header>
 
 <main class="dashboard-container">
 
-    <!-- WELCOME SECTION -->
-    <section class="dashboard-section">
+    <!-- WELCOME -->
+    <section class="dashboard-section welcome-card">
         <h1>
-            Welcome, <span id="userName">Friend</span>! 💚
+            <span data-i18n="dashboard.hello">Hello</span>,
+            <span id="userName">Friend</span>! 💚
         </h1>
-        <p>Your financial journey starts here.</p>
+
+        <p data-i18n="dashboard.welcome_message">
+            Let's make your money grow.
+        </p>
     </section>
 
-    <!-- WEEKLY SUMMARY -->
+    <!-- FINANCIAL SUMMARY -->
     <section class="dashboard-section">
-        <h2>📊 Financial Summary</h2>
+        <h2 data-i18n="dashboard.summary">
+            Your Financial Summary
+        </h2>
 
         <div class="summary-grid">
 
             <div class="summary-card">
-                <h3>Income This Week</h3>
+                <h3 data-i18n="dashboard.income_week">
+                    Total Income This Week
+                </h3>
                 <p id="weeklyIncome">₹0</p>
             </div>
 
             <div class="summary-card">
-                <h3>Expenses This Week</h3>
+                <h3 data-i18n="dashboard.expense_week">
+                    Total Expenses This Week
+                </h3>
                 <p id="weeklyExpense">₹0</p>
             </div>
 
             <div class="summary-card">
-                <h3>Savings This Week</h3>
+                <h3 data-i18n="dashboard.savings_week">
+                    Money Saved This Week
+                </h3>
                 <p id="weeklySavings">₹0</p>
             </div>
 
@@ -60,30 +82,34 @@
 
     <!-- QUICK ACTIONS -->
     <section class="dashboard-section">
-        <h2>⚡ Quick Actions</h2>
+        <h2 data-i18n="dashboard.quick_actions">
+            Quick Actions
+        </h2>
 
         <div class="quick-actions">
-
-            <button onclick="openFeature('income')">
+            <button onclick="openFeature('income')"
+                    data-i18n="dashboard.add_income">
                 ➕ Add Income
             </button>
 
-            <button onclick="openFeature('expense')">
+            <button onclick="openFeature('expense')"
+                    data-i18n="dashboard.add_expense">
                 ➖ Add Expense
             </button>
 
-            <button onclick="openFeature('budget')">
-                💰 Monthly Budget
+            <button onclick="openFeature('budget')"
+                    data-i18n="dashboard.my_budget">
+                📊 My Budget
             </button>
 
-            <button onclick="openFeature('goals')">
+            <button onclick="openFeature('goals')"
+                    data-i18n="dashboard.savings_goals">
                 🎯 Savings Goals
             </button>
-
         </div>
     </section>
 
-    <!-- INCOME AND EXPENSE CHART -->
+    <!-- CHART -->
     <section class="dashboard-section" id="transactionAnalytics">
         <h2>📊 Income vs Expenses</h2>
 
@@ -109,20 +135,24 @@
 
     <!-- SAVINGS GOALS -->
     <section class="dashboard-section" id="goalsSection">
-        <h2>🎯 Savings Goals</h2>
+        <h2 data-i18n="dashboard.my_goals">
+            My Savings Goals
+        </h2>
 
         <form id="goalForm">
             <input
                 type="text"
                 id="goalTitle"
-                placeholder="Enter your goal"
+                placeholder="Example: Buy a new phone"
+                data-i18n-placeholder="dashboard.goal_placeholder"
                 required
             >
 
             <input
                 type="number"
                 id="goalTarget"
-                placeholder="Target amount"
+                placeholder="Enter target amount"
+                data-i18n-placeholder="dashboard.target_placeholder"
                 min="1"
                 required
             >
@@ -130,9 +160,13 @@
             <input
                 type="date"
                 id="goalDeadline"
+                aria-label="Goal deadline"
             >
 
-            <button type="submit">Create Goal</button>
+            <button type="submit"
+                    data-i18n="dashboard.create_goal_button">
+                Create Savings Goal
+            </button>
         </form>
 
         <div id="goalMessage"></div>
@@ -141,36 +175,46 @@
 
     <!-- GOVERNMENT SCHEMES -->
     <section class="dashboard-section">
-        <h2>🏛️ Government Schemes</h2>
+        <h2 data-i18n="dashboard.schemes_title">
+            Government Schemes
+        </h2>
 
-        <p>
-            Discover government schemes and financial benefits.
+        <p data-i18n="dashboard.schemes_description">
+            Discover government schemes that may benefit you.
         </p>
 
-        <button onclick="openFeature('schemes')">
+        <button onclick="openFeature('schemes')"
+                data-i18n="dashboard.explore_schemes">
             Explore Schemes
         </button>
     </section>
 
     <!-- FINANCIAL LEARNING -->
     <section class="dashboard-section">
-        <h2>📚 Financial Learning</h2>
+        <h2 data-i18n="dashboard.learning_title">
+            Financial Learning
+        </h2>
 
-        <p>
-            Improve your financial knowledge through simple lessons.
+        <p data-i18n="dashboard.learning_description">
+            Improve your financial knowledge every day.
         </p>
 
-        <button onclick="openFeature('lessons')">
-            Start Learning
+        <button onclick="openFeature('lessons')"
+                data-i18n="dashboard.explore_lessons">
+            Explore Lessons
         </button>
     </section>
 
     <!-- NOTIFICATIONS -->
     <section class="dashboard-section">
-        <h2>🔔 Notifications</h2>
+        <h2 data-i18n="dashboard.notifications">
+            Notifications
+        </h2>
 
-        <div id="notificationsList">
-            <p>Loading notifications...</p>
+        <div id="notifications">
+            <p data-i18n="dashboard.loading_notifications">
+                Loading notifications...
+            </p>
         </div>
     </section>
 
@@ -180,28 +224,47 @@
 <nav class="bottom-nav">
 
     <button onclick="openFeature('home')">
-        🏠 Home
+        🏠 <span data-i18n="dashboard.home">Home</span>
     </button>
 
     <button onclick="openFeature('income')">
-        💰 Finance
+        💰 <span data-i18n="dashboard.finance">Finance</span>
     </button>
 
     <button onclick="openFeature('schemes')">
-        🏛️ Schemes
+        🏛️ <span data-i18n="dashboard.schemes">Schemes</span>
     </button>
 
     <button onclick="openFeature('profile')">
-        👤 Profile
+        👤 <span data-i18n="dashboard.profile">Profile</span>
     </button>
 
 </nav>
 
-<!-- SCRIPTS -->
 <script src="js/i18n.js"></script>
 <script src="js/api.js"></script>
 <script src="js/dashboard.js"></script>
 <script src="js/notifications.js"></script>
+
+<script>
+async function logoutUser() {
+    if (!confirm("Are you sure you want to logout?")) {
+        return;
+    }
+
+    const button = document.getElementById("logoutButton");
+    button.disabled = true;
+
+    try {
+        await api("POST", "/api/logout");
+        window.location.replace("index.html");
+    } catch (error) {
+        console.error("Logout error:", error);
+        alert(error.message || "Unable to logout. Please try again.");
+        button.disabled = false;
+    }
+}
+</script>
 
 </body>
 </html>
