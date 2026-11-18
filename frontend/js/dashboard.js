@@ -1,452 +1,277 @@
 
 // ======================================
-// ARTHAMITRA DASHBOARD
+// ARTHAMITRA NOTIFICATIONS
 // ======================================
 
-function tr(key, fallback) {
+"use strict";
+
+const notificationContainer =
+    document.getElementById("notifications");
+
+// ======================================
+// TRANSLATIONS
+// ======================================
+
+function notificationText(key, fallback) {
     if (typeof t !== "function") return fallback;
 
-    const value = t(key, fallback);
-    return value || fallback;
-}
-
-function formatMoney(amount) {
-    return "₹" + Number(amount || 0).toLocaleString("en-IN");
-}
-
-function getErrorMessage(error) {
-    return String(error?.message || "").toLowerCase();
+    return t("notifications." + key, fallback) || fallback;
 }
 
 // ======================================
-// LOAD DASHBOARD
+// DATE HELPERS
 // ======================================
 
-async function loadDashboard() {
-    try {
-        const profile = await api("GET", "/api/me");
-        const user = profile.user || profile;
+function getTodayKey() {
+    const date = new Date();
 
-        const userName = document.getElementById("userName");
+    return [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, "0"),
+        String(date.getDate()).padStart(2, "0")
+    ].join("-");
+}
 
-        if (userName) {
-            userName.textContent = user.name || "Friend";
-        }
+function getMonthKey() {
+    const date = new Date();
 
-        const summary = await api("GET", "/api/summary");
-        const week = summary.this_week || {};
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+}
 
-        document.getElementById("totalIncome").textContent =
-            formatMoney(week.earned);
+function getBudgetKey() {
+    const date = new Date();
 
-        document.getElementById("totalExpense").textContent =
-            formatMoney(week.spent);
-
-        document.getElementById("totalSavings").textContent =
-            formatMoney(week.saved);
-
-        await loadGoals();
-
-    } catch (error) {
-        console.error("Dashboard error:", error);
-
-        const message = getErrorMessage(error);
-
-        if (
-            message.includes("401") ||
-            message.includes("unauthorized") ||
-            message.includes("login")
-        ) {
-            window.location.href = "/";
-            return;
-        }
-
-        const notification = document.getElementById("notifications");
-
-        if (notification) {
-            notification.textContent = tr(
-                "dashboard.load_error",
-                "Unable to load dashboard data. Please refresh."
-            );
-        }
-    }
+    return `arthamitra_budget_${date.getFullYear()}_${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
 
 // ======================================
-// CREATE SAVINGS GOAL
+// RESPONSE HELPERS
 // ======================================
 
-const goalForm = document.getElementById("goalForm");
+function getEntries(payload) {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.entries)) return payload.entries;
 
-goalForm?.addEventListener("submit", async function(event) {
-    event.preventDefault();
+    return [];
+}
 
-    const title = document.getElementById("goalTitle").value.trim();
-    const target = Number(document.getElementById("goalTarget").value);
-    const deadline = document.getElementById("goalDeadline").value;
-    const message = document.getElementById("goalMessage");
+function getGoals(payload) {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.goals)) return payload.goals;
 
-    if (!title || !Number.isFinite(target) || target <= 0) {
-        message.textContent = tr(
-            "dashboard.invalid_goal",
-            "Please enter valid goal details."
-        );
-        message.style.color = "#b42318";
-        return;
-    }
-
-    try {
-        message.textContent = tr(
-            "dashboard.creating_goal",
-            "Creating your goal..."
-        );
-
-        message.style.color = "#176b4b";
-
-        const body = { title, target };
-
-        if (deadline) {
-            body.deadline = deadline;
-        }
-
-        await api("POST", "/api/goals", body);
-
-        message.textContent = tr(
-            "dashboard.goal_created",
-            "Savings goal created successfully! 🎉"
-        );
-
-        goalForm.reset();
-
-        await loadGoals();
-
-    } catch (error) {
-        console.error("Create goal error:", error);
-
-        message.textContent = tr(
-            "dashboard.goal_create_error",
-            "Unable to create savings goal."
-        );
-
-        message.style.color = "#b42318";
-    }
-});
-
-// ======================================
-// LOAD SAVINGS GOALS
-// ======================================
-
-async function loadGoals() {
-    const container = document.getElementById("goalsContainer");
-
-    if (!container) return;
-
-    try {
-        const result = await api("GET", "/api/goals");
-
-        const goals = Array.isArray(result)
-            ? result
-            : (result.goals || []);
-
-        container.replaceChildren();
-
-        if (goals.length === 0) {
-            container.textContent = tr(
-                "dashboard.no_goals",
-                "You haven't created any savings goals yet. Start your first goal above!"
-            );
-            return;
-        }
-
-        goals.forEach(goal => {
-            const card = document.createElement("div");
-            card.className = "goal-card";
-
-            const title = document.createElement("h3");
-
-            title.textContent =
-                "🎯 " +
-                (goal.title || tr(
-                    "dashboard.goal_default",
-                    "Savings Goal"
-                ));
-
-            const saved = Number(goal.saved || 0);
-            const target = Number(goal.target || 0);
-
-            const percent = target > 0
-                ? Math.min(100, Math.max(0, saved / target * 100))
-                : 0;
-
-            const amounts = document.createElement("p");
-
-            amounts.textContent =
-                tr("dashboard.saved_label", "Saved:") + " " +
-                formatMoney(saved) + " / " +
-                tr("dashboard.target_label", "Target:") + " " +
-                formatMoney(target);
-
-            const progressBg = document.createElement("div");
-            progressBg.className = "goal-progress-bg";
-
-            const progressFill = document.createElement("div");
-            progressFill.className = "goal-progress-fill";
-            progressFill.style.width = percent + "%";
-
-            progressBg.appendChild(progressFill);
-
-            const progressText = document.createElement("p");
-
-            progressText.textContent =
-                tr("dashboard.progress", "Progress:") + " " +
-                Math.round(percent) + "%";
-
-            const deadline = document.createElement("p");
-
-            if (goal.deadline) {
-                deadline.textContent =
-                    tr("dashboard.deadline_label", "Deadline:") +
-                    " " + goal.deadline;
-            }
-
-            const actions = document.createElement("div");
-            actions.className = "goal-actions";
-
-            const addButton = document.createElement("button");
-
-            addButton.textContent =
-                "➕ " + tr("goal_status.add_money", "Add Money");
-
-            addButton.disabled = percent >= 100;
-
-            addButton.addEventListener("click", () => {
-                contributeToGoal(goal.id, goal.title);
-            });
-
-            const deleteButton = document.createElement("button");
-
-            deleteButton.textContent =
-                "🗑️ " + tr("dashboard.delete_goal", "Delete");
-
-            deleteButton.className = "delete-goal";
-
-            deleteButton.addEventListener("click", () => {
-                deleteGoal(goal.id, goal.title);
-            });
-
-            actions.append(addButton, deleteButton);
-
-            if (percent >= 100) {
-                const completed = document.createElement("p");
-
-                completed.textContent =
-                    "🎉 " + tr(
-                        "goal_status.completed",
-                        "Goal completed!"
-                    );
-
-                completed.style.color = "#176b4b";
-
-                card.appendChild(completed);
-            }
-
-            card.append(
-                title,
-                amounts,
-                progressBg,
-                progressText
-            );
-
-            if (goal.deadline) {
-                card.appendChild(deadline);
-            }
-
-            card.appendChild(actions);
-
-            container.appendChild(card);
-        });
-
-    } catch (error) {
-        console.error("Load goals error:", error);
-
-        container.textContent = tr(
-            "dashboard.goals_load_error",
-            "Unable to load savings goals."
-        );
-    }
+    return [];
 }
 
 // ======================================
-// ADD MONEY TO SAVINGS GOAL
+// DISPLAY NOTIFICATION
 // ======================================
 
-async function contributeToGoal(goalId, goalTitle) {
-    const amountInput = prompt(
-        tr(
-            "dashboard.contribution_prompt",
-            "How much money do you want to add to"
-        ) +
-        " " + goalTitle + "? (₹)"
+function addNotification(message, type = "info") {
+    if (!notificationContainer) return;
+
+    const item = document.createElement("div");
+
+    item.className = "notification-item";
+    item.textContent = message;
+
+    item.style.padding = "14px";
+    item.style.marginBottom = "10px";
+    item.style.borderRadius = "12px";
+
+    item.style.background =
+        type === "warning" ? "#fff4e5" : "#eaf7ef";
+
+    item.style.color =
+        type === "warning" ? "#9a5700" : "#176b4b";
+
+    item.style.border =
+        "1px solid " +
+        (type === "warning" ? "#f2d29e" : "#cce9d6");
+
+    notificationContainer.appendChild(item);
+}
+
+// ======================================
+// DAILY REMINDERS
+// ======================================
+
+function checkDailyReminders(entries) {
+    const today = getTodayKey();
+
+    const hasIncome = entries.some(entry =>
+        entry.type === "income" &&
+        String(entry.date || "").slice(0, 10) === today
     );
 
-    if (amountInput === null) return;
-
-    const amount = Number(amountInput);
-
-    if (!Number.isFinite(amount) || amount <= 0) {
-        alert(tr(
-            "dashboard.invalid_amount",
-            "Please enter a valid amount."
-        ));
-        return;
-    }
-
-    try {
-        await api(
-            "POST",
-            "/api/goals/" + encodeURIComponent(goalId) + "/contribute",
-            { amount }
-        );
-
-        alert(tr(
-            "dashboard.contribution_success",
-            "Money added to your savings goal successfully! 🎉"
-        ));
-
-        await loadGoals();
-
-    } catch (error) {
-        console.error("Contribution error:", error);
-
-        alert(tr(
-            "dashboard.contribution_error",
-            "Unable to add money."
-        ));
-    }
-}
-
-// ======================================
-// DELETE SAVINGS GOAL
-// ======================================
-
-async function deleteGoal(goalId, goalTitle) {
-    const confirmed = confirm(
-        tr(
-            "dashboard.delete_confirmation",
-            "Are you sure you want to delete the goal:"
-        ) + " " + goalTitle + "?"
+    const hasExpense = entries.some(entry =>
+        entry.type === "expense" &&
+        String(entry.date || "").slice(0, 10) === today
     );
 
-    if (!confirmed) return;
+    if (!hasIncome) {
+        addNotification(
+            notificationText(
+                "income_reminder",
+                "💰 Remember to record your income for today."
+            )
+        );
+    }
 
-    try {
-        await api(
-            "DELETE",
-            "/api/goals/" + encodeURIComponent(goalId)
+    if (!hasExpense) {
+        addNotification(
+            notificationText(
+                "expense_reminder",
+                "💸 Remember to record your expenses for today."
+            )
+        );
+    }
+}
+
+// ======================================
+// MONTHLY BUDGET ALERTS
+// ======================================
+
+function checkMonthlyBudget(entries) {
+    const budget =
+        Number(localStorage.getItem(getBudgetKey())) || 0;
+
+    if (budget <= 0) return;
+
+    const month = getMonthKey();
+
+    const expenses = entries
+        .filter(entry =>
+            entry.type === "expense" &&
+            String(entry.date || "").startsWith(month)
+        )
+        .reduce(
+            (total, entry) =>
+                total + Number(entry.amount || 0),
+            0
         );
 
-        alert(tr(
-            "dashboard.delete_success",
-            "Savings goal deleted successfully."
-        ));
+    const percentage = expenses / budget * 100;
 
-        await loadGoals();
+    if (percentage >= 100) {
+        addNotification(
+            notificationText(
+                "budget_exceeded",
+                "🚨 Your monthly budget has been exceeded! Review your spending."
+            ),
+            "warning"
+        );
 
-    } catch (error) {
-        console.error("Delete goal error:", error);
-
-        alert(tr(
-            "dashboard.delete_error",
-            "Unable to delete goal."
-        ));
+    } else if (percentage >= 80) {
+        addNotification(
+            notificationText(
+                "budget_warning",
+                "⚠️ You have spent 80% or more of your monthly budget."
+            ),
+            "warning"
+        );
     }
 }
 
 // ======================================
-// DASHBOARD NAVIGATION
+// SAVINGS GOAL DEADLINE ALERTS
 // ======================================
 
-function openFeature(feature) {
-    switch (feature) {
+function checkGoalDeadlines(goals) {
+    const today = new Date();
 
-        case "home":
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-            break;
+    today.setHours(0, 0, 0, 0);
 
-        case "income":
-            window.location.href = "finance.html?type=income";
-            break;
+    goals.forEach(goal => {
+        if (!goal.deadline) return;
 
-        case "expense":
-            window.location.href = "finance.html?type=expense";
-            break;
+        const deadline =
+            new Date(goal.deadline + "T00:00:00");
 
-        case "finance":
-            window.location.href = "finance.html";
-            break;
+        if (Number.isNaN(deadline.getTime())) return;
 
-        case "budget":
-            window.location.href = "budget.html";
-            break;
+        const saved = Number(goal.saved || 0);
+        const target = Number(goal.target || 0);
 
-        case "goals":
-            document.getElementById("goalsList")
-                ?.scrollIntoView({ behavior: "smooth" });
-            break;
+        if (target > 0 && saved >= target) return;
 
-        case "schemes":
-            window.location.href = "schemes.html";
-            break;
+        const daysLeft = Math.ceil(
+            (deadline.getTime() - today.getTime()) /
+            86400000
+        );
 
-        case "lessons":
-            document.getElementById("lessons")
-                ?.scrollIntoView({ behavior: "smooth" });
-            break;
+        if (daysLeft < 0) {
+            addNotification(
+                notificationText(
+                    "goal_overdue",
+                    "⏰ The deadline for this savings goal has passed."
+                ) + " " + goal.title,
+                "warning"
+            );
 
-        case "profile":
-            window.location.href = "index.html";
-            break;
-
-        default:
-            alert(tr(
-                "dashboard.feature_coming",
-                "This feature will be added soon!"
-            ));
-    }
+        } else if (daysLeft <= 7) {
+            addNotification(
+                notificationText(
+                    "goal_approaching",
+                    "🎯 Your savings goal deadline is approaching."
+                ) + " " + goal.title,
+                "warning"
+            );
+        }
+    });
 }
 
 // ======================================
-// LOGOUT
+// LOAD NOTIFICATIONS
 // ======================================
 
-const logoutButton = document.getElementById("logoutBtn");
+async function loadNotifications() {
+    if (!notificationContainer) return;
 
-logoutButton?.addEventListener("click", async () => {
+    notificationContainer.replaceChildren();
+
     try {
-        await api("POST", "/api/logout");
-        window.location.href = "/";
+        const [entriesResponse, goalsResponse] =
+            await Promise.all([
+                api("GET", "/api/entries?days=3650"),
+                api("GET", "/api/goals")
+            ]);
+
+        const entries = getEntries(entriesResponse);
+        const goals = getGoals(goalsResponse);
+
+        checkDailyReminders(entries);
+        checkMonthlyBudget(entries);
+        checkGoalDeadlines(goals);
+
+        if (notificationContainer.children.length === 0) {
+            notificationContainer.textContent =
+                notificationText(
+                    "all_caught_up",
+                    "🎉 You're all caught up! No new reminders."
+                );
+        }
 
     } catch (error) {
-        alert(tr(
-            "dashboard.logout_error",
-            "Unable to logout. Please try again."
-        ));
+        console.error("Notification loading error:", error);
+
+        notificationContainer.textContent =
+            notificationText(
+                "load_error",
+                "Unable to load notifications. Please refresh."
+            );
     }
-});
+}
 
 // ======================================
 // LANGUAGE CHANGE
 // ======================================
 
-document.addEventListener("languageChanged", async () => {
-    await loadGoals();
+document.addEventListener("languageChanged", () => {
+    loadNotifications();
 });
 
 // ======================================
 // INITIALIZE
 // ======================================
 
-loadDashboard();
+loadNotifications();
