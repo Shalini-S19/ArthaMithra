@@ -2,7 +2,8 @@
 import json
 import os
 import re
-from datetime import date, timedelta
+import math
+from datetime import date, datetime, timedelta, timezone
 
 from flask import Flask, jsonify, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -18,7 +19,7 @@ FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
 # Set SECRET_KEY in the environment on the server. The fallback is for local dev only.
 app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
-app.json.ensure_ascii = False
+app.json.ensure_ascii = False   # send real Kannada letters in the API
 app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax")
 app.teardown_appcontext(db.close_db)
 
@@ -26,6 +27,10 @@ SCHEMES = matcher.load_schemes()
 with open(os.path.join(BASE_DIR, "lessons.json"), encoding="utf-8") as _f:
     LESSONS = json.load(_f)["lessons"]
 SCHEME_IDS = {s["id"] for s in SCHEMES}
+
+# PIN safety: after MAX_FAILS wrong PINs for one phone number, login is locked for LOCK_MINUTES
+MAX_FAILS = 5
+LOCK_MINUTES = 15
 
 
 # ---------- helpers ----------
@@ -95,6 +100,43 @@ def index():
     return app.send_static_file("index.html")
 
 
+# ---------- login attempt limit ----------
+def _now():
+    return datetime.now(timezone.utc)
+
+
+def lock_minutes_left(phone):
+    """Minutes left if this phone number is locked, else 0."""
+    row = db.get_db().execute(
+        "SELECT locked_until FROM login_attempts WHERE phone = ?", (phone,)).fetchone()
+    if row and row["locked_until"]:
+        left = (datetime.fromisoformat(row["locked_until"]) - _now()).total_seconds()
+        if left > 0:
+            return math.ceil(left / 60)
+    return 0
+
+
+def record_failed_login(phone):
+    conn = db.get_db()
+    row = conn.execute("SELECT fails FROM login_attempts WHERE phone = ?", (phone,)).fetchone()
+    fails = (row["fails"] if row else 0) + 1
+    locked_until = None
+    if fails >= MAX_FAILS:
+        locked_until = (_now() + timedelta(minutes=LOCK_MINUTES)).isoformat()
+        fails = 0
+    conn.execute(
+        "INSERT INTO login_attempts (phone, fails, locked_until) VALUES (?,?,?) "
+        "ON CONFLICT(phone) DO UPDATE SET fails = excluded.fails, locked_until = excluded.locked_until",
+        (phone, fails, locked_until))
+    conn.commit()
+
+
+def clear_failed_logins(phone):
+    conn = db.get_db()
+    conn.execute("DELETE FROM login_attempts WHERE phone = ?", (phone,))
+    conn.commit()
+
+
 # ---------- auth ----------
 @app.post("/api/register")
 def register():
@@ -142,9 +184,15 @@ def login():
     d = request.get_json(silent=True) or {}
     phone = re.sub(r"\D", "", str(d.get("phone") or ""))[-10:]
     pin = str(d.get("pin") or "")
+    if lock_minutes_left(phone):
+        return err("too_many_attempts", 429)
     u = db.get_db().execute("SELECT * FROM users WHERE phone = ?", (phone,)).fetchone()
     if not u or not check_password_hash(u["pin_hash"], pin):
+        record_failed_login(phone)
+        if lock_minutes_left(phone):
+            return err("too_many_attempts", 429)
         return err("login_failed", 401)
+    clear_failed_logins(phone)
     session["user_id"] = u["id"]
     session["lang"] = u["language"]
     return jsonify({"ok": True, "user": public_user(u)})

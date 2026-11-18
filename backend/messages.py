@@ -14,6 +14,7 @@ MESSAGES = {
     "gender_invalid":      ("Invalid gender value", "ಲಿಂಗದ ಮೌಲ್ಯ ತಪ್ಪಾಗಿದೆ"),
     "phone_taken":         ("This phone number is already registered", "ಈ ಫೋನ್ ನಂಬರ್ ಈಗಾಗಲೇ ನೋಂದಾಯಿಸಲಾಗಿದೆ"),
     "login_failed":        ("Wrong phone number or PIN", "ಫೋನ್ ನಂಬರ್ ಅಥವಾ ಪಿನ್ ತಪ್ಪಾಗಿದೆ"),
+    "too_many_attempts":   ("Too many wrong PIN tries. Please try again after 15 minutes.", "ತುಂಬಾ ಬಾರಿ ತಪ್ಪು ಪಿನ್ ಹಾಕಿದ್ದೀರಿ. 15 ನಿಮಿಷಗಳ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."),
     "nothing_to_update":   ("Nothing to update", "ಬದಲಾಯಿಸಲು ಏನೂ ಇಲ್ಲ"),
     "entry_type_invalid":  ("Type must be 'income' or 'expense'", "ಪ್ರಕಾರ 'income' ಅಥವಾ 'expense' ಆಗಿರಬೇಕು"),
     "amount_not_number":   ("Amount must be a number", "ಮೊತ್ತ ಸಂಖ್ಯೆ ಆಗಿರಬೇಕು"),

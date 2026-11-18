@@ -127,4 +127,40 @@ ck.post("/api/register", json={"name": "Kn", "phone": "9000000001", "pin": "1111
 r = ck.post("/api/entries", json={"type": "income", "amount": -1}).get_json()
 ok(r["error"] == r["error_kn"], "user with language=kn gets Kannada errors automatically")
 
+
+
+# ---------- PIN attempt limit ----------
+import db as dbmod
+lk = appmod.app.test_client()
+lk.post("/api/register", json={"name": "Lock", "phone": "9111111111", "pin": "2222"})
+lk.post("/api/logout")
+for i in range(4):
+    ok(lk.post("/api/login", json={"phone": "9111111111", "pin": "0000"}).status_code == 401, f"wrong PIN {i+1} gives 401")
+r = lk.post("/api/login", json={"phone": "9111111111", "pin": "0000"})
+ok(r.status_code == 429 and r.get_json()["code"] == "too_many_attempts", "5th wrong PIN locks the number")
+ok("ಮತ್ತೆ" in r.get_json()["error_kn"], "lock message is in Kannada too")
+ok(lk.post("/api/login", json={"phone": "9111111111", "pin": "2222"}).status_code == 429, "correct PIN is refused while locked")
+
+# simulate the lock ending
+import sqlite3
+con = sqlite3.connect(dbmod.DB_PATH)
+con.execute("UPDATE login_attempts SET locked_until = '2000-01-01T00:00:00+00:00' WHERE phone = '9111111111'")
+con.commit(); con.close()
+ok(lk.post("/api/login", json={"phone": "9111111111", "pin": "2222"}).status_code == 200, "login works again after the lock ends")
+
+# a success clears the counter
+lk.post("/api/logout")
+for i in range(3):
+    lk.post("/api/login", json={"phone": "9111111111", "pin": "0000"})
+lk.post("/api/login", json={"phone": "9111111111", "pin": "2222"})
+lk.post("/api/logout")
+for i in range(4):
+    lk.post("/api/login", json={"phone": "9111111111", "pin": "0000"})
+ok(lk.post("/api/login", json={"phone": "9111111111", "pin": "2222"}).status_code == 200, "a good login resets the wrong-PIN count")
+
+# unknown numbers are limited too
+for i in range(5):
+    r = lk.post("/api/login", json={"phone": "9222222222", "pin": "1111"})
+ok(r.status_code == 429, "unknown phone numbers are limited as well")
+
 print("\nAll tests passed.")

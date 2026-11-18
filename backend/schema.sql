@@ -43,3 +43,10 @@ CREATE TABLE IF NOT EXISTS scheme_applications (
     applied_at TEXT    NOT NULL DEFAULT (datetime('now')),
     UNIQUE (user_id, scheme_id)
 );
+
+-- PIN safety: counts wrong PIN tries per phone number and the time a lock ends
+CREATE TABLE IF NOT EXISTS login_attempts (
+    phone        TEXT PRIMARY KEY,
+    fails        INTEGER NOT NULL DEFAULT 0,
+    locked_until TEXT
+);
