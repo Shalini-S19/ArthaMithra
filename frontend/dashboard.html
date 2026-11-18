@@ -26,9 +26,7 @@
             <option value="kn">ಕನ್ನಡ</option>
         </select>
 
-        <button id="logoutButton"
-                type="button"
-                onclick="logoutUser()">
+        <button id="logoutButton" type="button" onclick="logoutUser()">
             🚪 <span data-i18n="common.logout">Logout</span>
         </button>
     </div>
@@ -42,7 +40,6 @@
             <span data-i18n="dashboard.hello">Hello</span>,
             <span id="userName">Friend</span>! 💚
         </h1>
-
         <p data-i18n="dashboard.welcome_message">
             Let's make your money grow.
         </p>
@@ -50,60 +47,44 @@
 
     <!-- FINANCIAL SUMMARY -->
     <section class="dashboard-section">
-        <h2 data-i18n="dashboard.summary">
-            Your Financial Summary
-        </h2>
+        <h2 data-i18n="dashboard.summary">Your Financial Summary</h2>
 
         <div class="summary-grid">
-
             <div class="summary-card">
-                <h3 data-i18n="dashboard.income_week">
-                    Total Income This Week
-                </h3>
+                <h3 data-i18n="dashboard.income_week">Total Income This Week</h3>
                 <p id="weeklyIncome">₹0</p>
             </div>
 
             <div class="summary-card">
-                <h3 data-i18n="dashboard.expense_week">
-                    Total Expenses This Week
-                </h3>
+                <h3 data-i18n="dashboard.expense_week">Total Expenses This Week</h3>
                 <p id="weeklyExpense">₹0</p>
             </div>
 
             <div class="summary-card">
-                <h3 data-i18n="dashboard.savings_week">
-                    Money Saved This Week
-                </h3>
+                <h3 data-i18n="dashboard.savings_week">Money Saved This Week</h3>
                 <p id="weeklySavings">₹0</p>
             </div>
-
         </div>
     </section>
 
     <!-- QUICK ACTIONS -->
     <section class="dashboard-section">
-        <h2 data-i18n="dashboard.quick_actions">
-            Quick Actions
-        </h2>
+        <h2 data-i18n="dashboard.quick_actions">Quick Actions</h2>
 
         <div class="quick-actions">
-            <button onclick="openFeature('income')"
-                    data-i18n="dashboard.add_income">
+            <button onclick="openFeature('income')" data-i18n="dashboard.add_income">
                 ➕ Add Income
             </button>
 
-            <button onclick="openFeature('expense')"
-                    data-i18n="dashboard.add_expense">
+            <button onclick="openFeature('expense')" data-i18n="dashboard.add_expense">
                 ➖ Add Expense
             </button>
 
-            <button onclick="openFeature('budget')"
-                    data-i18n="dashboard.my_budget">
+            <button onclick="openFeature('budget')" data-i18n="dashboard.my_budget">
                 📊 My Budget
             </button>
 
-            <button onclick="openFeature('goals')"
-                    data-i18n="dashboard.savings_goals">
+            <button onclick="openFeature('goals')" data-i18n="dashboard.savings_goals">
                 🎯 Savings Goals
             </button>
         </div>
@@ -111,10 +92,14 @@
 
     <!-- CHART -->
     <section class="dashboard-section" id="transactionAnalytics">
-        <h2>📊 Income vs Expenses</h2>
+        <h2 data-i18n="dashboard.chart_title">
+            📊 Income vs Expenses
+        </h2>
 
         <div class="summary-card">
-            <p>Your financial activity over the last 7 days</p>
+            <p data-i18n="dashboard.chart_description">
+                Your financial activity over the last 7 days
+            </p>
 
             <div id="weeklyChart">
                 <canvas id="weeklyFinanceChart"></canvas>
@@ -124,20 +109,18 @@
 
     <!-- RECENT TRANSACTIONS -->
     <section class="dashboard-section" id="recentTransactions">
-        <h2>🧾 Recent Transactions</h2>
+        <h2 data-i18n="finance.history">🧾 Recent Transactions</h2>
 
         <div class="summary-card">
             <div id="recentTransactionsList">
-                <p>Loading transactions...</p>
+                <p data-i18n="finance.loading">Loading transactions...</p>
             </div>
         </div>
     </section>
 
     <!-- SAVINGS GOALS -->
     <section class="dashboard-section" id="goalsSection">
-        <h2 data-i18n="dashboard.my_goals">
-            My Savings Goals
-        </h2>
+        <h2 data-i18n="dashboard.my_goals">🎯 My Savings Goals</h2>
 
         <form id="goalForm">
             <input
@@ -157,59 +140,54 @@
                 required
             >
 
-            <input
-                type="date"
-                id="goalDeadline"
-                aria-label="Goal deadline"
-            >
+            <label for="goalDeadline" data-i18n="dashboard.deadline">
+                Deadline (Optional)
+            </label>
 
-            <button type="submit"
-                    data-i18n="dashboard.create_goal_button">
+            <input type="date" id="goalDeadline">
+
+            <button type="submit" data-i18n="dashboard.create_goal_button">
                 Create Savings Goal
             </button>
         </form>
 
-        <div id="goalMessage"></div>
+        <div id="goalMessage" aria-live="polite"></div>
         <div id="goalsList"></div>
     </section>
 
     <!-- GOVERNMENT SCHEMES -->
     <section class="dashboard-section">
-        <h2 data-i18n="dashboard.schemes_title">
-            Government Schemes
-        </h2>
+        <h2 data-i18n="dashboard.schemes_title">Government Schemes 🏛️</h2>
 
         <p data-i18n="dashboard.schemes_description">
             Discover government schemes that may benefit you.
         </p>
 
-        <button onclick="openFeature('schemes')"
-                data-i18n="dashboard.explore_schemes">
+        <button onclick="openFeature('schemes')" data-i18n="dashboard.explore_schemes">
             Explore Schemes
         </button>
     </section>
 
     <!-- FINANCIAL LEARNING -->
     <section class="dashboard-section">
-        <h2 data-i18n="dashboard.learning_title">
-            Financial Learning
-        </h2>
+        <h2 data-i18n="dashboard.learning_title">Financial Learning 📚</h2>
 
         <p data-i18n="dashboard.learning_description">
             Improve your financial knowledge every day.
         </p>
 
-        <button onclick="openFeature('lessons')"
-                data-i18n="dashboard.explore_lessons">
+        <button onclick="openFeature('lessons')" data-i18n="dashboard.explore_lessons">
             Explore Lessons
         </button>
     </section>
 
     <!-- NOTIFICATIONS -->
     <section class="dashboard-section">
-        <h2 data-i18n="dashboard.notifications">
-            Notifications
-        </h2>
+        <h2 data-i18n="dashboard.notifications">Notifications 🔔</h2>
+
+        <p data-i18n="dashboard.notifications_description">
+            Stay updated about your finances and savings goals.
+        </p>
 
         <div id="notifications">
             <p data-i18n="dashboard.loading_notifications">
@@ -222,7 +200,6 @@
 
 <!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
-
     <button onclick="openFeature('home')">
         🏠 <span data-i18n="dashboard.home">Home</span>
     </button>
@@ -238,9 +215,9 @@
     <button onclick="openFeature('profile')">
         👤 <span data-i18n="dashboard.profile">Profile</span>
     </button>
-
 </nav>
 
+<!-- SCRIPTS -->
 <script src="js/i18n.js"></script>
 <script src="js/api.js"></script>
 <script src="js/dashboard.js"></script>
