@@ -204,6 +204,28 @@
       "verified": false,
       "last_checked": null,
       "kn_reviewed": false
+    },
+        {
+      "id": "pmjdy",
+      "name": {"en": "Pradhan Mantri Jan Dhan Yojana (free bank account)", "kn": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಜನ ಧನ ಯೋಜನೆ (ಉಚಿತ ಬ್ಯಾಂಕ್ ಖಾತೆ)"},
+      "category": "welfare",
+      "benefit": {"en": "A basic savings bank account with a RuPay debit card and no minimum balance. The card comes with accident insurance cover of up to Rs 2 lakh, and an overdraft facility is available.", "kn": "ಮೂಲ ಉಳಿತಾಯ ಬ್ಯಾಂಕ್ ಖಾತೆ, ರೂಪೇ ಡೆಬಿಟ್ ಕಾರ್ಡ್, ಕನಿಷ್ಠ ಬ್ಯಾಲೆನ್ಸ್ ಬೇಕಿಲ್ಲ. ಕಾರ್ಡ್‌ನೊಂದಿಗೆ ₹2 ಲಕ್ಷದವರೆಗೆ ಅಪಘಾತ ವಿಮೆ ಮತ್ತು ಓವರ್‌ಡ್ರಾಫ್ಟ್ ಸೌಲಭ್ಯ ಸಿಗುತ್ತದೆ."},
+      "why": {"en": "You do not have a bank account yet. This account helps you join insurance and pension schemes.", "kn": "ನಿಮಗೆ ಇನ್ನೂ ಬ್ಯಾಂಕ್ ಖಾತೆ ಇಲ್ಲ. ಈ ಖಾತೆ ವಿಮೆ ಮತ್ತು ಪಿಂಚಣಿ ಯೋಜನೆಗಳಿಗೆ ಸೇರಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ."},
+      "eligibility": {
+        "min_age": 10,
+        "profile_flags": {"has_bank_account": false}
+      },
+      "eligibility_text": {"en": "Indian citizens aged 10 years and above. Confirm the current rules at the bank.", "kn": "10 ವರ್ಷ ಮತ್ತು ಮೇಲ್ಪಟ್ಟ ಭಾರತೀಯ ನಾಗರಿಕರು. ಈಗಿನ ನಿಯಮಗಳನ್ನು ಬ್ಯಾಂಕ್‌ನಲ್ಲಿ ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."},
+      "documents": [
+        {"en": "Aadhaar number or card. If you have Aadhaar, no other document is needed. If your address has changed, a self-certificate of your current address is enough.", "kn": "ಆಧಾರ್ ಸಂಖ್ಯೆ ಅಥವಾ ಕಾರ್ಡ್. ಆಧಾರ್ ಇದ್ದರೆ ಬೇರೆ ದಾಖಲೆ ಬೇಕಿಲ್ಲ. ವಿಳಾಸ ಬದಲಾಗಿದ್ದರೆ ಈಗಿನ ವಿಳಾಸದ ಸ್ವಯಂ ದೃಢೀಕರಣ ಸಾಕು."},
+        {"en": "If you do not have Aadhaar: another officially valid ID document (ask the bank which ones it accepts)", "kn": "ಆಧಾರ್ ಇಲ್ಲದಿದ್ದರೆ: ಬೇರೆ ಅಧಿಕೃತ ಗುರುತಿನ ದಾಖಲೆ (ಯಾವುದು ಸ್ವೀಕಾರ ಎಂದು ಬ್ಯಾಂಕ್‌ನಲ್ಲಿ ಕೇಳಿ)"},
+        {"en": "PMJDY account opening form (available at the bank)", "kn": "ಪಿಎಂಜೆಡಿವೈ ಖಾತೆ ತೆರೆಯುವ ಅರ್ಜಿ (ಬ್ಯಾಂಕ್‌ನಲ್ಲಿ ಸಿಗುತ್ತದೆ)"}
+      ],
+      "how_to_apply": {"en": "Go to any bank branch or Bank Mitra (banking correspondent) outlet with your documents. Fill in the PMJDY account opening form and submit it. There is no charge to open the account.", "kn": "ನಿಮ್ಮ ದಾಖಲೆಗಳೊಂದಿಗೆ ಯಾವುದೇ ಬ್ಯಾಂಕ್ ಶಾಖೆ ಅಥವಾ ಬ್ಯಾಂಕ್ ಮಿತ್ರ (ಬ್ಯಾಂಕಿಂಗ್ ಕರೆಸ್ಪಾಂಡೆಂಟ್) ಕೇಂದ್ರಕ್ಕೆ ಹೋಗಿ. ಪಿಎಂಜೆಡಿವೈ ಖಾತೆ ತೆರೆಯುವ ಅರ್ಜಿ ತುಂಬಿ ಸಲ್ಲಿಸಿ. ಖಾತೆ ತೆರೆಯಲು ಶುಲ್ಕವಿಲ್ಲ."},
+      "source_url": "https://www.pmjdy.gov.in/scheme",
+      "verified": false,
+      "last_checked": null,
+      "kn_reviewed": false
     }
   ]
 }
