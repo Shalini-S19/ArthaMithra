@@ -1,767 +1,277 @@
 
-// ======================================
-// ARTHAMITRA DASHBOARD
-// ======================================
+/* =====================================
+   ARTHAMITHRA DASHBOARD DESIGN
+===================================== */
 
-"use strict";
-
-// ======================================
-// TRANSLATION HELPERS
-// ======================================
-
-function dashboardText(key, fallback) {
-    if (typeof t !== "function") return fallback;
-    return t("dashboard." + key, fallback) || fallback;
+.dashboard-container {
+    width: min(1100px, 92%);
+    margin: 28px auto 110px;
 }
 
-function goalText(key, fallback) {
-    if (typeof t !== "function") return fallback;
-    return t("goal_status." + key, fallback) || fallback;
+/* Dashboard sections */
+
+.dashboard-section {
+    background: #ffffff;
+    padding: 24px;
+    margin-bottom: 26px;
+    border-radius: 18px;
+    border: 1px solid #e2eee6;
+    box-shadow: 0 5px 18px rgba(18, 60, 50, 0.06);
 }
 
-// ======================================
-// FORMAT HELPERS
-// ======================================
-
-function formatMoney(amount) {
-    return "₹" + Number(amount || 0).toLocaleString("en-IN", {
-        maximumFractionDigits: 2
-    });
+.dashboard-container section > h2 {
+    color: #123c32;
+    font-size: 21px;
+    margin-bottom: 18px;
 }
 
-function getGoalList(payload) {
-    if (Array.isArray(payload)) return payload;
-    if (Array.isArray(payload?.goals)) return payload.goals;
-    return [];
+/* Welcome card */
+
+.dashboard-container > .dashboard-section:first-child {
+    background: linear-gradient(120deg, #176b4b, #123c32);
+    color: white;
+    padding: 32px;
 }
 
-function setDashboardValue(ids, value) {
-    ids.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) element.textContent = value;
-    });
+.dashboard-container > .dashboard-section:first-child h1 {
+    font-size: 29px;
+    margin-bottom: 8px;
 }
 
-function getGoalContainer() {
-    return document.getElementById("goalsContainer") ||
-           document.getElementById("goalsList");
+.dashboard-container > .dashboard-section:first-child p {
+    color: #d4e9dd;
+    margin: 0;
 }
 
-function showGoalMessage(message, isError = false) {
-    const element = document.getElementById("goalMessage");
-    if (!element) return;
+/* Financial summary */
 
-    element.textContent = message;
-    element.style.color = isError ? "#b42318" : "#176b4b";
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
 }
 
-// ======================================
-// TRANSACTION DATA
-// ======================================
+.summary-card {
+    background: #ffffff;
+    border: 1px solid #e1ece5;
+    border-radius: 15px;
+    padding: 22px;
+    box-shadow: 0 4px 14px rgba(18, 60, 50, 0.05);
+}
 
-let dashboardEntries = [];
-let weeklyFinanceChart = null;
+.summary-card h3 {
+    color: #123c32;
+    font-size: 17px;
+    margin-bottom: 12px;
+}
 
-// ======================================
-// GET LAST 7 DAYS
-// ======================================
+.summary-card p {
+    color: #63796e;
+    font-size: 14px;
+    margin-top: 10px;
+}
 
-function getLastSevenDays() {
-    const days = [];
+/* Quick actions - FIXED CLASS NAME */
 
-    for (let i = 6; i >= 0; i--) {
-        const date = new Date();
-        date.setHours(0, 0, 0, 0);
-        date.setDate(date.getDate() - i);
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 13px;
+}
 
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
+.quick-actions button,
+.dashboard-section > button {
+    background: #e8f5ed;
+    color: #176b4b;
+    border: 1px solid #c8e2d1;
+    padding: 15px 12px;
+    border-radius: 11px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
 
-        days.push({
-            key: `${year}-${month}-${day}`,
-            label: date.toLocaleDateString(
-                localStorage.getItem("lang") === "kn" ? "kn-IN" : "en-IN",
-                { day: "numeric", month: "short" }
-            )
-        });
+.quick-actions button:hover,
+.dashboard-section > button:hover {
+    background: #176b4b;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Chart */
+
+#weeklyChart {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    margin-top: 15px;
+}
+
+#weeklyFinanceChart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Recent transactions */
+
+#recentTransactionsList > div {
+    transition: 0.2s ease;
+}
+
+#recentTransactionsList > div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(18, 60, 50, 0.08);
+}
+
+/* Savings goals */
+
+#goalForm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+#goalForm input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d5e5da;
+    border-radius: 9px;
+    font-size: 14px;
+}
+
+#goalForm input:focus {
+    outline: none;
+    border-color: #176b4b;
+}
+
+#goalForm button {
+    grid-column: 1 / -1;
+    background: #176b4b;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.goal-card {
+    padding: 20px;
+    margin: 15px 0;
+    border: 1px solid #dce9e0;
+    border-radius: 14px;
+    background: #fafffb;
+}
+
+.goal-card h3 {
+    color: #123c32;
+    margin-bottom: 12px;
+}
+
+.goal-progress-bg {
+    width: 100%;
+    height: 10px;
+    background: #e2eee6;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.goal-progress-fill {
+    height: 100%;
+    background: #26966b;
+    border-radius: 20px;
+}
+
+.goal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.goal-actions button {
+    padding: 9px 15px;
+    border: none;
+    border-radius: 8px;
+    background: #176b4b;
+    color: white;
+    cursor: pointer;
+}
+
+.goal-actions .delete-goal {
+    background: #b42318;
+}
+
+/* Bottom navigation */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-top: 1px solid #dce9e0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 5px;
+    z-index: 100;
+    box-shadow: 0 -3px 12px rgba(18, 60, 50, 0.05);
+}
+
+.bottom-nav button {
+    border: none;
+    background: transparent;
+    color: #176b4b;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 7px;
+}
+
+/* Notifications */
+
+#notificationsList {
+    color: #456457;
+    line-height: 1.8;
+}
+
+/* Responsive design */
+
+@media (max-width: 750px) {
+
+    .summary-grid {
+        grid-template-columns: 1fr;
     }
 
-    return days;
-}
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-// ======================================
-// LOAD DASHBOARD SUMMARY
-// ======================================
+    #goalForm {
+        grid-template-columns: 1fr;
+    }
 
-async function loadDashboard() {
-    try {
-        // Load user profile
-        const profile = await api("GET", "/api/me");
-        const user = profile.user || profile;
+    .dashboard-container {
+        width: 94%;
+        margin-top: 18px;
+    }
 
-        const nameElement = document.getElementById("userName");
+    .dashboard-section {
+        padding: 18px;
+    }
 
-        if (nameElement) {
-            nameElement.textContent = user.name || "Friend";
-        }
+    .dashboard-container > .dashboard-section:first-child h1 {
+        font-size: 23px;
+    }
 
-        // Load weekly summary
-        const summary = await api("GET", "/api/summary");
-        const week = summary.this_week || {};
+    #weeklyChart {
+        height: 250px;
+    }
 
-        setDashboardValue(
-            ["weeklyIncome", "totalIncome"],
-            formatMoney(week.earned)
-        );
-
-        setDashboardValue(
-            ["weeklyExpense", "totalExpense"],
-            formatMoney(week.spent)
-        );
-
-        setDashboardValue(
-            ["weeklySavings", "totalSavings"],
-            formatMoney(week.saved)
-        );
-
-        // Load remaining dashboard features
-        await Promise.all([
-            loadGoals(),
-            loadTransactionAnalytics()
-        ]);
-
-    } catch (error) {
-        console.error("Dashboard loading error:", error);
-
-        const container = getGoalContainer();
-
-        if (container) {
-            container.textContent = dashboardText(
-                "load_error",
-                "Unable to load dashboard. Please try again."
-            );
-        }
+    .bottom-nav button {
+        font-size: 13px;
     }
 }
-
-// ======================================
-// LOAD TRANSACTIONS FOR CHART AND HISTORY
-// ======================================
-
-async function loadTransactionAnalytics() {
-    const recentContainer = document.getElementById(
-        "recentTransactionsList"
-    );
-
-    if (recentContainer) {
-        recentContainer.textContent = "Loading transactions...";
-    }
-
-    try {
-        const response = await api("GET", "/api/entries?days=7");
-
-        dashboardEntries = Array.isArray(response)
-            ? response
-            : (response.entries || []);
-
-        renderWeeklyChart();
-        renderRecentTransactions();
-
-    } catch (error) {
-        console.error("Transaction analytics error:", error);
-
-        const chartContainer = document.getElementById("weeklyChart");
-
-        if (chartContainer) {
-            chartContainer.textContent =
-                "Unable to load financial chart.";
-        }
-
-        if (recentContainer) {
-            recentContainer.textContent =
-                "Unable to load recent transactions.";
-        }
-    }
-}
-
-// ======================================
-// RENDER INCOME VS EXPENSES CHART
-// ======================================
-
-function renderWeeklyChart() {
-    const canvas = document.getElementById("weeklyFinanceChart");
-    const chartContainer = document.getElementById("weeklyChart");
-
-    if (!canvas) return;
-
-    if (typeof Chart === "undefined") {
-        if (chartContainer) {
-            chartContainer.textContent =
-                "Chart library could not be loaded.";
-        }
-        return;
-    }
-
-    const days = getLastSevenDays();
-
-    const incomeData = days.map(day => {
-        return dashboardEntries
-            .filter(entry =>
-                entry.date === day.key &&
-                entry.type === "income"
-            )
-            .reduce((total, entry) =>
-                total + Number(entry.amount || 0), 0
-            );
-    });
-
-    const expenseData = days.map(day => {
-        return dashboardEntries
-            .filter(entry =>
-                entry.date === day.key &&
-                entry.type === "expense"
-            )
-            .reduce((total, entry) =>
-                total + Number(entry.amount || 0), 0
-            );
-    });
-
-    if (weeklyFinanceChart) {
-        weeklyFinanceChart.destroy();
-    }
-
-    weeklyFinanceChart = new Chart(canvas, {
-        type: "bar",
-
-        data: {
-            labels: days.map(day => day.label),
-
-            datasets: [
-                {
-                    label: "Income",
-                    data: incomeData,
-                    backgroundColor: "#26966b",
-                    borderRadius: 6
-                },
-                {
-                    label: "Expenses",
-                    data: expenseData,
-                    backgroundColor: "#e16b6b",
-                    borderRadius: 6
-                }
-            ]
-        },
-
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-
-            plugins: {
-                legend: {
-                    position: "top"
-                },
-
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return context.dataset.label +
-                                ": " + formatMoney(context.raw);
-                        }
-                    }
-                }
-            },
-
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return "₹" +
-                                Number(value).toLocaleString("en-IN");
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-// ======================================
-// RENDER RECENT TRANSACTIONS
-// ======================================
-
-function renderRecentTransactions() {
-    const container = document.getElementById(
-        "recentTransactionsList"
-    );
-
-    if (!container) return;
-
-    container.replaceChildren();
-
-    if (dashboardEntries.length === 0) {
-        const message = document.createElement("p");
-
-        message.textContent =
-            "No transactions recorded in the last 7 days.";
-
-        container.appendChild(message);
-        return;
-    }
-
-    // Display latest 5 transactions
-    const recentEntries = [...dashboardEntries]
-        .sort((a, b) => {
-            const dateComparison =
-                String(b.date || "").localeCompare(String(a.date || ""));
-
-            if (dateComparison !== 0) return dateComparison;
-
-            return Number(b.id || 0) - Number(a.id || 0);
-        })
-        .slice(0, 5);
-
-    recentEntries.forEach(entry => {
-        const card = document.createElement("div");
-
-        card.style.padding = "14px";
-        card.style.marginBottom = "10px";
-        card.style.border = "1px solid #dce9e0";
-        card.style.borderRadius = "12px";
-        card.style.background = "#ffffff";
-
-        const isIncome = entry.type === "income";
-
-        const heading = document.createElement("h3");
-
-        heading.textContent =
-            (isIncome ? "💰 Income" : "💸 Expense") +
-            " - " +
-            (entry.category || "Other");
-
-        heading.style.color = isIncome ? "#176b4b" : "#b42318";
-
-        const amount = document.createElement("p");
-
-        amount.textContent = formatMoney(entry.amount);
-        amount.style.fontWeight = "bold";
-        amount.style.fontSize = "18px";
-        amount.style.color = isIncome ? "#176b4b" : "#b42318";
-
-        const date = document.createElement("small");
-        date.textContent = entry.date || "";
-
-        const note = document.createElement("p");
-        note.textContent = entry.note || "";
-
-        card.append(heading, amount, date);
-
-        if (entry.note) {
-            card.appendChild(note);
-        }
-
-        container.appendChild(card);
-    });
-}
-
-// ======================================
-// CREATE SAVINGS GOAL
-// ======================================
-
-const goalForm = document.getElementById("goalForm");
-
-if (goalForm) {
-    goalForm.addEventListener("submit", async function(event) {
-        event.preventDefault();
-
-        const title = document.getElementById("goalTitle").value.trim();
-
-        const target = Number(
-            document.getElementById("goalTarget").value
-        );
-
-        const deadline =
-            document.getElementById("goalDeadline").value;
-
-        if (!title || !Number.isFinite(target) || target <= 0) {
-            showGoalMessage(
-                dashboardText(
-                    "invalid_goal",
-                    "Please enter valid goal details."
-                ),
-                true
-            );
-            return;
-        }
-
-        const submitButton = goalForm.querySelector(
-            'button[type="submit"]'
-        );
-
-        if (submitButton) submitButton.disabled = true;
-
-        showGoalMessage(
-            dashboardText("creating_goal", "Creating your goal...")
-        );
-
-        try {
-            await api("POST", "/api/goals", {
-                title,
-                target,
-                deadline: deadline || null
-            });
-
-            goalForm.reset();
-
-            showGoalMessage(
-                dashboardText(
-                    "goal_created",
-                    "Savings goal created successfully! 🎉"
-                )
-            );
-
-            await loadGoals();
-
-        } catch (error) {
-            console.error("Goal creation error:", error);
-
-            showGoalMessage(
-                dashboardText(
-                    "goal_create_error",
-                    "Unable to create savings goal."
-                ),
-                true
-            );
-
-        } finally {
-            if (submitButton) submitButton.disabled = false;
-        }
-    });
-}
-
-// ======================================
-// LOAD SAVINGS GOALS
-// ======================================
-
-async function loadGoals() {
-    const container = getGoalContainer();
-
-    if (!container) return;
-
-    container.textContent = dashboardText(
-        "loading_goals",
-        "Loading your goals..."
-    );
-
-    try {
-        const response = await api("GET", "/api/goals");
-        const goals = getGoalList(response);
-
-        container.replaceChildren();
-
-        if (goals.length === 0) {
-            const emptyMessage = document.createElement("p");
-
-            emptyMessage.textContent = dashboardText(
-                "no_goals",
-                "You have not created any savings goals yet."
-            );
-
-            container.appendChild(emptyMessage);
-            return;
-        }
-
-        goals.forEach(goal => {
-            container.appendChild(createGoalCard(goal));
-        });
-
-    } catch (error) {
-        console.error("Goals loading error:", error);
-
-        container.textContent = dashboardText(
-            "goals_load_error",
-            "Unable to load savings goals."
-        );
-    }
-}
-
-// ======================================
-// CREATE GOAL CARD
-// ======================================
-
-function createGoalCard(goal) {
-    const card = document.createElement("article");
-    card.className = "goal-card";
-
-    const target = Number(goal.target || 0);
-    const saved = Number(goal.saved || 0);
-
-    const percentage = target > 0
-        ? Math.min(100, Math.round(saved / target * 100))
-        : 0;
-
-    const title = document.createElement("h3");
-    title.textContent = goal.title || "Savings Goal";
-
-    const savedText = document.createElement("p");
-
-    savedText.textContent =
-        dashboardText("saved_label", "Saved:") + " " +
-        formatMoney(saved);
-
-    const targetText = document.createElement("p");
-
-    targetText.textContent =
-        dashboardText("target_label", "Target:") + " " +
-        formatMoney(target);
-
-    const progressText = document.createElement("p");
-
-    progressText.textContent =
-        dashboardText("progress", "Progress:") + " " +
-        percentage + "%";
-
-    const progressBackground = document.createElement("div");
-    progressBackground.className = "goal-progress-bg";
-
-    const progressFill = document.createElement("div");
-    progressFill.className = "goal-progress-fill";
-    progressFill.style.width = percentage + "%";
-
-    progressBackground.appendChild(progressFill);
-
-    const deadlineText = document.createElement("p");
-
-    if (goal.deadline) {
-        deadlineText.textContent =
-            dashboardText("deadline_label", "Deadline:") + " " +
-            goal.deadline;
-    }
-
-    const statusText = document.createElement("p");
-    statusText.className = "goal-message";
-
-    const statusKey = goal.status || "on_track";
-
-    const statusFallbacks = {
-        completed: "Goal completed!",
-        overdue: "Deadline has passed",
-        due_soon: "Deadline approaching",
-        on_track: "You're on track"
-    };
-
-    statusText.textContent = goalText(
-        statusKey,
-        statusFallbacks[statusKey] || "You're on track"
-    );
-
-    const actions = document.createElement("div");
-    actions.className = "goal-actions";
-
-    if (saved < target) {
-        const addButton = document.createElement("button");
-
-        addButton.type = "button";
-        addButton.textContent = goalText("add_money", "Add Money");
-
-        addButton.addEventListener("click", function() {
-            contributeToGoal(goal.id);
-        });
-
-        actions.appendChild(addButton);
-    }
-
-    const deleteButton = document.createElement("button");
-
-    deleteButton.type = "button";
-    deleteButton.className = "delete-goal";
-    deleteButton.textContent = dashboardText("delete_goal", "Delete");
-
-    deleteButton.addEventListener("click", function() {
-        deleteGoal(goal.id, goal.title);
-    });
-
-    actions.appendChild(deleteButton);
-
-    card.append(
-        title,
-        savedText,
-        targetText,
-        progressText,
-        progressBackground
-    );
-
-    if (goal.deadline) {
-        card.appendChild(deadlineText);
-    }
-
-    card.append(statusText, actions);
-
-    return card;
-}
-
-// ======================================
-// ADD MONEY TO GOAL
-// ======================================
-
-async function contributeToGoal(goalId) {
-    const amountText = prompt(
-        dashboardText(
-            "contribution_prompt",
-            "How much money would you like to add?"
-        )
-    );
-
-    if (amountText === null) return;
-
-    const amount = Number(amountText);
-
-    if (!Number.isFinite(amount) || amount <= 0) {
-        alert(
-            dashboardText(
-                "invalid_amount",
-                "Please enter a valid amount."
-            )
-        );
-        return;
-    }
-
-    try {
-        await api(
-            "POST",
-            "/api/goals/" + encodeURIComponent(goalId) + "/contribute",
-            { amount }
-        );
-
-        alert(
-            dashboardText(
-                "contribution_success",
-                "Money added to your savings goal! 🎉"
-            )
-        );
-
-        await loadGoals();
-
-    } catch (error) {
-        console.error("Contribution error:", error);
-
-        alert(
-            dashboardText(
-                "contribution_error",
-                "Unable to add money."
-            )
-        );
-    }
-}
-
-// ======================================
-// DELETE GOAL
-// ======================================
-
-async function deleteGoal(goalId, title) {
-    const confirmation = confirm(
-        dashboardText(
-            "delete_confirmation",
-            "Are you sure you want to delete this goal:"
-        ) + " " + title + "?"
-    );
-
-    if (!confirmation) return;
-
-    try {
-        await api(
-            "DELETE",
-            "/api/goals/" + encodeURIComponent(goalId)
-        );
-
-        alert(
-            dashboardText(
-                "delete_success",
-                "Savings goal deleted successfully."
-            )
-        );
-
-        await loadGoals();
-
-    } catch (error) {
-        console.error("Goal deletion error:", error);
-
-        alert(
-            dashboardText(
-                "delete_error",
-                "Unable to delete the goal."
-            )
-        );
-    }
-}
-
-// ======================================
-// NAVIGATION
-// ======================================
-
-function openFeature(feature) {
-    const pages = {
-        home: "dashboard.html",
-        income: "finance.html?type=income",
-        expense: "finance.html?type=expense",
-        finance: "finance.html",
-        budget: "budget.html",
-        goals: "dashboard.html#goalsList",
-        schemes: "schemes.html",
-        lessons: "learn.html",
-        profile: "profile.html"
-    };
-
-    if (pages[feature]) {
-        window.location.href = pages[feature];
-    } else {
-        alert(
-            dashboardText(
-                "feature_coming",
-                "This feature is coming soon!"
-            )
-        );
-    }
-}
-
-// ======================================
-// LOGOUT
-// ======================================
-
-const logoutButton = document.getElementById("logoutBtn");
-
-if (logoutButton) {
-    logoutButton.addEventListener("click", async function() {
-        try {
-            await api("POST", "/api/logout");
-            window.location.href = "index.html";
-
-        } catch (error) {
-            console.error("Logout error:", error);
-
-            alert(
-                dashboardText(
-                    "logout_error",
-                    "Unable to log out. Please try again."
-                )
-            );
-        }
-    });
-}
-
-// ======================================
-// LANGUAGE CHANGE
-// ======================================
-
-document.addEventListener("languageChanged", function() {
-    renderWeeklyChart();
-    renderRecentTransactions();
-    loadGoals();
-});
-
-// ======================================
-// INITIALIZE DASHBOARD
-// ======================================
-
-loadDashboard();
