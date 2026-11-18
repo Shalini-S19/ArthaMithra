@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Learning | ArthaMitra</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f7f3;
+            color: #123c32;
+        }
+
+        header {
+            background: #176b4b;
+            color: white;
+            padding: 22px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        header h2 { margin: 0; }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        select, button {
+            padding: 11px 15px;
+            border-radius: 9px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .intro, .lesson {
+            background: white;
+            padding: 24px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .intro h1 { color: #176b4b; }
+
+        .lesson h2 { color: #176b4b; }
+
+        .lesson p {
+            line-height: 1.7;
+            color: #52665e;
+        }
+
+        .lesson button {
+            background: #176b4b;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .lesson .complete {
+            background: #e6f4eb;
+            color: #176b4b;
+            margin-left: 8px;
+        }
+
+        .lesson-content {
+            display: none;
+            background: #f5faf6;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .lesson-content.show { display: block; }
+
+        .progress {
+            height: 12px;
+            background: #dce9df;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #26945e;
+            transition: width .3s;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #71847b;
+        }
+
+        @media(max-width: 600px) {
+            header { padding: 18px; }
+            .lesson, .intro { padding: 18px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>📚 ArthaMitra - <span id="headerTitle">Learn</span></h2>
+
+    <div>
+        <select id="language">
+            <option value="en">English</option>
+            <option value="kn">ಕನ್ನಡ</option>
+        </select>
+
+        <a href="dashboard.html" id="back">← Dashboard</a>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="intro">
+        <h1 id="pageTitle">Financial Learning 💚</h1>
+        <p id="subtitle">
+            Learn simple money management skills and build a better financial future.
+        </p>
+
+        <h3 id="progressTitle">Your Learning Progress</h3>
+        <div class="progress">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="progressText">0 of 5 lessons completed</p>
+    </section>
+
+    <div id="lessonsContainer"></div>
+
+</main>
+
+<footer id="footer">
+    © 2026 ArthaMitra | Your Financial Friend 💚
+</footer>
+
+<script>
+const lessons = [
+    {
+        icon: "💰",
+        title: {
+            en: "1. Understanding Money",
+            kn: "1. ಹಣವನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳುವುದು"
+        },
+        description: {
+            en: "Learn the importance of money and how to manage it wisely.",
+            kn: "ಹಣದ ಮಹತ್ವ ಮತ್ತು ಅದನ್ನು ಬುದ್ಧಿವಂತಿಕೆಯಿಂದ ನಿರ್ವಹಿಸುವುದನ್ನು ಕಲಿಯಿರಿ."
+        },
+        content: {
+            en: [
+                "Money helps us buy things we need.",
+                "Always understand the difference between needs and wants.",
+                "Spend carefully and avoid unnecessary purchases.",
+                "Keep track of the money you receive and spend."
+            ],
+            kn: [
+                "ನಮಗೆ ಅಗತ್ಯವಿರುವ ವಸ್ತುಗಳನ್ನು ಖರೀದಿಸಲು ಹಣ ಸಹಾಯ ಮಾಡುತ್ತದೆ.",
+                "ಅಗತ್ಯಗಳು ಮತ್ತು ಆಸೆಗಳ ನಡುವಿನ ವ್ಯತ್ಯಾಸವನ್ನು ತಿಳಿಯಿರಿ.",
+                "ಎಚ್ಚರಿಕೆಯಿಂದ ಖರ್ಚು ಮಾಡಿ ಮತ್ತು ಅನಗತ್ಯ ಖರೀದಿಗಳನ್ನು ತಪ್ಪಿಸಿ.",
+                "ನೀವು ಪಡೆಯುವ ಮತ್ತು ಖರ್ಚು ಮಾಡುವ ಹಣದ ಲೆಕ್ಕವಿಡಿ."
+            ]
+        }
+    },
+    {
+        icon: "🐷",
+        title: {
+            en: "2. Importance of Saving",
+            kn: "2. ಉಳಿತಾಯದ ಮಹತ್ವ"
+        },
+        description: {
+            en: "Understand why saving money regularly is important.",
+            kn: "ನಿಯಮಿತವಾಗಿ ಹಣ ಉಳಿತಾಯ ಮಾಡುವುದು ಏಕೆ ಮುಖ್ಯ ಎಂದು ತಿಳಿಯಿರಿ."
+        },
+        content: {
+            en: [
+                "Try to save a small amount every time you receive money.",
+                "Set a savings goal for something important.",
+                "Keep emergency savings for unexpected situations.",
+                "Small savings can grow into a big amount over time."
+            ],
+            kn: [
+                "ಹಣ ಬಂದಾಗಲೆಲ್ಲಾ ಸ್ವಲ್ಪ ಮೊತ್ತವನ್ನು ಉಳಿತಾಯ ಮಾಡಲು ಪ್ರಯತ್ನಿಸಿ.",
+                "ಮುಖ್ಯವಾದ ವಿಷಯಕ್ಕಾಗಿ ಉಳಿತಾಯದ ಗುರಿಯನ್ನು ಹೊಂದಿಸಿ.",
+                "ಅನಿರೀಕ್ಷಿತ ಸಂದರ್ಭಗಳಿಗಾಗಿ ತುರ್ತು ಉಳಿತಾಯವನ್ನು ಇಡಿ.",
+                "ಸಣ್ಣ ಉಳಿತಾಯವು ಕಾಲಕ್ರಮೇಣ ದೊಡ್ಡ ಮೊತ್ತವಾಗಬಹುದು."
+            ]
+        }
+    },
+    {
+        icon: "📊",
+        title: {
+            en: "3. Creating a Monthly Budget",
+            kn: "3. ಮಾಸಿಕ ಬಜೆಟ್ ರಚಿಸುವುದು"
+        },
+        description: {
+            en: "Learn how to plan your monthly income and expenses.",
+            kn: "ನಿಮ್ಮ ಮಾಸಿಕ ಆದಾಯ ಮತ್ತು ಖರ್ಚುಗಳನ್ನು ಯೋಜಿಸುವುದನ್ನು ಕಲಿಯಿರಿ."
+        },
+        content: {
+            en: [
+                "First, calculate your total monthly income.",
+                "List all your essential expenses.",
+                "Decide how much money you can save.",
+                "Check your spending regularly and stay within your budget."
+            ],
+            kn: [
+                "ಮೊದಲು ನಿಮ್ಮ ಒಟ್ಟು ಮಾಸಿಕ ಆದಾಯವನ್ನು ಲೆಕ್ಕ ಹಾಕಿ.",
+                "ನಿಮ್ಮ ಎಲ್ಲಾ ಅಗತ್ಯ ಖರ್ಚುಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡಿ.",
+                "ಎಷ್ಟು ಹಣವನ್ನು ಉಳಿತಾಯ ಮಾಡಬಹುದು ಎಂದು ನಿರ್ಧರಿಸಿ.",
+                "ನಿಮ್ಮ ಖರ್ಚುಗಳನ್ನು ನಿಯಮಿತವಾಗಿ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಬಜೆಟ್ ಮಿತಿಯಲ್ಲಿರಿ."
+            ]
+        }
+    },
+    {
+        icon: "🏦",
+        title: {
+            en: "4. Understanding Banks",
+            kn: "4. ಬ್ಯಾಂಕ್‌ಗಳನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳುವುದು"
+        },
+        description: {
+            en: "Discover how bank accounts and savings work.",
+            kn: "ಬ್ಯಾಂಕ್ ಖಾತೆಗಳು ಮತ್ತು ಉಳಿತಾಯ ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತವೆ ಎಂದು ತಿಳಿಯಿರಿ."
+        },
+        content: {
+            en: [
+                "A bank account helps you keep your money safe.",
+                "A savings account may provide interest on your money.",
+                "Never share your ATM PIN or OTP with anyone.",
+                "Check your bank transactions regularly."
+            ],
+            kn: [
+                "ಬ್ಯಾಂಕ್ ಖಾತೆಯು ನಿಮ್ಮ ಹಣವನ್ನು ಸುರಕ್ಷಿತವಾಗಿಡಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.",
+                "ಉಳಿತಾಯ ಖಾತೆಯು ನಿಮ್ಮ ಹಣಕ್ಕೆ ಬಡ್ಡಿಯನ್ನು ನೀಡಬಹುದು.",
+                "ನಿಮ್ಮ ATM ಪಿನ್ ಅಥವಾ OTP ಅನ್ನು ಯಾರೊಂದಿಗೂ ಹಂಚಿಕೊಳ್ಳಬೇಡಿ.",
+                "ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ವಹಿವಾಟುಗಳನ್ನು ನಿಯಮಿತವಾಗಿ ಪರಿಶೀಲಿಸಿ."
+            ]
+        }
+    },
+    {
+        icon: "🛡️",
+        title: {
+            en: "5. Financial Safety",
+            kn: "5. ಹಣಕಾಸಿನ ಸುರಕ್ಷತೆ"
+        },
+        description: {
+            en: "Protect yourself from online financial fraud.",
+            kn: "ಆನ್‌ಲೈನ್ ಹಣಕಾಸಿನ ವಂಚನೆಯಿಂದ ನಿಮ್ಮನ್ನು ರಕ್ಷಿಸಿಕೊಳ್ಳಿ."
+        },
+        content: {
+            en: [
+                "Never share your OTP, PIN or passwords.",
+                "Do not click suspicious payment links.",
+                "Verify calls and messages claiming to be from your bank.",
+                "Report suspicious transactions to your bank immediately."
+            ],
+            kn: [
+                "ನಿಮ್ಮ OTP, ಪಿನ್ ಅಥವಾ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಯಾರೊಂದಿಗೂ ಹಂಚಿಕೊಳ್ಳಬೇಡಿ.",
+                "ಸಂದೇಹಾಸ್ಪದ ಪಾವತಿ ಲಿಂಕ್‌ಗಳನ್ನು ತೆರೆಯಬೇಡಿ.",
+                "ಬ್ಯಾಂಕಿನಿಂದ ಬಂದಿವೆ ಎನ್ನುವ ಕರೆಗಳು ಮತ್ತು ಸಂದೇಶಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
+                "ಸಂದೇಹಾಸ್ಪದ ವಹಿವಾಟುಗಳನ್ನು ತಕ್ಷಣ ನಿಮ್ಮ ಬ್ಯಾಂಕ್‌ಗೆ ವರದಿ ಮಾಡಿ."
+            ]
+        }
+    }
+];
+
+const translations = {
+    en: {
+        header: "Learn",
+        title: "Financial Learning 💚",
+        subtitle: "Learn simple money management skills and build a better financial future.",
+        progress: "Your Learning Progress",
+        completed: "lessons completed",
+        back: "← Dashboard",
+        read: "Read Lesson",
+        hide: "Hide Lesson",
+        mark: "✓ Mark Completed",
+        done: "✓ Completed",
+        footer: "© 2026 ArthaMitra | Your Financial Friend 💚"
+    },
+    kn: {
+        header: "ಕಲಿಯಿರಿ",
+        title: "ಹಣಕಾಸಿನ ಕಲಿಕೆ 💚",
+        subtitle: "ಸರಳ ಹಣ ನಿರ್ವಹಣಾ ಕೌಶಲ್ಯಗಳನ್ನು ಕಲಿಯಿರಿ ಮತ್ತು ಉತ್ತಮ ಹಣಕಾಸಿನ ಭವಿಷ್ಯವನ್ನು ನಿರ್ಮಿಸಿ.",
+        progress: "ನಿಮ್ಮ ಕಲಿಕೆಯ ಪ್ರಗತಿ",
+        completed: "ಪಾಠಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ",
+        back: "← ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+        read: "ಪಾಠ ಓದಿ",
+        hide: "ಪಾಠ ಮರೆಮಾಡಿ",
+        mark: "✓ ಪೂರ್ಣಗೊಂಡಿದೆ ಎಂದು ಗುರುತಿಸಿ",
+        done: "✓ ಪೂರ್ಣಗೊಂಡಿದೆ",
+        footer: "© 2026 ಅರ್ಥಮಿತ್ರ | ನಿಮ್ಮ ಹಣಕಾಸಿನ ಸ್ನೇಹಿತ 💚"
+    }
+};
+
+let completed = JSON.parse(
+    localStorage.getItem("arthaLessonsCompleted") || "[]"
+);
+
+const container = document.getElementById("lessonsContainer");
+const languageSelect = document.getElementById("language");
+
+function renderPage() {
+    const lang = languageSelect.value;
+    const words = translations[lang];
+
+    document.documentElement.lang = lang;
+
+    document.getElementById("headerTitle").textContent = words.header;
+    document.getElementById("pageTitle").textContent = words.title;
+    document.getElementById("subtitle").textContent = words.subtitle;
+    document.getElementById("progressTitle").textContent = words.progress;
+    document.getElementById("back").textContent = words.back;
+    document.getElementById("footer").textContent = words.footer;
+
+    container.replaceChildren();
+
+    lessons.forEach((lesson, index) => {
+        const card = document.createElement("section");
+        card.className = "lesson";
+
+        const heading = document.createElement("h2");
+        heading.textContent = lesson.icon + " " + lesson.title[lang];
+
+        const description = document.createElement("p");
+        description.textContent = lesson.description[lang];
+
+        const content = document.createElement("div");
+        content.className = "lesson-content";
+        content.id = "lessonContent" + index;
+
+        const list = document.createElement("ul");
+
+        lesson.content[lang].forEach(point => {
+            const item = document.createElement("li");
+            item.textContent = point;
+            item.style.marginBottom = "12px";
+            item.style.lineHeight = "1.6";
+            list.appendChild(item);
+        });
+
+        content.appendChild(list);
+
+        const readButton = document.createElement("button");
+        readButton.textContent = words.read;
+
+        readButton.addEventListener("click", () => {
+            const isOpen = content.classList.toggle("show");
+            readButton.textContent = isOpen ? words.hide : words.read;
+        });
+
+        const completeButton = document.createElement("button");
+        completeButton.className = "complete";
+
+        function updateCompleteButton() {
+            completeButton.textContent = completed.includes(index)
+                ? words.done
+                : words.mark;
+        }
+
+        updateCompleteButton();
+
+        completeButton.addEventListener("click", () => {
+            if (completed.includes(index)) {
+                completed = completed.filter(item => item !== index);
+            } else {
+                completed.push(index);
+            }
+
+            localStorage.setItem(
+                "arthaLessonsCompleted",
+                JSON.stringify(completed)
+            );
+
+            updateCompleteButton();
+            updateProgress();
+        });
+
+        card.append(heading, description, readButton, completeButton, content);
+        container.appendChild(card);
+    });
+
+    updateProgress();
+}
+
+function updateProgress() {
+    const lang = languageSelect.value;
+    const count = completed.length;
+
+    document.getElementById("progressFill").style.width =
+        (count / lessons.length * 100) + "%";
+
+    document.getElementById("progressText").textContent =
+        count + " / " + lessons.length + " " +
+        translations[lang].completed;
+}
+
+languageSelect.addEventListener("change", () => {
+    localStorage.setItem("lang", languageSelect.value);
+    renderPage();
+});
+
+languageSelect.value = localStorage.getItem("lang") || "en";
+renderPage();
+</script>
+
+</body>
+</html>
