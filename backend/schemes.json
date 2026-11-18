@@ -184,6 +184,26 @@
       "verified": false,
       "last_checked": null,
       "kn_reviewed": false
+    },
+        {
+      "id": "gruha-jyothi",
+      "name": {"en": "Gruha Jyothi (free electricity)", "kn": "ಗೃಹ ಜ್ಯೋತಿ (ಉಚಿತ ವಿದ್ಯುತ್)"},
+      "category": "welfare",
+      "benefit": {"en": "Up to 200 units of free electricity every month for eligible households with a home (domestic) electricity connection.", "kn": "ಮನೆಯ ವಿದ್ಯುತ್ ಸಂಪರ್ಕ ಇರುವ ಅರ್ಹ ಕುಟುಂಬಗಳಿಗೆ ಪ್ರತಿ ತಿಂಗಳು 200 ಯೂನಿಟ್‌ವರೆಗೆ ಉಚಿತ ವಿದ್ಯುತ್."},
+      "why": {"en": "Free electricity for homes. Check if your household qualifies.", "kn": "ಮನೆಗಳಿಗೆ ಉಚಿತ ವಿದ್ಯುತ್. ನಿಮ್ಮ ಮನೆ ಅರ್ಹವೇ ಎಂದು ನೋಡಿ."},
+      "eligibility": {},
+      "eligibility_text": {"en": "Households in Karnataka with a home (domestic) electricity connection. Commercial connections are not eligible. Tenants can also apply. Check the official portal for the current rules.", "kn": "ಕರ್ನಾಟಕದಲ್ಲಿ ಮನೆಯ (ಗೃಹ) ವಿದ್ಯುತ್ ಸಂಪರ್ಕ ಇರುವ ಕುಟುಂಬಗಳು. ವಾಣಿಜ್ಯ ಸಂಪರ್ಕಗಳಿಗೆ ಅರ್ಹತೆ ಇಲ್ಲ. ಬಾಡಿಗೆದಾರರೂ ಅರ್ಜಿ ಹಾಕಬಹುದು. ಈಗಿನ ನಿಯಮಗಳಿಗೆ ಅಧಿಕೃತ ಪೋರ್ಟಲ್ ನೋಡಿ."},
+      "documents": [
+        {"en": "Aadhaar (the electricity account must be linked with Aadhaar)", "kn": "ಆಧಾರ್ (ವಿದ್ಯುತ್ ಖಾತೆ ಆಧಾರ್‌ಗೆ ಲಿಂಕ್ ಆಗಿರಬೇಕು)"},
+        {"en": "Electricity account number from your bill (RR number or consumer ID)", "kn": "ವಿದ್ಯುತ್ ಬಿಲ್‌ನಲ್ಲಿರುವ ಖಾತೆ ಸಂಖ್ಯೆ (ಆರ್‌ಆರ್ ಸಂಖ್ಯೆ ಅಥವಾ ಗ್ರಾಹಕ ಐಡಿ)"},
+        {"en": "Mobile number", "kn": "ಮೊಬೈಲ್ ನಂಬರ್"},
+        {"en": "Rental agreement, if you are a tenant", "kn": "ಬಾಡಿಗೆ ಒಪ್ಪಂದ, ನೀವು ಬಾಡಿಗೆದಾರರಾಗಿದ್ದರೆ"}
+      ],
+      "how_to_apply": {"en": "Register on the Seva Sindhu portal (sevasindhugs.karnataka.gov.in) with your electricity account number and Aadhaar details. There is no fee. For help, visit your nearest BESCOM office.", "kn": "ಸೇವಾ ಸಿಂಧು ಪೋರ್ಟಲ್‌ನಲ್ಲಿ (sevasindhugs.karnataka.gov.in) ನಿಮ್ಮ ವಿದ್ಯುತ್ ಖಾತೆ ಸಂಖ್ಯೆ ಮತ್ತು ಆಧಾರ್ ವಿವರಗಳೊಂದಿಗೆ ನೋಂದಾಯಿಸಿ. ಯಾವುದೇ ಶುಲ್ಕವಿಲ್ಲ. ಸಹಾಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಹತ್ತಿರದ ಬೆಸ್ಕಾಂ ಕಚೇರಿಗೆ ಭೇಟಿ ನೀಡಿ."},
+      "source_url": "https://sevasindhugs.karnataka.gov.in",
+      "verified": false,
+      "last_checked": null,
+      "kn_reviewed": false
     }
   ]
 }
