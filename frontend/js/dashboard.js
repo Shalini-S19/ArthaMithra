@@ -1,8 +1,10 @@
 
+"use strict";
+
 // ============================================
 // ARTHAMITHRA - COMPLETE DASHBOARD JAVASCRIPT
+// FIXED: USERNAME, GREETING, SAVINGS GOALS
 // ENGLISH + KANNADA SUPPORT
-// USERNAME AND GREETING FIXED
 // ============================================
 
 let weeklyFinanceChart = null;
@@ -10,7 +12,7 @@ let dashboardGoals = [];
 let dashboardEntries = [];
 
 // ============================================
-// TRANSLATION HELPERS
+// LANGUAGE HELPERS
 // ============================================
 
 function currentDashboardLanguage() {
@@ -22,13 +24,10 @@ function currentDashboardLanguage() {
 function dashboardText(key, english, kannada) {
     const lang = currentDashboardLanguage();
 
-    if (lang === "kn" && kannada) {
-        return kannada;
-    }
+    if (lang === "kn" && kannada) return kannada;
 
     if (typeof t === "function") {
         const translated = t("dashboard." + key, "");
-
         if (translated && translated !== "dashboard." + key) {
             return translated;
         }
@@ -39,29 +38,17 @@ function dashboardText(key, english, kannada) {
 
 function financeText(key) {
     const translations = {
-        income: {
-            en: "Income",
-            kn: "ಆದಾಯ"
-        },
-        expense: {
-            en: "Expense",
-            kn: "ವೆಚ್ಚ"
-        },
+        income: { en: "Income", kn: "ಆದಾಯ" },
+        expense: { en: "Expense", kn: "ಖರ್ಚು" },
         no_transactions: {
             en: "No transactions recorded yet.",
             kn: "ಇನ್ನೂ ಯಾವುದೇ ವಹಿವಾಟು ದಾಖಲಾಗಿಲ್ಲ."
         },
-        add_money: {
-            en: "Add Money",
-            kn: "ಹಣ ಸೇರಿಸಿ"
-        }
+        add_money: { en: "Add Money", kn: "ಹಣ ಸೇರಿಸಿ" }
     };
 
     const lang = currentDashboardLanguage();
-
-    return translations[key]?.[lang] ||
-        translations[key]?.en ||
-        key;
+    return translations[key]?.[lang] || translations[key]?.en || key;
 }
 
 // ============================================
@@ -79,7 +66,7 @@ function escapeDashboardHTML(value) {
 }
 
 // ============================================
-// CURRENCY FORMAT
+// CURRENCY
 // ============================================
 
 function formatDashboardMoney(amount) {
@@ -117,14 +104,13 @@ function openFeature(feature) {
         document.querySelector(destination)?.scrollIntoView({
             behavior: "smooth"
         });
-        return;
+    } else {
+        window.location.href = destination;
     }
-
-    window.location.href = destination;
 }
 
 // ============================================
-// GET USER NAME
+// USERNAME
 // ============================================
 
 function getDashboardUserName(profile) {
@@ -136,7 +122,7 @@ function getDashboardUserName(profile) {
         profile?.me ||
         profile;
 
-    const name =
+    return String(
         user?.name ||
         user?.full_name ||
         user?.fullName ||
@@ -145,55 +131,39 @@ function getDashboardUserName(profile) {
         user?.firstName ||
         user?.display_name ||
         user?.displayName ||
-        profile?.name ||
-        profile?.full_name ||
-        "";
-
-    return String(name).trim();
+        ""
+    ).trim();
 }
-
-// ============================================
-// DISPLAY GREETING
-// ============================================
 
 function displayDashboardGreeting(name) {
     const nameElement = document.getElementById("userName");
-
     if (!nameElement) return;
 
     nameElement.textContent = name || "Friend";
 
-    // Ensure the name is visible
     nameElement.style.display = "inline";
     nameElement.style.visibility = "visible";
     nameElement.style.opacity = "1";
     nameElement.style.color = "#ffffff";
     nameElement.style.fontWeight = "bold";
 
-    const welcomeCard = nameElement.closest(".welcome-card");
+    const card = nameElement.closest(".welcome-card");
 
-    if (welcomeCard) {
-        welcomeCard.style.background =
+    if (card) {
+        card.style.background =
             "linear-gradient(120deg, #176b4b, #123c32)";
+        card.style.color = "#ffffff";
 
-        welcomeCard.style.color = "#ffffff";
-
-        const heading = welcomeCard.querySelector("h1");
-
+        const heading = card.querySelector("h1");
         if (heading) {
-            heading.style.display = "block";
+            heading.style.color = "#ffffff";
             heading.style.visibility = "visible";
             heading.style.opacity = "1";
-            heading.style.color = "#ffffff";
-            heading.style.fontSize = "27px";
-            heading.style.marginBottom = "10px";
         }
 
-        const paragraph = welcomeCard.querySelector("p");
-
+        const paragraph = card.querySelector("p");
         if (paragraph) {
             paragraph.style.color = "#ffffff";
-            paragraph.style.visibility = "visible";
         }
     }
 }
@@ -203,39 +173,26 @@ function displayDashboardGreeting(name) {
 // ============================================
 
 async function loadDashboard() {
-    // Show greeting immediately
     displayDashboardGreeting("Friend");
 
     try {
         const profile = await api("GET", "/api/me");
 
-        console.log("Dashboard profile response:", profile);
+        console.log("Dashboard profile:", profile);
 
-        const userName = getDashboardUserName(profile);
-
-        displayDashboardGreeting(userName || "Friend");
-
-        await loadFinancialSummary();
-        await loadRecentTransactions();
-        await loadSavingsGoals();
+        const name = getDashboardUserName(profile);
+        displayDashboardGreeting(name || "Friend");
 
     } catch (error) {
-        console.error("Dashboard loading error:", error);
-
+        console.error("Profile loading error:", error);
         displayDashboardGreeting("Friend");
-
-        const message = dashboardText(
-            "load_error",
-            "Unable to load dashboard information. Please log in and try again.",
-            "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಮಾಹಿತಿಯನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಲಾಗಿನ್ ಮಾಡಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
-        );
-
-        const list = document.getElementById("recentTransactionsList");
-
-        if (list) {
-            list.textContent = message;
-        }
     }
+
+    await Promise.allSettled([
+        loadFinancialSummary(),
+        loadRecentTransactions(),
+        loadSavingsGoals()
+    ]);
 }
 
 // ============================================
@@ -249,11 +206,8 @@ async function loadFinancialSummary() {
 
         const income = Number(week.earned || 0);
         const expense = Number(week.spent || 0);
-
         const savings = Number(
-            week.saved !== undefined
-                ? week.saved
-                : income - expense
+            week.saved !== undefined ? week.saved : income - expense
         );
 
         const incomeElement = document.getElementById("weeklyIncome");
@@ -271,9 +225,8 @@ async function loadFinancialSummary() {
         if (savingsElement) {
             savingsElement.textContent = formatDashboardMoney(savings);
         }
-
     } catch (error) {
-        console.error("Financial summary error:", error);
+        console.error("Summary loading error:", error);
     }
 }
 
@@ -283,7 +236,6 @@ async function loadFinancialSummary() {
 
 async function loadRecentTransactions() {
     const container = document.getElementById("recentTransactionsList");
-
     if (!container) return;
 
     try {
@@ -301,32 +253,28 @@ async function loadRecentTransactions() {
 
         container.textContent = dashboardText(
             "load_error",
-            "Unable to load transactions. Please log in and try again.",
-            "ವಹಿವಾಟುಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಲಾಗಿನ್ ಮಾಡಿ."
+            "Unable to load transactions.",
+            "ವಹಿವಾಟುಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ."
         );
     }
 }
 
 function renderRecentTransactions() {
     const container = document.getElementById("recentTransactionsList");
-
     if (!container) return;
 
     const recent = dashboardEntries.slice(0, 5);
 
-    if (recent.length === 0) {
+    if (!recent.length) {
         container.textContent = financeText("no_transactions");
         return;
     }
 
     container.innerHTML = recent.map(entry => {
         const isIncome = entry.type === "income";
-
-        const typeLabel = isIncome
+        const label = isIncome
             ? financeText("income")
             : financeText("expense");
-
-        const amount = formatDashboardMoney(entry.amount);
 
         return `
             <div style="
@@ -339,20 +287,20 @@ function renderRecentTransactions() {
             ">
                 <div>
                     <strong>
-                        ${escapeDashboardHTML(entry.category || typeLabel)}
+                        ${escapeDashboardHTML(entry.category || label)}
                     </strong>
-
                     <p style="margin:5px 0;color:#718278;font-size:13px;">
                         ${escapeDashboardHTML(entry.note || "")}
                     </p>
-
                     <small style="color:#718278;">
                         ${escapeDashboardHTML(entry.date || "")}
                     </small>
                 </div>
 
                 <strong style="color:${isIncome ? "#16834c" : "#c0392b"};">
-                    ${isIncome ? "+" : "-"}${escapeDashboardHTML(amount)}
+                    ${isIncome ? "+" : "-"}${escapeDashboardHTML(
+                        formatDashboardMoney(entry.amount)
+                    )}
                 </strong>
             </div>
         `;
@@ -360,7 +308,7 @@ function renderRecentTransactions() {
 }
 
 // ============================================
-// WEEKLY INCOME VS EXPENSE CHART
+// WEEKLY CHART
 // ============================================
 
 function renderWeeklyChart() {
@@ -384,34 +332,26 @@ function renderWeeklyChart() {
             String(date.getDate()).padStart(2, "0")
         ].join("-");
 
-        labels.push(
-            date.toLocaleDateString(
-                currentDashboardLanguage() === "kn" ? "kn-IN" : "en-IN",
-                {
-                    day: "numeric",
-                    month: "short"
-                }
-            )
-        );
+        labels.push(date.toLocaleDateString(
+            currentDashboardLanguage() === "kn" ? "kn-IN" : "en-IN",
+            { day: "numeric", month: "short" }
+        ));
 
-        const dayEntries = dashboardEntries.filter(entry =>
+        const entries = dashboardEntries.filter(entry =>
             String(entry.date || "").slice(0, 10) === dateKey
         );
 
-        const income = dayEntries
-            .filter(entry => entry.type === "income")
-            .reduce((sum, entry) =>
-                sum + Number(entry.amount || 0), 0
-            );
+        incomeData.push(
+            entries
+                .filter(entry => entry.type === "income")
+                .reduce((sum, entry) => sum + Number(entry.amount || 0), 0)
+        );
 
-        const expense = dayEntries
-            .filter(entry => entry.type === "expense")
-            .reduce((sum, entry) =>
-                sum + Number(entry.amount || 0), 0
-            );
-
-        incomeData.push(income);
-        expenseData.push(expense);
+        expenseData.push(
+            entries
+                .filter(entry => entry.type === "expense")
+                .reduce((sum, entry) => sum + Number(entry.amount || 0), 0)
+        );
     }
 
     if (weeklyFinanceChart) {
@@ -420,10 +360,8 @@ function renderWeeklyChart() {
 
     weeklyFinanceChart = new Chart(canvas, {
         type: "bar",
-
         data: {
-            labels: labels,
-
+            labels,
             datasets: [
                 {
                     label: financeText("income"),
@@ -439,17 +377,12 @@ function renderWeeklyChart() {
                 }
             ]
         },
-
         options: {
             responsive: true,
             maintainAspectRatio: false,
-
             plugins: {
-                legend: {
-                    position: "top"
-                }
+                legend: { position: "top" }
             },
-
             scales: {
                 y: {
                     beginAtZero: true,
@@ -465,12 +398,11 @@ function renderWeeklyChart() {
 }
 
 // ============================================
-// SAVINGS GOALS
+// LOAD SAVINGS GOALS
 // ============================================
 
 async function loadSavingsGoals() {
     const container = document.getElementById("goalsList");
-
     if (!container) return;
 
     try {
@@ -493,12 +425,16 @@ async function loadSavingsGoals() {
     }
 }
 
+// ============================================
+// DISPLAY SAVINGS GOALS
+// Backend fields: title, target, saved, deadline
+// ============================================
+
 function renderSavingsGoals() {
     const container = document.getElementById("goalsList");
-
     if (!container) return;
 
-    if (dashboardGoals.length === 0) {
+    if (!dashboardGoals.length) {
         container.textContent = dashboardText(
             "no_goals",
             "You haven't created any savings goals yet. Start your first goal above!",
@@ -508,26 +444,15 @@ function renderSavingsGoals() {
     }
 
     container.innerHTML = dashboardGoals.map(goal => {
-        const title = goal.title || goal.name ||
-            dashboardText("goal_default", "Savings Goal", "ಉಳಿತಾಯ ಗುರಿ");
+        const title = goal.title || "Savings Goal";
 
-        const target = Number(
-            goal.target_amount ?? goal.target ?? 0
-        );
+        // Backend returns target and saved
+        const target = Number(goal.target ?? goal.target_amount ?? 0);
+        const saved = Number(goal.saved ?? goal.saved_amount ?? 0);
 
-        const saved = Number(
-            goal.saved_amount ?? goal.saved ?? goal.current_amount ?? 0
-        );
-
-        const percent = Math.min(
-            100,
-            Math.max(
-                0,
-                Number(goal.percent ?? (
-                    target > 0 ? saved / target * 100 : 0
-                ))
-            )
-        );
+        const percent = target > 0
+            ? Math.min(100, Math.max(0, saved / target * 100))
+            : 0;
 
         return `
             <div class="goal-card">
@@ -535,14 +460,14 @@ function renderSavingsGoals() {
 
                 <p>
                     ${escapeDashboardHTML(
-                        dashboardText("saved_label", "Saved:", "ಉಳಿಸಿದ ಮೊತ್ತ:")
+                        dashboardText("saved_label", "Saved:", "ಉಳಿತಾಯ:")
                     )}
                     ${escapeDashboardHTML(formatDashboardMoney(saved))}
                 </p>
 
                 <p>
                     ${escapeDashboardHTML(
-                        dashboardText("target_label", "Target:", "ಗುರಿ ಮೊತ್ತ:")
+                        dashboardText("target_label", "Target:", "ಗುರಿ:")
                     )}
                     ${escapeDashboardHTML(formatDashboardMoney(target))}
                 </p>
@@ -563,7 +488,7 @@ function renderSavingsGoals() {
                 ${goal.deadline ? `
                     <p>
                         ${escapeDashboardHTML(
-                            dashboardText("deadline_label", "Deadline:", "ಕೊನೆಯ ದಿನಾಂಕ:")
+                            dashboardText("deadline_label", "Deadline:", "ಗಡುವು:")
                         )}
                         ${escapeDashboardHTML(goal.deadline)}
                     </p>
@@ -591,7 +516,8 @@ function renderSavingsGoals() {
 }
 
 // ============================================
-// CREATE SAVINGS GOAL
+// CREATE SAVINGS GOAL - FIXED
+// Backend expects "target", NOT "target_amount"
 // ============================================
 
 async function createSavingsGoal(event) {
@@ -602,36 +528,59 @@ async function createSavingsGoal(event) {
     const deadlineInput = document.getElementById("goalDeadline");
     const message = document.getElementById("goalMessage");
 
-    const title = titleInput.value.trim();
-    const target = Number(targetInput.value);
-    const deadline = deadlineInput.value;
+    if (!titleInput || !targetInput || !message) return;
 
-    if (!title || !Number.isFinite(target) || target <= 0) {
+    const title = titleInput.value.trim();
+    const targetValue = targetInput.value.trim();
+    const target = Number(targetValue);
+    const deadline = deadlineInput?.value || "";
+
+    if (
+        !title ||
+        !targetValue ||
+        !Number.isFinite(target) ||
+        target <= 0
+    ) {
         message.textContent = dashboardText(
             "invalid_goal",
-            "Please enter valid goal details.",
-            "ದಯವಿಟ್ಟು ಸರಿಯಾದ ಗುರಿ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ."
+            "Please enter a valid goal name and target amount.",
+            "ದಯವಿಟ್ಟು ಸರಿಯಾದ ಗುರಿಯ ಹೆಸರು ಮತ್ತು ಮೊತ್ತವನ್ನು ನಮೂದಿಸಿ."
         );
         return;
     }
 
+    if (target > 10000000) {
+        message.textContent = "Maximum target amount is ₹1,00,00,000.";
+        return;
+    }
+
+    const submitButton = document.querySelector(
+        '#goalForm button[type="submit"]'
+    );
+
+    if (submitButton) submitButton.disabled = true;
+
     message.textContent = dashboardText(
         "creating_goal",
-        "Creating your goal...",
-        "ನಿಮ್ಮ ಗುರಿಯನ್ನು ರಚಿಸಲಾಗುತ್ತಿದೆ..."
+        "Creating your savings goal...",
+        "ನಿಮ್ಮ ಉಳಿತಾಯ ಗುರಿಯನ್ನು ರಚಿಸಲಾಗುತ್ತಿದೆ..."
     );
 
     try {
-        await api("POST", "/api/goals", {
+        const payload = {
             title: title,
-            target_amount: target,
+            target: target,
             deadline: deadline || null
-        });
+        };
+
+        console.log("Creating savings goal:", payload);
+
+        await api("POST", "/api/goals", payload);
 
         message.textContent = dashboardText(
             "goal_created",
-            "Savings goal created successfully!",
-            "ಉಳಿತಾಯ ಗುರಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ!"
+            "Savings goal created successfully! 🎉",
+            "ಉಳಿತಾಯ ಗುರಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ! 🎉"
         );
 
         document.getElementById("goalForm").reset();
@@ -639,24 +588,26 @@ async function createSavingsGoal(event) {
         await loadSavingsGoals();
 
     } catch (error) {
-        console.error("Create goal error:", error);
+        console.error("Create savings goal error:", error);
 
         message.textContent = error.message ||
             dashboardText(
                 "goal_create_error",
-                "Unable to create savings goal.",
-                "ಉಳಿತಾಯ ಗುರಿಯನ್ನು ರಚಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ."
+                "Unable to create savings goal. Please try again.",
+                "ಉಳಿತಾಯ ಗುರಿಯನ್ನು ರಚಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
             );
+
+    } finally {
+        if (submitButton) submitButton.disabled = false;
     }
 }
 
 // ============================================
-// GOAL CONTRIBUTION AND DELETE
+// ADD MONEY / DELETE GOAL
 // ============================================
 
 async function handleGoalAction(event) {
     const button = event.target.closest("[data-goal-action]");
-
     if (!button) return;
 
     const goalId = button.dataset.goalId;
@@ -665,13 +616,17 @@ async function handleGoalAction(event) {
     if (!goalId) return;
 
     if (action === "contribute") {
-        const amount = Number(prompt(
+        const input = prompt(
             dashboardText(
                 "contribution_prompt",
                 "How much money would you like to add?",
                 "ನೀವು ಎಷ್ಟು ಹಣವನ್ನು ಸೇರಿಸಲು ಬಯಸುತ್ತೀರಿ?"
             )
-        ));
+        );
+
+        if (input === null) return;
+
+        const amount = Number(input);
 
         if (!Number.isFinite(amount) || amount <= 0) {
             alert(dashboardText(
@@ -689,20 +644,15 @@ async function handleGoalAction(event) {
 
             alert(dashboardText(
                 "contribution_success",
-                "Money added to your savings goal successfully!",
-                "ನಿಮ್ಮ ಉಳಿತಾಯ ಗುರಿಗೆ ಹಣವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸೇರಿಸಲಾಗಿದೆ!"
+                "Money added successfully!",
+                "ಹಣವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸೇರಿಸಲಾಗಿದೆ!"
             ));
 
             await loadSavingsGoals();
 
         } catch (error) {
-            console.error("Goal contribution error:", error);
-
-            alert(error.message || dashboardText(
-                "contribution_error",
-                "Unable to add money.",
-                "ಹಣವನ್ನು ಸೇರಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ."
-            ));
+            console.error("Contribution error:", error);
+            alert(error.message || "Unable to add money.");
         }
     }
 
@@ -715,7 +665,7 @@ async function handleGoalAction(event) {
             dashboardText(
                 "delete_confirmation",
                 "Are you sure you want to delete this goal?",
-                "ಈ ಉಳಿತಾಯ ಗುರಿಯನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿದ್ದೀರಾ?"
+                "ಈ ಗುರಿಯನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?"
             ) + " " + (goal?.title || "")
         );
 
@@ -734,12 +684,7 @@ async function handleGoalAction(event) {
 
         } catch (error) {
             console.error("Delete goal error:", error);
-
-            alert(error.message || dashboardText(
-                "delete_error",
-                "Unable to delete goal.",
-                "ಗುರಿಯನ್ನು ಅಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ."
-            ));
+            alert(error.message || "Unable to delete goal.");
         }
     }
 }
@@ -755,7 +700,7 @@ document.addEventListener("languageChanged", function() {
 });
 
 // ============================================
-// INITIALIZE DASHBOARD
+// INITIALIZE
 // ============================================
 
 document.addEventListener("DOMContentLoaded", function() {
