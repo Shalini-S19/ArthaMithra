@@ -265,5 +265,16 @@
     "registering": "Creating your account...",
     "register_success": "Registration successful! Redirecting...",
     "register_error": "Registration failed. Please try again."
-  }
+  },
+  "notifications": {
+  "income_reminder": "💰 Remember to record your income for today.",
+  "expense_reminder": "💸 Remember to record your expenses for today.",
+  "budget_exceeded": "🚨 Your monthly budget has been exceeded! Review your spending.",
+  "budget_warning": "⚠️ You have spent 80% or more of your monthly budget.",
+  "goal_overdue": "⏰ The deadline for this savings goal has passed.",
+  "goal_approaching": "🎯 Your savings goal deadline is approaching.",
+  "all_caught_up": "🎉 You're all caught up! No new reminders.",
+  "load_error": "Unable to load notifications. Please refresh."
+}
+  
 }
