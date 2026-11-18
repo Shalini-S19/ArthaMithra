@@ -2,6 +2,7 @@
 // ============================================
 // ARTHAMITHRA - COMPLETE DASHBOARD JAVASCRIPT
 // ENGLISH + KANNADA SUPPORT
+// USERNAME AND GREETING FIXED
 // ============================================
 
 let weeklyFinanceChart = null;
@@ -27,6 +28,7 @@ function dashboardText(key, english, kannada) {
 
     if (typeof t === "function") {
         const translated = t("dashboard." + key, "");
+
         if (translated && translated !== "dashboard." + key) {
             return translated;
         }
@@ -122,30 +124,105 @@ function openFeature(feature) {
 }
 
 // ============================================
+// GET USER NAME
+// ============================================
+
+function getDashboardUserName(profile) {
+    const user =
+        profile?.user ||
+        profile?.data?.user ||
+        profile?.data ||
+        profile?.profile ||
+        profile?.me ||
+        profile;
+
+    const name =
+        user?.name ||
+        user?.full_name ||
+        user?.fullName ||
+        user?.username ||
+        user?.first_name ||
+        user?.firstName ||
+        user?.display_name ||
+        user?.displayName ||
+        profile?.name ||
+        profile?.full_name ||
+        "";
+
+    return String(name).trim();
+}
+
+// ============================================
+// DISPLAY GREETING
+// ============================================
+
+function displayDashboardGreeting(name) {
+    const nameElement = document.getElementById("userName");
+
+    if (!nameElement) return;
+
+    nameElement.textContent = name || "Friend";
+
+    // Ensure the name is visible
+    nameElement.style.display = "inline";
+    nameElement.style.visibility = "visible";
+    nameElement.style.opacity = "1";
+    nameElement.style.color = "#ffffff";
+    nameElement.style.fontWeight = "bold";
+
+    const welcomeCard = nameElement.closest(".welcome-card");
+
+    if (welcomeCard) {
+        welcomeCard.style.background =
+            "linear-gradient(120deg, #176b4b, #123c32)";
+
+        welcomeCard.style.color = "#ffffff";
+
+        const heading = welcomeCard.querySelector("h1");
+
+        if (heading) {
+            heading.style.display = "block";
+            heading.style.visibility = "visible";
+            heading.style.opacity = "1";
+            heading.style.color = "#ffffff";
+            heading.style.fontSize = "27px";
+            heading.style.marginBottom = "10px";
+        }
+
+        const paragraph = welcomeCard.querySelector("p");
+
+        if (paragraph) {
+            paragraph.style.color = "#ffffff";
+            paragraph.style.visibility = "visible";
+        }
+    }
+}
+
+// ============================================
 // LOAD DASHBOARD
 // ============================================
 
 async function loadDashboard() {
+    // Show greeting immediately
+    displayDashboardGreeting("Friend");
+
     try {
         const profile = await api("GET", "/api/me");
-        const user = profile.user || profile;
 
-        const nameElement = document.getElementById("userName");
+        console.log("Dashboard profile response:", profile);
 
-        if (nameElement) {
-            nameElement.textContent = user.name || "Friend";
-        }
+        const userName = getDashboardUserName(profile);
+
+        displayDashboardGreeting(userName || "Friend");
 
         await loadFinancialSummary();
         await loadRecentTransactions();
         await loadSavingsGoals();
 
-        if (typeof loadNotifications === "function") {
-            await loadNotifications();
-        }
-
     } catch (error) {
         console.error("Dashboard loading error:", error);
+
+        displayDashboardGreeting("Friend");
 
         const message = dashboardText(
             "load_error",
@@ -376,7 +453,9 @@ function renderWeeklyChart() {
             scales: {
                 y: {
                     beginAtZero: true,
+                    grace: "10%",
                     ticks: {
+                        precision: 0,
                         callback: value => "₹" + value
                     }
                 }
@@ -673,8 +752,6 @@ document.addEventListener("languageChanged", function() {
     renderRecentTransactions();
     renderSavingsGoals();
     renderWeeklyChart();
-
-    // notifications.js handles its own language change.
 });
 
 // ============================================
