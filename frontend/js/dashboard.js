@@ -6,7 +6,7 @@
 "use strict";
 
 // ======================================
-// TRANSLATION HELPER
+// TRANSLATION HELPERS
 // ======================================
 
 function dashboardText(key, fallback) {
@@ -35,6 +35,18 @@ function getGoalList(payload) {
     return [];
 }
 
+function setDashboardValue(ids, value) {
+    ids.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = value;
+    });
+}
+
+function getGoalContainer() {
+    return document.getElementById("goalsContainer") ||
+           document.getElementById("goalsList");
+}
+
 function showGoalMessage(message, isError = false) {
     const element = document.getElementById("goalMessage");
     if (!element) return;
@@ -44,11 +56,47 @@ function showGoalMessage(message, isError = false) {
 }
 
 // ======================================
-// LOAD DASHBOARD
+// TRANSACTION DATA
+// ======================================
+
+let dashboardEntries = [];
+let weeklyFinanceChart = null;
+
+// ======================================
+// GET LAST 7 DAYS
+// ======================================
+
+function getLastSevenDays() {
+    const days = [];
+
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        date.setDate(date.getDate() - i);
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        days.push({
+            key: `${year}-${month}-${day}`,
+            label: date.toLocaleDateString(
+                localStorage.getItem("lang") === "kn" ? "kn-IN" : "en-IN",
+                { day: "numeric", month: "short" }
+            )
+        });
+    }
+
+    return days;
+}
+
+// ======================================
+// LOAD DASHBOARD SUMMARY
 // ======================================
 
 async function loadDashboard() {
     try {
+        // Load user profile
         const profile = await api("GET", "/api/me");
         const user = profile.user || profile;
 
@@ -58,24 +106,35 @@ async function loadDashboard() {
             nameElement.textContent = user.name || "Friend";
         }
 
+        // Load weekly summary
         const summary = await api("GET", "/api/summary");
         const week = summary.this_week || {};
 
-        document.getElementById("totalIncome").textContent =
-            formatMoney(week.earned);
+        setDashboardValue(
+            ["weeklyIncome", "totalIncome"],
+            formatMoney(week.earned)
+        );
 
-        document.getElementById("totalExpense").textContent =
-            formatMoney(week.spent);
+        setDashboardValue(
+            ["weeklyExpense", "totalExpense"],
+            formatMoney(week.spent)
+        );
 
-        document.getElementById("totalSavings").textContent =
-            formatMoney(week.saved);
+        setDashboardValue(
+            ["weeklySavings", "totalSavings"],
+            formatMoney(week.saved)
+        );
 
-        await loadGoals();
+        // Load remaining dashboard features
+        await Promise.all([
+            loadGoals(),
+            loadTransactionAnalytics()
+        ]);
 
     } catch (error) {
         console.error("Dashboard loading error:", error);
 
-        const container = document.getElementById("goalsContainer");
+        const container = getGoalContainer();
 
         if (container) {
             container.textContent = dashboardText(
@@ -84,6 +143,226 @@ async function loadDashboard() {
             );
         }
     }
+}
+
+// ======================================
+// LOAD TRANSACTIONS FOR CHART AND HISTORY
+// ======================================
+
+async function loadTransactionAnalytics() {
+    const recentContainer = document.getElementById(
+        "recentTransactionsList"
+    );
+
+    if (recentContainer) {
+        recentContainer.textContent = "Loading transactions...";
+    }
+
+    try {
+        const response = await api("GET", "/api/entries?days=7");
+
+        dashboardEntries = Array.isArray(response)
+            ? response
+            : (response.entries || []);
+
+        renderWeeklyChart();
+        renderRecentTransactions();
+
+    } catch (error) {
+        console.error("Transaction analytics error:", error);
+
+        const chartContainer = document.getElementById("weeklyChart");
+
+        if (chartContainer) {
+            chartContainer.textContent =
+                "Unable to load financial chart.";
+        }
+
+        if (recentContainer) {
+            recentContainer.textContent =
+                "Unable to load recent transactions.";
+        }
+    }
+}
+
+// ======================================
+// RENDER INCOME VS EXPENSES CHART
+// ======================================
+
+function renderWeeklyChart() {
+    const canvas = document.getElementById("weeklyFinanceChart");
+    const chartContainer = document.getElementById("weeklyChart");
+
+    if (!canvas) return;
+
+    if (typeof Chart === "undefined") {
+        if (chartContainer) {
+            chartContainer.textContent =
+                "Chart library could not be loaded.";
+        }
+        return;
+    }
+
+    const days = getLastSevenDays();
+
+    const incomeData = days.map(day => {
+        return dashboardEntries
+            .filter(entry =>
+                entry.date === day.key &&
+                entry.type === "income"
+            )
+            .reduce((total, entry) =>
+                total + Number(entry.amount || 0), 0
+            );
+    });
+
+    const expenseData = days.map(day => {
+        return dashboardEntries
+            .filter(entry =>
+                entry.date === day.key &&
+                entry.type === "expense"
+            )
+            .reduce((total, entry) =>
+                total + Number(entry.amount || 0), 0
+            );
+    });
+
+    if (weeklyFinanceChart) {
+        weeklyFinanceChart.destroy();
+    }
+
+    weeklyFinanceChart = new Chart(canvas, {
+        type: "bar",
+
+        data: {
+            labels: days.map(day => day.label),
+
+            datasets: [
+                {
+                    label: "Income",
+                    data: incomeData,
+                    backgroundColor: "#26966b",
+                    borderRadius: 6
+                },
+                {
+                    label: "Expenses",
+                    data: expenseData,
+                    backgroundColor: "#e16b6b",
+                    borderRadius: 6
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+
+            plugins: {
+                legend: {
+                    position: "top"
+                },
+
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label +
+                                ": " + formatMoney(context.raw);
+                        }
+                    }
+                }
+            },
+
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return "₹" +
+                                Number(value).toLocaleString("en-IN");
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// ======================================
+// RENDER RECENT TRANSACTIONS
+// ======================================
+
+function renderRecentTransactions() {
+    const container = document.getElementById(
+        "recentTransactionsList"
+    );
+
+    if (!container) return;
+
+    container.replaceChildren();
+
+    if (dashboardEntries.length === 0) {
+        const message = document.createElement("p");
+
+        message.textContent =
+            "No transactions recorded in the last 7 days.";
+
+        container.appendChild(message);
+        return;
+    }
+
+    // Display latest 5 transactions
+    const recentEntries = [...dashboardEntries]
+        .sort((a, b) => {
+            const dateComparison =
+                String(b.date || "").localeCompare(String(a.date || ""));
+
+            if (dateComparison !== 0) return dateComparison;
+
+            return Number(b.id || 0) - Number(a.id || 0);
+        })
+        .slice(0, 5);
+
+    recentEntries.forEach(entry => {
+        const card = document.createElement("div");
+
+        card.style.padding = "14px";
+        card.style.marginBottom = "10px";
+        card.style.border = "1px solid #dce9e0";
+        card.style.borderRadius = "12px";
+        card.style.background = "#ffffff";
+
+        const isIncome = entry.type === "income";
+
+        const heading = document.createElement("h3");
+
+        heading.textContent =
+            (isIncome ? "💰 Income" : "💸 Expense") +
+            " - " +
+            (entry.category || "Other");
+
+        heading.style.color = isIncome ? "#176b4b" : "#b42318";
+
+        const amount = document.createElement("p");
+
+        amount.textContent = formatMoney(entry.amount);
+        amount.style.fontWeight = "bold";
+        amount.style.fontSize = "18px";
+        amount.style.color = isIncome ? "#176b4b" : "#b42318";
+
+        const date = document.createElement("small");
+        date.textContent = entry.date || "";
+
+        const note = document.createElement("p");
+        note.textContent = entry.note || "";
+
+        card.append(heading, amount, date);
+
+        if (entry.note) {
+            card.appendChild(note);
+        }
+
+        container.appendChild(card);
+    });
 }
 
 // ======================================
@@ -97,6 +376,7 @@ if (goalForm) {
         event.preventDefault();
 
         const title = document.getElementById("goalTitle").value.trim();
+
         const target = Number(
             document.getElementById("goalTarget").value
         );
@@ -165,7 +445,8 @@ if (goalForm) {
 // ======================================
 
 async function loadGoals() {
-    const container = document.getElementById("goalsContainer");
+    const container = getGoalContainer();
+
     if (!container) return;
 
     container.textContent = dashboardText(
@@ -224,16 +505,19 @@ function createGoalCard(goal) {
     title.textContent = goal.title || "Savings Goal";
 
     const savedText = document.createElement("p");
+
     savedText.textContent =
         dashboardText("saved_label", "Saved:") + " " +
         formatMoney(saved);
 
     const targetText = document.createElement("p");
+
     targetText.textContent =
         dashboardText("target_label", "Target:") + " " +
         formatMoney(target);
 
     const progressText = document.createElement("p");
+
     progressText.textContent =
         dashboardText("progress", "Progress:") + " " +
         percentage + "%";
@@ -277,6 +561,7 @@ function createGoalCard(goal) {
 
     if (saved < target) {
         const addButton = document.createElement("button");
+
         addButton.type = "button";
         addButton.textContent = goalText("add_money", "Add Money");
 
@@ -288,6 +573,7 @@ function createGoalCard(goal) {
     }
 
     const deleteButton = document.createElement("button");
+
     deleteButton.type = "button";
     deleteButton.className = "delete-goal";
     deleteButton.textContent = dashboardText("delete_goal", "Delete");
@@ -469,6 +755,8 @@ if (logoutButton) {
 // ======================================
 
 document.addEventListener("languageChanged", function() {
+    renderWeeklyChart();
+    renderRecentTransactions();
     loadGoals();
 });
 
