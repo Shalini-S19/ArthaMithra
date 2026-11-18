@@ -185,46 +185,98 @@
       "last_checked": null,
       "kn_reviewed": false
     },
-        {
+    {
       "id": "gruha-jyothi",
-      "name": {"en": "Gruha Jyothi (free electricity)", "kn": "ಗೃಹ ಜ್ಯೋತಿ (ಉಚಿತ ವಿದ್ಯುತ್)"},
+      "name": {
+        "en": "Gruha Jyothi (free electricity)",
+        "kn": "ಗೃಹ ಜ್ಯೋತಿ (ಉಚಿತ ವಿದ್ಯುತ್)"
+      },
       "category": "welfare",
-      "benefit": {"en": "Up to 200 units of free electricity every month for eligible households with a home (domestic) electricity connection.", "kn": "ಮನೆಯ ವಿದ್ಯುತ್ ಸಂಪರ್ಕ ಇರುವ ಅರ್ಹ ಕುಟುಂಬಗಳಿಗೆ ಪ್ರತಿ ತಿಂಗಳು 200 ಯೂನಿಟ್‌ವರೆಗೆ ಉಚಿತ ವಿದ್ಯುತ್."},
-      "why": {"en": "Free electricity for homes. Check if your household qualifies.", "kn": "ಮನೆಗಳಿಗೆ ಉಚಿತ ವಿದ್ಯುತ್. ನಿಮ್ಮ ಮನೆ ಅರ್ಹವೇ ಎಂದು ನೋಡಿ."},
+      "benefit": {
+        "en": "Up to 200 units of free electricity every month for eligible households with a home (domestic) electricity connection.",
+        "kn": "ಮನೆಯ ವಿದ್ಯುತ್ ಸಂಪರ್ಕ ಇರುವ ಅರ್ಹ ಕುಟುಂಬಗಳಿಗೆ ಪ್ರತಿ ತಿಂಗಳು 200 ಯೂನಿಟ್‌ವರೆಗೆ ಉಚಿತ ವಿದ್ಯುತ್."
+      },
+      "why": {
+        "en": "Free electricity for homes. Check if your household qualifies.",
+        "kn": "ಮನೆಗಳಿಗೆ ಉಚಿತ ವಿದ್ಯುತ್. ನಿಮ್ಮ ಮನೆ ಅರ್ಹವೇ ಎಂದು ನೋಡಿ."
+      },
       "eligibility": {},
-      "eligibility_text": {"en": "Households in Karnataka with a home (domestic) electricity connection. Commercial connections are not eligible. Tenants can also apply. Check the official portal for the current rules.", "kn": "ಕರ್ನಾಟಕದಲ್ಲಿ ಮನೆಯ (ಗೃಹ) ವಿದ್ಯುತ್ ಸಂಪರ್ಕ ಇರುವ ಕುಟುಂಬಗಳು. ವಾಣಿಜ್ಯ ಸಂಪರ್ಕಗಳಿಗೆ ಅರ್ಹತೆ ಇಲ್ಲ. ಬಾಡಿಗೆದಾರರೂ ಅರ್ಜಿ ಹಾಕಬಹುದು. ಈಗಿನ ನಿಯಮಗಳಿಗೆ ಅಧಿಕೃತ ಪೋರ್ಟಲ್ ನೋಡಿ."},
+      "eligibility_text": {
+        "en": "Households in Karnataka with a home (domestic) electricity connection. Commercial connections are not eligible. Tenants can also apply. Check the official portal for the current rules.",
+        "kn": "ಕರ್ನಾಟಕದಲ್ಲಿ ಮನೆಯ (ಗೃಹ) ವಿದ್ಯುತ್ ಸಂಪರ್ಕ ಇರುವ ಕುಟುಂಬಗಳು. ವಾಣಿಜ್ಯ ಸಂಪರ್ಕಗಳಿಗೆ ಅರ್ಹತೆ ಇಲ್ಲ. ಬಾಡಿಗೆದಾರರೂ ಅರ್ಜಿ ಹಾಕಬಹುದು. ಈಗಿನ ನಿಯಮಗಳಿಗೆ ಅಧಿಕೃತ ಪೋರ್ಟಲ್ ನೋಡಿ."
+      },
       "documents": [
-        {"en": "Aadhaar (the electricity account must be linked with Aadhaar)", "kn": "ಆಧಾರ್ (ವಿದ್ಯುತ್ ಖಾತೆ ಆಧಾರ್‌ಗೆ ಲಿಂಕ್ ಆಗಿರಬೇಕು)"},
-        {"en": "Electricity account number from your bill (RR number or consumer ID)", "kn": "ವಿದ್ಯುತ್ ಬಿಲ್‌ನಲ್ಲಿರುವ ಖಾತೆ ಸಂಖ್ಯೆ (ಆರ್‌ಆರ್ ಸಂಖ್ಯೆ ಅಥವಾ ಗ್ರಾಹಕ ಐಡಿ)"},
-        {"en": "Mobile number", "kn": "ಮೊಬೈಲ್ ನಂಬರ್"},
-        {"en": "Rental agreement, if you are a tenant", "kn": "ಬಾಡಿಗೆ ಒಪ್ಪಂದ, ನೀವು ಬಾಡಿಗೆದಾರರಾಗಿದ್ದರೆ"}
+        {
+          "en": "Aadhaar (the electricity account must be linked with Aadhaar)",
+          "kn": "ಆಧಾರ್ (ವಿದ್ಯುತ್ ಖಾತೆ ಆಧಾರ್‌ಗೆ ಲಿಂಕ್ ಆಗಿರಬೇಕು)"
+        },
+        {
+          "en": "Electricity account number from your bill (RR number or consumer ID)",
+          "kn": "ವಿದ್ಯುತ್ ಬಿಲ್‌ನಲ್ಲಿರುವ ಖಾತೆ ಸಂಖ್ಯೆ (ಆರ್‌ಆರ್ ಸಂಖ್ಯೆ ಅಥವಾ ಗ್ರಾಹಕ ಐಡಿ)"
+        },
+        {
+          "en": "Mobile number",
+          "kn": "ಮೊಬೈಲ್ ನಂಬರ್"
+        },
+        {
+          "en": "Rental agreement, if you are a tenant",
+          "kn": "ಬಾಡಿಗೆ ಒಪ್ಪಂದ, ನೀವು ಬಾಡಿಗೆದಾರರಾಗಿದ್ದರೆ"
+        }
       ],
-      "how_to_apply": {"en": "Register on the Seva Sindhu portal (sevasindhugs.karnataka.gov.in) with your electricity account number and Aadhaar details. There is no fee. For help, visit your nearest BESCOM office.", "kn": "ಸೇವಾ ಸಿಂಧು ಪೋರ್ಟಲ್‌ನಲ್ಲಿ (sevasindhugs.karnataka.gov.in) ನಿಮ್ಮ ವಿದ್ಯುತ್ ಖಾತೆ ಸಂಖ್ಯೆ ಮತ್ತು ಆಧಾರ್ ವಿವರಗಳೊಂದಿಗೆ ನೋಂದಾಯಿಸಿ. ಯಾವುದೇ ಶುಲ್ಕವಿಲ್ಲ. ಸಹಾಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಹತ್ತಿರದ ಬೆಸ್ಕಾಂ ಕಚೇರಿಗೆ ಭೇಟಿ ನೀಡಿ."},
+      "how_to_apply": {
+        "en": "Register on the Seva Sindhu portal (sevasindhugs.karnataka.gov.in) with your electricity account number and Aadhaar details. There is no fee. For help, visit your nearest BESCOM office.",
+        "kn": "ಸೇವಾ ಸಿಂಧು ಪೋರ್ಟಲ್‌ನಲ್ಲಿ (sevasindhugs.karnataka.gov.in) ನಿಮ್ಮ ವಿದ್ಯುತ್ ಖಾತೆ ಸಂಖ್ಯೆ ಮತ್ತು ಆಧಾರ್ ವಿವರಗಳೊಂದಿಗೆ ನೋಂದಾಯಿಸಿ. ಯಾವುದೇ ಶುಲ್ಕವಿಲ್ಲ. ಸಹಾಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಹತ್ತಿರದ ಬೆಸ್ಕಾಂ ಕಚೇರಿಗೆ ಭೇಟಿ ನೀಡಿ."
+      },
       "source_url": "https://sevasindhugs.karnataka.gov.in",
       "verified": false,
       "last_checked": null,
       "kn_reviewed": false
     },
-        {
+    {
       "id": "pmjdy",
-      "name": {"en": "Pradhan Mantri Jan Dhan Yojana (free bank account)", "kn": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಜನ ಧನ ಯೋಜನೆ (ಉಚಿತ ಬ್ಯಾಂಕ್ ಖಾತೆ)"},
-      "category": "welfare",
-      "benefit": {"en": "A basic savings bank account with a RuPay debit card and no minimum balance. The card comes with accident insurance cover of up to Rs 2 lakh, and an overdraft facility is available.", "kn": "ಮೂಲ ಉಳಿತಾಯ ಬ್ಯಾಂಕ್ ಖಾತೆ, ರೂಪೇ ಡೆಬಿಟ್ ಕಾರ್ಡ್, ಕನಿಷ್ಠ ಬ್ಯಾಲೆನ್ಸ್ ಬೇಕಿಲ್ಲ. ಕಾರ್ಡ್‌ನೊಂದಿಗೆ ₹2 ಲಕ್ಷದವರೆಗೆ ಅಪಘಾತ ವಿಮೆ ಮತ್ತು ಓವರ್‌ಡ್ರಾಫ್ಟ್ ಸೌಲಭ್ಯ ಸಿಗುತ್ತದೆ."},
-      "why": {"en": "You do not have a bank account yet. This account helps you join insurance and pension schemes.", "kn": "ನಿಮಗೆ ಇನ್ನೂ ಬ್ಯಾಂಕ್ ಖಾತೆ ಇಲ್ಲ. ಈ ಖಾತೆ ವಿಮೆ ಮತ್ತು ಪಿಂಚಣಿ ಯೋಜನೆಗಳಿಗೆ ಸೇರಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ."},
-      "eligibility": {
-        "min_age": 10,
-        "profile_flags": {"has_bank_account": false}
+      "name": {
+        "en": "Pradhan Mantri Jan Dhan Yojana (free bank account)",
+        "kn": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಜನ ಧನ ಯೋಜನೆ (ಉಚಿತ ಬ್ಯಾಂಕ್ ಖಾತೆ)"
       },
-      "eligibility_text": {"en": "Indian citizens aged 10 years and above. Confirm the current rules at the bank.", "kn": "10 ವರ್ಷ ಮತ್ತು ಮೇಲ್ಪಟ್ಟ ಭಾರತೀಯ ನಾಗರಿಕರು. ಈಗಿನ ನಿಯಮಗಳನ್ನು ಬ್ಯಾಂಕ್‌ನಲ್ಲಿ ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."},
+      "category": "welfare",
+      "benefit": {
+        "en": "A basic savings bank account with no minimum balance, interest on your deposit, and a RuPay debit card. The card comes with accident insurance cover of Rs 1 lakh, or Rs 2 lakh for accounts opened after 28 August 2018. An overdraft facility of up to Rs 10,000 is available to eligible account holders. The account also lets you join PMJJBY, PMSBY and APY.",
+        "kn": "ಕನಿಷ್ಠ ಬ್ಯಾಲೆನ್ಸ್ ಬೇಕಿಲ್ಲದ ಮೂಲ ಉಳಿತಾಯ ಬ್ಯಾಂಕ್ ಖಾತೆ, ಠೇವಣಿಗೆ ಬಡ್ಡಿ, ಮತ್ತು ರೂಪೇ ಡೆಬಿಟ್ ಕಾರ್ಡ್. ಕಾರ್ಡ್‌ನೊಂದಿಗೆ ₹1 ಲಕ್ಷ ಅಪಘಾತ ವಿಮೆ (2018 ಆಗಸ್ಟ್ 28 ರ ನಂತರ ತೆರೆದ ಖಾತೆಗಳಿಗೆ ₹2 ಲಕ್ಷ). ಅರ್ಹ ಖಾತೆದಾರರಿಗೆ ₹10,000 ವರೆಗೆ ಓವರ್‌ಡ್ರಾಫ್ಟ್ ಸೌಲಭ್ಯ. ಈ ಖಾತೆಯಿಂದ ಪಿಎಂಜೆಜೆಬಿವೈ, ಪಿಎಂಎಸ್‌ಬಿವೈ ಮತ್ತು ಎಪಿವೈ ಯೋಜನೆಗಳಿಗೆ ಸೇರಬಹುದು."
+      },
+      "why": {
+        "en": "You do not have a bank account yet. This account helps you join insurance and pension schemes.",
+        "kn": "ನಿಮಗೆ ಇನ್ನೂ ಬ್ಯಾಂಕ್ ಖಾತೆ ಇಲ್ಲ. ಈ ಖಾತೆ ವಿಮೆ ಮತ್ತು ಪಿಂಚಣಿ ಯೋಜನೆಗಳಿಗೆ ಸೇರಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ."
+      },
+      "eligibility": {
+        "profile_flags": {
+          "has_bank_account": false
+        }
+      },
+      "eligibility_text": {
+        "en": "People who do not have any other bank account. The account can be opened at any bank branch or Bank Mitra (business correspondent) outlet.",
+        "kn": "ಬೇರೆ ಯಾವುದೇ ಬ್ಯಾಂಕ್ ಖಾತೆ ಇಲ್ಲದವರು. ಯಾವುದೇ ಬ್ಯಾಂಕ್ ಶಾಖೆ ಅಥವಾ ಬ್ಯಾಂಕ್ ಮಿತ್ರ (ವ್ಯಾಪಾರ ಪ್ರತಿನಿಧಿ) ಕೇಂದ್ರದಲ್ಲಿ ಖಾತೆ ತೆರೆಯಬಹುದು."
+      },
       "documents": [
-        {"en": "Aadhaar number or card. If you have Aadhaar, no other document is needed. If your address has changed, a self-certificate of your current address is enough.", "kn": "ಆಧಾರ್ ಸಂಖ್ಯೆ ಅಥವಾ ಕಾರ್ಡ್. ಆಧಾರ್ ಇದ್ದರೆ ಬೇರೆ ದಾಖಲೆ ಬೇಕಿಲ್ಲ. ವಿಳಾಸ ಬದಲಾಗಿದ್ದರೆ ಈಗಿನ ವಿಳಾಸದ ಸ್ವಯಂ ದೃಢೀಕರಣ ಸಾಕು."},
-        {"en": "If you do not have Aadhaar: another officially valid ID document (ask the bank which ones it accepts)", "kn": "ಆಧಾರ್ ಇಲ್ಲದಿದ್ದರೆ: ಬೇರೆ ಅಧಿಕೃತ ಗುರುತಿನ ದಾಖಲೆ (ಯಾವುದು ಸ್ವೀಕಾರ ಎಂದು ಬ್ಯಾಂಕ್‌ನಲ್ಲಿ ಕೇಳಿ)"},
-        {"en": "PMJDY account opening form (available at the bank)", "kn": "ಪಿಎಂಜೆಡಿವೈ ಖಾತೆ ತೆರೆಯುವ ಅರ್ಜಿ (ಬ್ಯಾಂಕ್‌ನಲ್ಲಿ ಸಿಗುತ್ತದೆ)"}
+        {
+          "en": "Aadhaar number or card. Banks say no other document is needed if you have Aadhaar. If your address has changed, a self-certificate of your current address is enough.",
+          "kn": "ಆಧಾರ್ ಸಂಖ್ಯೆ ಅಥವಾ ಕಾರ್ಡ್. ಆಧಾರ್ ಇದ್ದರೆ ಬೇರೆ ದಾಖಲೆ ಬೇಕಿಲ್ಲ ಎಂದು ಬ್ಯಾಂಕ್‌ಗಳು ಹೇಳುತ್ತವೆ. ವಿಳಾಸ ಬದಲಾಗಿದ್ದರೆ ಈಗಿನ ವಿಳಾಸದ ಸ್ವಯಂ ದೃಢೀಕರಣ ಸಾಕು."
+        },
+        {
+          "en": "If you do not have Aadhaar: another officially valid ID document (ask the bank which ones it accepts)",
+          "kn": "ಆಧಾರ್ ಇಲ್ಲದಿದ್ದರೆ: ಬೇರೆ ಅಧಿಕೃತ ಗುರುತಿನ ದಾಖಲೆ (ಯಾವುದು ಸ್ವೀಕಾರ ಎಂದು ಬ್ಯಾಂಕ್‌ನಲ್ಲಿ ಕೇಳಿ)"
+        },
+        {
+          "en": "Account opening form (the bank gives it)",
+          "kn": "ಖಾತೆ ತೆರೆಯುವ ಅರ್ಜಿ (ಬ್ಯಾಂಕ್ ನೀಡುತ್ತದೆ)"
+        }
       ],
-      "how_to_apply": {"en": "Go to any bank branch or Bank Mitra (banking correspondent) outlet with your documents. Fill in the PMJDY account opening form and submit it. There is no charge to open the account.", "kn": "ನಿಮ್ಮ ದಾಖಲೆಗಳೊಂದಿಗೆ ಯಾವುದೇ ಬ್ಯಾಂಕ್ ಶಾಖೆ ಅಥವಾ ಬ್ಯಾಂಕ್ ಮಿತ್ರ (ಬ್ಯಾಂಕಿಂಗ್ ಕರೆಸ್ಪಾಂಡೆಂಟ್) ಕೇಂದ್ರಕ್ಕೆ ಹೋಗಿ. ಪಿಎಂಜೆಡಿವೈ ಖಾತೆ ತೆರೆಯುವ ಅರ್ಜಿ ತುಂಬಿ ಸಲ್ಲಿಸಿ. ಖಾತೆ ತೆರೆಯಲು ಶುಲ್ಕವಿಲ್ಲ."},
-      "source_url": "https://www.pmjdy.gov.in/scheme",
-      "verified": false,
-      "last_checked": null,
+      "how_to_apply": {
+        "en": "Go to any bank branch or Bank Mitra outlet with your documents and ask to open a PMJDY account. Fill in the account opening form and submit it. Helpline: 1800 11 0001 or 1800 180 1111.",
+        "kn": "ನಿಮ್ಮ ದಾಖಲೆಗಳೊಂದಿಗೆ ಯಾವುದೇ ಬ್ಯಾಂಕ್ ಶಾಖೆ ಅಥವಾ ಬ್ಯಾಂಕ್ ಮಿತ್ರ ಕೇಂದ್ರಕ್ಕೆ ಹೋಗಿ, ಪಿಎಂಜೆಡಿವೈ ಖಾತೆ ತೆರೆಯಲು ಕೇಳಿ. ಖಾತೆ ತೆರೆಯುವ ಅರ್ಜಿ ತುಂಬಿ ಸಲ್ಲಿಸಿ. ಸಹಾಯವಾಣಿ: 1800 11 0001 ಅಥವಾ 1800 180 1111."
+      },
+      "source_url": "https://pmjdy.gov.in/scheme",
+      "verified": true,
+      "last_checked": "2026-11-18",
       "kn_reviewed": false
     }
   ]
