@@ -1,16 +1,21 @@
 
 // ======================================
-// ARTHAMITRA DASHBOARD - BILINGUAL
+// ARTHAMITRA DASHBOARD
 // ======================================
 
 function tr(key, fallback) {
-    const value = typeof t === "function" ? t(key) : key;
-    return value === key ? fallback : value;
+    if (typeof t !== "function") return fallback;
+
+    const value = t(key, fallback);
+    return value || fallback;
 }
 
-// FORMAT MONEY
 function formatMoney(amount) {
     return "₹" + Number(amount || 0).toLocaleString("en-IN");
+}
+
+function getErrorMessage(error) {
+    return String(error?.message || "").toLowerCase();
 }
 
 // ======================================
@@ -22,8 +27,11 @@ async function loadDashboard() {
         const profile = await api("GET", "/api/me");
         const user = profile.user || profile;
 
-        document.getElementById("userName").textContent =
-            user.name || "Friend";
+        const userName = document.getElementById("userName");
+
+        if (userName) {
+            userName.textContent = user.name || "Friend";
+        }
 
         const summary = await api("GET", "/api/summary");
         const week = summary.this_week || {};
@@ -42,16 +50,25 @@ async function loadDashboard() {
     } catch (error) {
         console.error("Dashboard error:", error);
 
+        const message = getErrorMessage(error);
+
         if (
-            error.message.includes("401") ||
-            error.message.toLowerCase().includes("login")
+            message.includes("401") ||
+            message.includes("unauthorized") ||
+            message.includes("login")
         ) {
             window.location.href = "/";
             return;
         }
 
-        document.getElementById("notifications").textContent =
-            tr("dashboard.load_error", "Unable to load dashboard data. Please refresh.");
+        const notification = document.getElementById("notifications");
+
+        if (notification) {
+            notification.textContent = tr(
+                "dashboard.load_error",
+                "Unable to load dashboard data. Please refresh."
+            );
+        }
     }
 }
 
@@ -70,15 +87,20 @@ goalForm?.addEventListener("submit", async function(event) {
     const message = document.getElementById("goalMessage");
 
     if (!title || !Number.isFinite(target) || target <= 0) {
-        message.textContent =
-            tr("dashboard.invalid_goal", "Please enter valid goal details.");
+        message.textContent = tr(
+            "dashboard.invalid_goal",
+            "Please enter valid goal details."
+        );
         message.style.color = "#b42318";
         return;
     }
 
     try {
-        message.textContent =
-            tr("dashboard.creating_goal", "Creating your goal...");
+        message.textContent = tr(
+            "dashboard.creating_goal",
+            "Creating your goal..."
+        );
+
         message.style.color = "#176b4b";
 
         const body = { title, target };
@@ -89,18 +111,22 @@ goalForm?.addEventListener("submit", async function(event) {
 
         await api("POST", "/api/goals", body);
 
-        message.textContent =
-            tr("dashboard.goal_created", "Savings goal created successfully! 🎉");
+        message.textContent = tr(
+            "dashboard.goal_created",
+            "Savings goal created successfully! 🎉"
+        );
 
         goalForm.reset();
+
         await loadGoals();
 
     } catch (error) {
         console.error("Create goal error:", error);
 
-        message.textContent =
-            error.message ||
-            tr("dashboard.goal_create_error", "Unable to create savings goal.");
+        message.textContent = tr(
+            "dashboard.goal_create_error",
+            "Unable to create savings goal."
+        );
 
         message.style.color = "#b42318";
     }
@@ -112,6 +138,7 @@ goalForm?.addEventListener("submit", async function(event) {
 
 async function loadGoals() {
     const container = document.getElementById("goalsContainer");
+
     if (!container) return;
 
     try {
@@ -124,11 +151,10 @@ async function loadGoals() {
         container.replaceChildren();
 
         if (goals.length === 0) {
-            container.textContent =
-                tr(
-                    "dashboard.no_goals",
-                    "You haven't created any savings goals yet. Start your first goal above!"
-                );
+            container.textContent = tr(
+                "dashboard.no_goals",
+                "You haven't created any savings goals yet. Start your first goal above!"
+            );
             return;
         }
 
@@ -137,8 +163,13 @@ async function loadGoals() {
             card.className = "goal-card";
 
             const title = document.createElement("h3");
+
             title.textContent =
-                "🎯 " + (goal.title || tr("dashboard.goal_default", "Savings Goal"));
+                "🎯 " +
+                (goal.title || tr(
+                    "dashboard.goal_default",
+                    "Savings Goal"
+                ));
 
             const saved = Number(goal.saved || 0);
             const target = Number(goal.target || 0);
@@ -148,6 +179,7 @@ async function loadGoals() {
                 : 0;
 
             const amounts = document.createElement("p");
+
             amounts.textContent =
                 tr("dashboard.saved_label", "Saved:") + " " +
                 formatMoney(saved) + " / " +
@@ -164,6 +196,7 @@ async function loadGoals() {
             progressBg.appendChild(progressFill);
 
             const progressText = document.createElement("p");
+
             progressText.textContent =
                 tr("dashboard.progress", "Progress:") + " " +
                 Math.round(percent) + "%";
@@ -180,6 +213,7 @@ async function loadGoals() {
             actions.className = "goal-actions";
 
             const addButton = document.createElement("button");
+
             addButton.textContent =
                 "➕ " + tr("goal_status.add_money", "Add Money");
 
@@ -190,6 +224,7 @@ async function loadGoals() {
             });
 
             const deleteButton = document.createElement("button");
+
             deleteButton.textContent =
                 "🗑️ " + tr("dashboard.delete_goal", "Delete");
 
@@ -203,10 +238,15 @@ async function loadGoals() {
 
             if (percent >= 100) {
                 const completed = document.createElement("p");
+
                 completed.textContent =
-                    "🎉 " + tr("goal_status.completed", "Goal completed!");
+                    "🎉 " + tr(
+                        "goal_status.completed",
+                        "Goal completed!"
+                    );
 
                 completed.style.color = "#176b4b";
+
                 card.appendChild(completed);
             }
 
@@ -214,10 +254,14 @@ async function loadGoals() {
                 title,
                 amounts,
                 progressBg,
-                progressText,
-                deadline,
-                actions
+                progressText
             );
+
+            if (goal.deadline) {
+                card.appendChild(deadline);
+            }
+
+            card.appendChild(actions);
 
             container.appendChild(card);
         });
@@ -225,8 +269,10 @@ async function loadGoals() {
     } catch (error) {
         console.error("Load goals error:", error);
 
-        container.textContent =
-            tr("dashboard.goals_load_error", "Unable to load savings goals.");
+        container.textContent = tr(
+            "dashboard.goals_load_error",
+            "Unable to load savings goals."
+        );
     }
 }
 
@@ -236,7 +282,10 @@ async function loadGoals() {
 
 async function contributeToGoal(goalId, goalTitle) {
     const amountInput = prompt(
-        tr("dashboard.contribution_prompt", "How much money do you want to add to") +
+        tr(
+            "dashboard.contribution_prompt",
+            "How much money do you want to add to"
+        ) +
         " " + goalTitle + "? (₹)"
     );
 
@@ -245,7 +294,10 @@ async function contributeToGoal(goalId, goalTitle) {
     const amount = Number(amountInput);
 
     if (!Number.isFinite(amount) || amount <= 0) {
-        alert(tr("dashboard.invalid_amount", "Please enter a valid amount."));
+        alert(tr(
+            "dashboard.invalid_amount",
+            "Please enter a valid amount."
+        ));
         return;
     }
 
@@ -256,22 +308,20 @@ async function contributeToGoal(goalId, goalTitle) {
             { amount }
         );
 
-        alert(
-            tr(
-                "dashboard.contribution_success",
-                "Money added to your savings goal successfully! 🎉"
-            )
-        );
+        alert(tr(
+            "dashboard.contribution_success",
+            "Money added to your savings goal successfully! 🎉"
+        ));
 
         await loadGoals();
 
     } catch (error) {
         console.error("Contribution error:", error);
 
-        alert(
-            error.message ||
-            tr("dashboard.contribution_error", "Unable to add money.")
-        );
+        alert(tr(
+            "dashboard.contribution_error",
+            "Unable to add money."
+        ));
     }
 }
 
@@ -281,8 +331,10 @@ async function contributeToGoal(goalId, goalTitle) {
 
 async function deleteGoal(goalId, goalTitle) {
     const confirmed = confirm(
-        tr("dashboard.delete_confirmation", "Are you sure you want to delete the goal:") +
-        " " + goalTitle + "?"
+        tr(
+            "dashboard.delete_confirmation",
+            "Are you sure you want to delete the goal:"
+        ) + " " + goalTitle + "?"
     );
 
     if (!confirmed) return;
@@ -293,19 +345,20 @@ async function deleteGoal(goalId, goalTitle) {
             "/api/goals/" + encodeURIComponent(goalId)
         );
 
-        alert(
-            tr("dashboard.delete_success", "Savings goal deleted successfully.")
-        );
+        alert(tr(
+            "dashboard.delete_success",
+            "Savings goal deleted successfully."
+        ));
 
         await loadGoals();
 
     } catch (error) {
         console.error("Delete goal error:", error);
 
-        alert(
-            error.message ||
-            tr("dashboard.delete_error", "Unable to delete goal.")
-        );
+        alert(tr(
+            "dashboard.delete_error",
+            "Unable to delete goal."
+        ));
     }
 }
 
@@ -317,7 +370,10 @@ function openFeature(feature) {
     switch (feature) {
 
         case "home":
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
             break;
 
         case "income":
@@ -355,7 +411,10 @@ function openFeature(feature) {
             break;
 
         default:
-            alert(tr("dashboard.feature_coming", "This feature will be added soon!"));
+            alert(tr(
+                "dashboard.feature_coming",
+                "This feature will be added soon!"
+            ));
     }
 }
 
@@ -371,20 +430,23 @@ logoutButton?.addEventListener("click", async () => {
         window.location.href = "/";
 
     } catch (error) {
-        alert(tr("dashboard.logout_error", "Unable to logout. Please try again."));
+        alert(tr(
+            "dashboard.logout_error",
+            "Unable to logout. Please try again."
+        ));
     }
 });
 
 // ======================================
-// REFRESH DYNAMIC TEXT WHEN LANGUAGE CHANGES
+// LANGUAGE CHANGE
 // ======================================
 
-document.addEventListener("languageChanged", () => {
-    loadGoals();
+document.addEventListener("languageChanged", async () => {
+    await loadGoals();
 });
 
 // ======================================
-// INITIALIZE DASHBOARD
+// INITIALIZE
 // ======================================
 
 loadDashboard();
