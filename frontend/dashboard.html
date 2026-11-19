@@ -45,25 +45,33 @@
         </p>
     </section>
 
-    <!-- FINANCIAL SUMMARY -->
+    <!-- MONTHLY FINANCIAL SUMMARY -->
     <section class="dashboard-section">
         <h2 data-i18n="dashboard.summary">Your Financial Summary</h2>
 
         <div class="summary-grid">
+
             <div class="summary-card">
-                <h3 data-i18n="dashboard.income_week">Total Income This Week</h3>
+                <h3 id="monthlyIncomeHeading">
+                    Total Income This Month
+                </h3>
                 <p id="weeklyIncome">₹0</p>
             </div>
 
             <div class="summary-card">
-                <h3 data-i18n="dashboard.expense_week">Total Expenses This Week</h3>
+                <h3 id="monthlyExpenseHeading">
+                    Total Expenses This Month
+                </h3>
                 <p id="weeklyExpense">₹0</p>
             </div>
 
             <div class="summary-card">
-                <h3 data-i18n="dashboard.savings_week">Money Saved This Week</h3>
+                <h3 id="monthlySavingsHeading">
+                    Money Saved This Month
+                </h3>
                 <p id="weeklySavings">₹0</p>
             </div>
+
         </div>
     </section>
 
@@ -224,6 +232,51 @@
 <script src="js/notifications.js"></script>
 
 <script>
+/* =====================================
+   MONTHLY SUMMARY TRANSLATIONS
+===================================== */
+
+function updateMonthlyHeadings() {
+    const lang = typeof getCurrentLanguage === "function"
+        ? getCurrentLanguage()
+        : (localStorage.getItem("lang") || "en");
+
+    const headings = {
+        en: {
+            income: "Total Income This Month",
+            expense: "Total Expenses This Month",
+            savings: "Money Saved This Month"
+        },
+        kn: {
+            income: "ಈ ತಿಂಗಳ ಒಟ್ಟು ಆದಾಯ",
+            expense: "ಈ ತಿಂಗಳ ಒಟ್ಟು ಖರ್ಚು",
+            savings: "ಈ ತಿಂಗಳ ಉಳಿತಾಯ"
+        }
+    };
+
+    const text = headings[lang] || headings.en;
+
+    document.getElementById("monthlyIncomeHeading").textContent =
+        text.income;
+
+    document.getElementById("monthlyExpenseHeading").textContent =
+        text.expense;
+
+    document.getElementById("monthlySavingsHeading").textContent =
+        text.savings;
+}
+
+updateMonthlyHeadings();
+
+document.addEventListener(
+    "languageChanged",
+    updateMonthlyHeadings
+);
+
+/* =====================================
+   LOGOUT
+===================================== */
+
 async function logoutUser() {
     if (!confirm("Are you sure you want to logout?")) {
         return;
