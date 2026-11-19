@@ -195,16 +195,13 @@ async function loadDashboard() {
     }
 
     await Promise.allSettled([
-        (async () => {
-            await loadRecentTransactions();
-            await loadFinancialSummary();
-        })(),
+        loadRecentTransactions(),
         loadSavingsGoals()
     ]);
 }
 
 /* =========================================
-   MONTHLY FINANCIAL SUMMARY
+   CURRENT MONTH ENTRIES
 ========================================= */
 
 function getCurrentMonthEntries() {
@@ -215,10 +212,15 @@ function getCurrentMonthEntries() {
         String(now.getMonth() + 1).padStart(2, "0")
     ].join("-");
 
-    return dashboardEntries.filter(entry =>
-        String(entry.date || "").slice(0, 7) === monthKey
-    );
+    return dashboardEntries.filter(entry => {
+        const entryDate = String(entry.date || "").slice(0, 10);
+        return entryDate.slice(0, 7) === monthKey;
+    });
 }
+
+/* =========================================
+   MONTHLY FINANCIAL SUMMARY
+========================================= */
 
 async function loadFinancialSummary() {
     try {
@@ -268,7 +270,7 @@ async function loadFinancialSummary() {
 }
 
 /* =========================================
-   RECENT TRANSACTIONS
+   LOAD RECENT TRANSACTIONS
 ========================================= */
 
 async function loadRecentTransactions() {
@@ -278,7 +280,8 @@ async function loadRecentTransactions() {
     if (!container) return;
 
     try {
-        const result = await api("GET", "/api/entries?days=31");
+        // Load sufficient history for current-month calculations
+        const result = await api("GET", "/api/entries?days=3650");
 
         dashboardEntries = Array.isArray(result)
             ? result
@@ -286,6 +289,7 @@ async function loadRecentTransactions() {
 
         renderRecentTransactions();
         renderMonthlyChart();
+        await loadFinancialSummary();
 
     } catch (error) {
         console.error("Transaction loading error:", error);
@@ -297,6 +301,10 @@ async function loadRecentTransactions() {
         );
     }
 }
+
+/* =========================================
+   DISPLAY RECENT TRANSACTIONS
+========================================= */
 
 function renderRecentTransactions() {
     const container =
