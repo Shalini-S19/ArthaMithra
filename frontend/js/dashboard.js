@@ -1,8 +1,9 @@
+
 "use strict";
 
 /* =========================================
    ARTHAMITHRA DASHBOARD
-   English + Kannada
+   Monthly Finance | English + Kannada
 ========================================= */
 
 let monthlyFinanceChart = null;
@@ -46,7 +47,9 @@ function financeText(key) {
     };
 
     const lang = currentDashboardLanguage();
-    return translations[key]?.[lang] || translations[key]?.en || key;
+
+    return translations[key]?.[lang] ||
+        translations[key]?.en || key;
 }
 
 /* =========================================
@@ -204,18 +207,22 @@ async function loadDashboard() {
    MONTHLY FINANCIAL SUMMARY
 ========================================= */
 
+function getCurrentMonthEntries() {
+    const now = new Date();
+
+    const monthKey = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0")
+    ].join("-");
+
+    return dashboardEntries.filter(entry =>
+        String(entry.date || "").slice(0, 7) === monthKey
+    );
+}
+
 async function loadFinancialSummary() {
     try {
-        const now = new Date();
-
-        const currentMonthKey = [
-            now.getFullYear(),
-            String(now.getMonth() + 1).padStart(2, "0")
-        ].join("-");
-
-        const monthlyEntries = dashboardEntries.filter(entry =>
-            String(entry.date || "").slice(0, 7) === currentMonthKey
-        );
+        const monthlyEntries = getCurrentMonthEntries();
 
         const income = monthlyEntries
             .filter(entry => entry.type === "income")
@@ -256,7 +263,7 @@ async function loadFinancialSummary() {
         }
 
     } catch (error) {
-        console.error("Monthly summary loading error:", error);
+        console.error("Monthly summary error:", error);
     }
 }
 
@@ -297,7 +304,11 @@ function renderRecentTransactions() {
 
     if (!container) return;
 
-    const recent = dashboardEntries.slice(0, 5);
+    const recent = [...dashboardEntries]
+        .sort((a, b) =>
+            String(b.date || "").localeCompare(String(a.date || ""))
+        )
+        .slice(0, 5);
 
     if (!recent.length) {
         container.textContent = financeText("no_transactions");
@@ -365,6 +376,8 @@ function renderMonthlyChart() {
     const month = today.getMonth();
     const daysInCurrentMonth = today.getDate();
 
+    const monthlyEntries = getCurrentMonthEntries();
+
     const labels = [];
     const incomeData = [];
     const expenseData = [];
@@ -378,7 +391,7 @@ function renderMonthlyChart() {
 
         labels.push(String(day));
 
-        const dayEntries = dashboardEntries.filter(entry =>
+        const dayEntries = monthlyEntries.filter(entry =>
             String(entry.date || "").slice(0, 10) === dateKey
         );
 
@@ -468,7 +481,9 @@ function renderMonthlyChart() {
             }
         }
     });
-}/* =========================================
+}
+
+/* =========================================
    LOAD SAVINGS GOALS
 ========================================= */
 
@@ -538,22 +553,14 @@ function renderSavingsGoals() {
 
                 <p>
                     ${escapeDashboardHTML(
-                        dashboardText(
-                            "saved_label",
-                            "Saved:",
-                            "ಉಳಿತಾಯ:"
-                        )
+                        dashboardText("saved_label", "Saved:", "ಉಳಿತಾಯ:")
                     )}
                     ${escapeDashboardHTML(formatDashboardMoney(saved))}
                 </p>
 
                 <p>
                     ${escapeDashboardHTML(
-                        dashboardText(
-                            "target_label",
-                            "Target:",
-                            "ಗುರಿ:"
-                        )
+                        dashboardText("target_label", "Target:", "ಗುರಿ:")
                     )}
                     ${escapeDashboardHTML(formatDashboardMoney(target))}
                 </p>
@@ -567,11 +574,7 @@ function renderSavingsGoals() {
 
                 <p>
                     ${escapeDashboardHTML(
-                        dashboardText(
-                            "progress",
-                            "Progress:",
-                            "ಪ್ರಗತಿ:"
-                        )
+                        dashboardText("progress", "Progress:", "ಪ್ರಗತಿ:")
                     )}
                     ${Math.round(percent)}%
                 </p>
@@ -579,11 +582,7 @@ function renderSavingsGoals() {
                 ${goal.deadline ? `
                     <p>
                         ${escapeDashboardHTML(
-                            dashboardText(
-                                "deadline_label",
-                                "Deadline:",
-                                "ಗಡುವು:"
-                            )
+                            dashboardText("deadline_label", "Deadline:", "ಗಡುವು:")
                         )}
                         ${escapeDashboardHTML(goal.deadline)}
                     </p>
@@ -607,11 +606,7 @@ function renderSavingsGoals() {
                         data-goal-id="${escapeDashboardHTML(goal.id)}">
 
                         ${escapeDashboardHTML(
-                            dashboardText(
-                                "delete_goal",
-                                "Delete",
-                                "ಅಳಿಸಿ"
-                            )
+                            dashboardText("delete_goal", "Delete", "ಅಳಿಸಿ")
                         )}
 
                     </button>
@@ -624,7 +619,6 @@ function renderSavingsGoals() {
 
 /* =========================================
    CREATE SAVINGS GOAL
-   BACKEND EXPECTS "target"
 ========================================= */
 
 async function createSavingsGoal(event) {
@@ -660,7 +654,6 @@ async function createSavingsGoal(event) {
     if (target > 10000000) {
         message.textContent =
             "Maximum target amount is ₹1,00,00,000.";
-
         return;
     }
 
@@ -684,8 +677,6 @@ async function createSavingsGoal(event) {
             target: target,
             deadline: deadline || null
         };
-
-        console.log("Creating savings goal:", payload);
 
         await api("POST", "/api/goals", payload);
 
