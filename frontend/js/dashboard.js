@@ -3,10 +3,10 @@
 
 /* =========================================
    ARTHAMITHRA DASHBOARD
-   English + Kannada
+   Monthly Finance | English + Kannada
 ========================================= */
 
-let weeklyFinanceChart = null;
+let monthlyFinanceChart = null;
 let dashboardGoals = [];
 let dashboardEntries = [];
 
@@ -47,7 +47,9 @@ function financeText(key) {
     };
 
     const lang = currentDashboardLanguage();
-    return translations[key]?.[lang] || translations[key]?.en || key;
+
+    return translations[key]?.[lang] ||
+        translations[key]?.en || key;
 }
 
 /* =========================================
@@ -193,29 +195,50 @@ async function loadDashboard() {
     }
 
     await Promise.allSettled([
-        loadFinancialSummary(),
         loadRecentTransactions(),
         loadSavingsGoals()
     ]);
 }
 
 /* =========================================
-   FINANCIAL SUMMARY
+   CURRENT MONTH ENTRIES
+========================================= */
+
+function getCurrentMonthEntries() {
+    const now = new Date();
+
+    const monthKey = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0")
+    ].join("-");
+
+    return dashboardEntries.filter(entry => {
+        const entryDate = String(entry.date || "").slice(0, 10);
+        return entryDate.slice(0, 7) === monthKey;
+    });
+}
+
+/* =========================================
+   MONTHLY FINANCIAL SUMMARY
 ========================================= */
 
 async function loadFinancialSummary() {
     try {
-        const result = await api("GET", "/api/summary");
-        const week = result.this_week || {};
+        const monthlyEntries = getCurrentMonthEntries();
 
-        const income = Number(week.earned || 0);
-        const expense = Number(week.spent || 0);
+        const income = monthlyEntries
+            .filter(entry => entry.type === "income")
+            .reduce((sum, entry) =>
+                sum + Number(entry.amount || 0), 0
+            );
 
-        const savings = Number(
-            week.saved !== undefined
-                ? week.saved
-                : income - expense
-        );
+        const expense = monthlyEntries
+            .filter(entry => entry.type === "expense")
+            .reduce((sum, entry) =>
+                sum + Number(entry.amount || 0), 0
+            );
+
+        const savings = income - expense;
 
         const incomeElement =
             document.getElementById("weeklyIncome");
@@ -242,12 +265,12 @@ async function loadFinancialSummary() {
         }
 
     } catch (error) {
-        console.error("Summary loading error:", error);
+        console.error("Monthly summary error:", error);
     }
 }
 
 /* =========================================
-   RECENT TRANSACTIONS
+   LOAD RECENT TRANSACTIONS
 ========================================= */
 
 async function loadRecentTransactions() {
@@ -257,14 +280,16 @@ async function loadRecentTransactions() {
     if (!container) return;
 
     try {
-        const result = await api("GET", "/api/entries?days=7");
+        // Load sufficient history for current-month calculations
+        const result = await api("GET", "/api/entries?days=3650");
 
         dashboardEntries = Array.isArray(result)
             ? result
             : (Array.isArray(result.entries) ? result.entries : []);
 
         renderRecentTransactions();
-        renderWeeklyChart();
+        renderMonthlyChart();
+        await loadFinancialSummary();
 
     } catch (error) {
         console.error("Transaction loading error:", error);
@@ -277,13 +302,21 @@ async function loadRecentTransactions() {
     }
 }
 
+/* =========================================
+   DISPLAY RECENT TRANSACTIONS
+========================================= */
+
 function renderRecentTransactions() {
     const container =
         document.getElementById("recentTransactionsList");
 
     if (!container) return;
 
-    const recent = dashboardEntries.slice(0, 5);
+    const recent = [...dashboardEntries]
+        .sort((a, b) =>
+            String(b.date || "").localeCompare(String(a.date || ""))
+        )
+        .slice(0, 5);
 
     if (!recent.length) {
         container.textContent = financeText("no_transactions");
@@ -337,74 +370,61 @@ function renderRecentTransactions() {
 }
 
 /* =========================================
-   WEEKLY INCOME VS EXPENSE CHART
+   MONTHLY INCOME VS EXPENSE CHART
 ========================================= */
 
-function renderWeeklyChart() {
+function renderMonthlyChart() {
     const canvas =
         document.getElementById("weeklyFinanceChart");
 
     if (!canvas || typeof Chart === "undefined") return;
 
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const daysInCurrentMonth = today.getDate();
+
+    const monthlyEntries = getCurrentMonthEntries();
+
     const labels = [];
     const incomeData = [];
     const expenseData = [];
 
-    const today = new Date();
-
-    for (let i = 6; i >= 0; i--) {
-        const date = new Date(today);
-
-        date.setDate(today.getDate() - i);
-
+    for (let day = 1; day <= daysInCurrentMonth; day++) {
         const dateKey = [
-            date.getFullYear(),
-            String(date.getMonth() + 1).padStart(2, "0"),
-            String(date.getDate()).padStart(2, "0")
+            year,
+            String(month + 1).padStart(2, "0"),
+            String(day).padStart(2, "0")
         ].join("-");
 
-        labels.push(
-            date.toLocaleDateString(
-                currentDashboardLanguage() === "kn"
-                    ? "kn-IN"
-                    : "en-IN",
-                {
-                    day: "numeric",
-                    month: "short"
-                }
-            )
-        );
+        labels.push(String(day));
 
-        const entries = dashboardEntries.filter(entry =>
+        const dayEntries = monthlyEntries.filter(entry =>
             String(entry.date || "").slice(0, 10) === dateKey
         );
 
         incomeData.push(
-            entries
+            dayEntries
                 .filter(entry => entry.type === "income")
-                .reduce(
-                    (sum, entry) =>
-                        sum + Number(entry.amount || 0),
-                    0
+                .reduce((sum, entry) =>
+                    sum + Number(entry.amount || 0), 0
                 )
         );
 
         expenseData.push(
-            entries
+            dayEntries
                 .filter(entry => entry.type === "expense")
-                .reduce(
-                    (sum, entry) =>
-                        sum + Number(entry.amount || 0),
-                    0
+                .reduce((sum, entry) =>
+                    sum + Number(entry.amount || 0), 0
                 )
         );
     }
 
-    if (weeklyFinanceChart) {
-        weeklyFinanceChart.destroy();
+    if (monthlyFinanceChart) {
+        monthlyFinanceChart.destroy();
     }
 
-    weeklyFinanceChart = new Chart(canvas, {
+    monthlyFinanceChart = new Chart(canvas, {
         type: "bar",
 
         data: {
@@ -433,10 +453,30 @@ function renderWeeklyChart() {
             plugins: {
                 legend: {
                     position: "top"
+                },
+
+                tooltip: {
+                    callbacks: {
+                        title: items => {
+                            const day =
+                                Number(items[0]?.label || 0);
+
+                            return `${day}/${month + 1}/${year}`;
+                        }
+                    }
                 }
             },
 
             scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: currentDashboardLanguage() === "kn"
+                            ? "ತಿಂಗಳ ದಿನ"
+                            : "Day of month"
+                    }
+                },
+
                 y: {
                     beginAtZero: true,
                     grace: "10%",
@@ -521,22 +561,14 @@ function renderSavingsGoals() {
 
                 <p>
                     ${escapeDashboardHTML(
-                        dashboardText(
-                            "saved_label",
-                            "Saved:",
-                            "ಉಳಿತಾಯ:"
-                        )
+                        dashboardText("saved_label", "Saved:", "ಉಳಿತಾಯ:")
                     )}
                     ${escapeDashboardHTML(formatDashboardMoney(saved))}
                 </p>
 
                 <p>
                     ${escapeDashboardHTML(
-                        dashboardText(
-                            "target_label",
-                            "Target:",
-                            "ಗುರಿ:"
-                        )
+                        dashboardText("target_label", "Target:", "ಗುರಿ:")
                     )}
                     ${escapeDashboardHTML(formatDashboardMoney(target))}
                 </p>
@@ -550,11 +582,7 @@ function renderSavingsGoals() {
 
                 <p>
                     ${escapeDashboardHTML(
-                        dashboardText(
-                            "progress",
-                            "Progress:",
-                            "ಪ್ರಗತಿ:"
-                        )
+                        dashboardText("progress", "Progress:", "ಪ್ರಗತಿ:")
                     )}
                     ${Math.round(percent)}%
                 </p>
@@ -562,11 +590,7 @@ function renderSavingsGoals() {
                 ${goal.deadline ? `
                     <p>
                         ${escapeDashboardHTML(
-                            dashboardText(
-                                "deadline_label",
-                                "Deadline:",
-                                "ಗಡುವು:"
-                            )
+                            dashboardText("deadline_label", "Deadline:", "ಗಡುವು:")
                         )}
                         ${escapeDashboardHTML(goal.deadline)}
                     </p>
@@ -590,11 +614,7 @@ function renderSavingsGoals() {
                         data-goal-id="${escapeDashboardHTML(goal.id)}">
 
                         ${escapeDashboardHTML(
-                            dashboardText(
-                                "delete_goal",
-                                "Delete",
-                                "ಅಳಿಸಿ"
-                            )
+                            dashboardText("delete_goal", "Delete", "ಅಳಿಸಿ")
                         )}
 
                     </button>
@@ -607,7 +627,6 @@ function renderSavingsGoals() {
 
 /* =========================================
    CREATE SAVINGS GOAL
-   IMPORTANT: BACKEND EXPECTS "target"
 ========================================= */
 
 async function createSavingsGoal(event) {
@@ -643,7 +662,6 @@ async function createSavingsGoal(event) {
     if (target > 10000000) {
         message.textContent =
             "Maximum target amount is ₹1,00,00,000.";
-
         return;
     }
 
@@ -662,16 +680,11 @@ async function createSavingsGoal(event) {
     );
 
     try {
-        // IMPORTANT:
-        // Backend expects "target", NOT "target_amount".
-
         const payload = {
             title: title,
             target: target,
             deadline: deadline || null
         };
-
-        console.log("Creating savings goal:", payload);
 
         await api("POST", "/api/goals", payload);
 
@@ -809,7 +822,7 @@ async function handleGoalAction(event) {
 document.addEventListener("languageChanged", function() {
     renderRecentTransactions();
     renderSavingsGoals();
-    renderWeeklyChart();
+    renderMonthlyChart();
 });
 
 /* =========================================
