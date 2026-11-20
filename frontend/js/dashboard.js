@@ -82,6 +82,96 @@ function formatDashboardMoney(amount) {
 }
 
 /* =========================================
+   MONEY HEALTH SCORE
+========================================= */
+
+function updateMoneyHealthPart(name, value, maximum) {
+    const valueElement = document.getElementById(
+        `score${name}Value`
+    );
+
+    const barElement = document.getElementById(
+        `score${name}Bar`
+    );
+
+    if (!valueElement || !barElement) return;
+
+    const safeValue = Number(value) || 0;
+    const safeMaximum = Number(maximum) || 0;
+
+    const percentage = safeMaximum > 0
+        ? Math.min(100, Math.max(0, (safeValue / safeMaximum) * 100))
+        : 0;
+
+    valueElement.textContent = `${safeValue}/${safeMaximum}`;
+    barElement.style.width = `${percentage}%`;
+}
+
+async function loadMoneyHealthScore() {
+    const section = document.getElementById("moneyHealthSection");
+
+    if (!section) return;
+
+    section.hidden = true;
+
+    try {
+        const lang = currentDashboardLanguage() === "kn" ? "kn" : "en";
+
+        const response = await api(
+            "GET",
+            `/api/score?lang=${encodeURIComponent(lang)}`
+        );
+
+        const scoreData = response?.data || response;
+
+        if (
+            !scoreData ||
+            !Number.isFinite(Number(scoreData.score)) ||
+            !scoreData.parts ||
+            !scoreData.max_parts
+        ) {
+            throw new Error("Invalid money health score response.");
+        }
+
+        const scoreElement =
+            document.getElementById("moneyHealthScore");
+
+        const tipElement =
+            document.getElementById("moneyHealthTip");
+
+        if (!scoreElement || !tipElement) return;
+
+        scoreElement.textContent = Number(scoreData.score);
+
+        updateMoneyHealthPart(
+            "Savings",
+            scoreData.parts.savings,
+            scoreData.max_parts.savings
+        );
+
+        updateMoneyHealthPart(
+            "Consistency",
+            scoreData.parts.consistency,
+            scoreData.max_parts.consistency
+        );
+
+        updateMoneyHealthPart(
+            "Schemes",
+            scoreData.parts.schemes,
+            scoreData.max_parts.schemes
+        );
+
+        tipElement.textContent = scoreData.tip_text || "";
+
+        section.hidden = false;
+
+    } catch (error) {
+        console.error("Money health score loading error:", error);
+        section.hidden = true;
+    }
+}
+
+/* =========================================
    NAVIGATION
 ========================================= */
 
@@ -196,7 +286,8 @@ async function loadDashboard() {
 
     await Promise.allSettled([
         loadRecentTransactions(),
-        loadSavingsGoals()
+        loadSavingsGoals(),
+        loadMoneyHealthScore()
     ]);
 }
 
@@ -280,7 +371,6 @@ async function loadRecentTransactions() {
     if (!container) return;
 
     try {
-        // Load sufficient history for current-month calculations
         const result = await api("GET", "/api/entries?days=3650");
 
         dashboardEntries = Array.isArray(result)
@@ -823,6 +913,7 @@ document.addEventListener("languageChanged", function() {
     renderRecentTransactions();
     renderSavingsGoals();
     renderMonthlyChart();
+    loadMoneyHealthScore();
 });
 
 /* =========================================
