@@ -75,6 +75,78 @@
         </div>
     </section>
 
+    <!-- MONEY HEALTH SCORE -->
+    <section class="dashboard-section"
+             id="moneyHealthSection"
+             hidden>
+
+        <h2 data-i18n="score.title"></h2>
+
+        <div class="summary-card">
+
+            <div style="text-align:center;padding:15px 0;">
+                <div id="moneyHealthScore"
+                     style="font-size:52px;font-weight:800;color:#16845b;line-height:1.2;">
+                    0
+                </div>
+
+                <p data-i18n="score.out_of"
+                   style="margin-top:5px;">
+                </p>
+            </div>
+
+            <!-- SAVINGS -->
+            <div style="margin:18px 0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <strong data-i18n="score.savings"></strong>
+                    <span id="scoreSavingsValue">0/40</span>
+                </div>
+
+                <div style="height:10px;background:#e5eee8;border-radius:20px;overflow:hidden;">
+                    <div id="scoreSavingsBar"
+                         style="height:100%;width:0%;background:#29966b;border-radius:20px;transition:width 0.4s;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONSISTENCY -->
+            <div style="margin:18px 0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <strong data-i18n="score.consistency"></strong>
+                    <span id="scoreConsistencyValue">0/30</span>
+                </div>
+
+                <div style="height:10px;background:#e5eee8;border-radius:20px;overflow:hidden;">
+                    <div id="scoreConsistencyBar"
+                         style="height:100%;width:0%;background:#29966b;border-radius:20px;transition:width 0.4s;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCHEMES -->
+            <div style="margin:18px 0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <strong data-i18n="score.schemes"></strong>
+                    <span id="scoreSchemesValue">0/30</span>
+                </div>
+
+                <div style="height:10px;background:#e5eee8;border-radius:20px;overflow:hidden;">
+                    <div id="scoreSchemesBar"
+                         style="height:100%;width:0%;background:#29966b;border-radius:20px;transition:width 0.4s;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERSONALIZED TIP -->
+            <div style="background:#f0f8f3;padding:15px;border-radius:12px;margin-top:22px;">
+                <p id="moneyHealthTip"
+                   style="margin:0;line-height:1.6;">
+                </p>
+            </div>
+
+        </div>
+    </section>
+
     <!-- QUICK ACTIONS -->
     <section class="dashboard-section">
         <h2 data-i18n="dashboard.quick_actions">Quick Actions</h2>
