@@ -163,4 +163,57 @@ for i in range(5):
     r = lk.post("/api/login", json={"phone": "9222222222", "pin": "1111"})
 ok(r.status_code == 429, "unknown phone numbers are limited as well")
 
+
+
+# ---------- Monthly totals and editing entries ----------
+from datetime import date as _d, timedelta as _td
+ed = appmod.app.test_client()
+ed.post("/api/register", json={"name": "Edit", "phone": "9333333333", "pin": "3333"})
+today = _d.today()
+first = today.replace(day=1)
+prev_month_day = (first - _td(days=1)).isoformat()
+
+r = ed.post("/api/entries", json={"type": "income", "amount": 10000})        # typo: meant 1000
+ok(r.status_code == 201, "add an entry with a typo amount")
+wrong_id = r.get_json()["id"]
+ed.post("/api/entries", json={"type": "expense", "amount": 200})
+ed.post("/api/entries", json={"type": "income", "amount": 500, "date": prev_month_day})
+
+sm = ed.get("/api/summary").get_json()
+ok(sm["this_month"]["earned"] == 10000 and sm["this_month"]["spent"] == 200, "summary has this month's totals")
+ok(sm["last_month"]["earned"] == 500, "summary has last month's totals")
+ok("this_week" in sm and "last_week" in sm, "weekly totals are still available")
+
+r = ed.patch(f"/api/entries/{wrong_id}", json={"amount": 1000})
+ok(r.status_code == 200 and r.get_json()["entry"]["amount"] == 1000, "editing fixes the amount")
+ok(ed.get("/api/summary").get_json()["this_month"]["earned"] == 1000, "monthly total updates after the edit")
+r = ed.patch(f"/api/entries/{wrong_id}", json={"note": "wages", "category": "work"})
+ok(r.get_json()["entry"]["note"] == "wages" and r.get_json()["entry"]["amount"] == 1000, "partial edit keeps the other fields")
+ok(ed.patch(f"/api/entries/{wrong_id}", json={"amount": -5}).status_code == 400, "edit with a negative amount is rejected")
+ok(ed.patch(f"/api/entries/{wrong_id}", json={"amount": "nan"}).status_code == 400, "edit with NaN is rejected")
+ok(ed.patch(f"/api/entries/{wrong_id}", json={"type": "gift"}).status_code == 400, "edit with a bad type is rejected")
+ok(ed.patch(f"/api/entries/{wrong_id}", json={"date": "yesterday"}).status_code == 400, "edit with a bad date is rejected")
+ok(ed.patch(f"/api/entries/{wrong_id}", json={}).status_code == 400, "empty edit is rejected")
+ok(ed.patch("/api/entries/999999", json={"amount": 5}).status_code == 404, "editing a missing entry gives 404")
+ok(ed.post("/api/entries", json={"type": "income", "amount": "nan"}).status_code == 400, "adding NaN is rejected")
+
+ed.patch(f"/api/entries/{wrong_id}", json={"date": prev_month_day})
+sm = ed.get("/api/summary").get_json()
+ok(sm["this_month"]["earned"] == 0 and sm["last_month"]["earned"] == 1500, "moving an entry's date moves it between months")
+
+month_key = today.strftime("%Y-%m")
+ok(len(ed.get(f"/api/entries?month={month_key}").get_json()) == 1, "?month= lists only that month")
+ok(ed.get("/api/entries?month=2026-13").status_code == 400, "bad ?month= is rejected")
+
+# other users cannot touch my entries
+other = appmod.app.test_client()
+other.post("/api/register", json={"name": "Other", "phone": "9444444444", "pin": "4444"})
+ok(other.patch(f"/api/entries/{wrong_id}", json={"amount": 1}).status_code == 404, "cannot edit another user's entry")
+ok(other.delete(f"/api/entries/{wrong_id}").status_code == 404, "cannot delete another user's entry")
+
+ok(ed.delete(f"/api/entries/{wrong_id}").status_code == 200, "delete an entry")
+ok(ed.delete(f"/api/entries/{wrong_id}").status_code == 404, "deleting twice gives 404")
+ok(ed.get("/api/summary").get_json()["last_month"]["earned"] == 500, "totals update after a delete")
+ok(ed.patch("/api/entries/1", json={"amount": 1}, query_string={"lang": "kn"}).get_json()["error"] == ed.patch("/api/entries/1", json={"amount": 1}, query_string={"lang": "kn"}).get_json()["error_kn"], "entry errors are bilingual")
+
 print("\nAll tests passed.")

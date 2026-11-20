@@ -41,3 +41,11 @@ Set `SECRET_KEY` to a long random value on the server. Start command: `gunicorn 
 - Schemes include `category_label` (insurance, pension, health, welfare) in both languages.
 - `/api/score` includes `tip_text`. `income_note` in `/api/schemes/matches` is now a pair (or a string with `?lang`).
 - All backend text lives in `backend/messages.py`. Kannada there is a draft: have a Kannada speaker check it.
+
+## Editing entries and monthly totals
+| Method | Route | Notes |
+|---|---|---|
+| PATCH | /api/entries/<id> | Edit an entry. Send only the fields to change: type, amount, category, note, date. Returns the updated entry. |
+| DELETE | /api/entries/<id> | Delete an entry |
+| GET | /api/entries?month=YYYY-MM | All entries of one calendar month (use ?days=7 for recent entries) |
+| GET | /api/summary | `this_month` and `last_month` (calendar months) plus `this_week` and `last_week`; each has earned, spent, saved, from, to |

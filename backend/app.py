@@ -246,43 +246,114 @@ def update_me():
 
 
 # ---------- earnings and expenses ----------
+def bad_amount(x):
+    """True if x is not a sensible money amount (NaN, infinity, zero, negative or huge)."""
+    return (not math.isfinite(x)) or x <= 0 or x > 10_000_000
+
+
+def parse_entry(d, partial=False):
+    """Check the fields of an entry. Returns (fields, error_code).
+    partial=True is for edits: only the fields that are present are checked and returned."""
+    fields = {}
+    if not partial or "type" in d:
+        if d.get("type") not in ("income", "expense"):
+            return None, "entry_type_invalid"
+        fields["type"] = d["type"]
+    if not partial or "amount" in d:
+        try:
+            amount = float(d.get("amount"))
+        except (TypeError, ValueError):
+            return None, "amount_not_number"
+        if bad_amount(amount):
+            return None, "amount_positive"
+        fields["amount"] = amount
+    if not partial or "date" in d:
+        day = d.get("date") or (None if partial else date.today().isoformat())
+        try:
+            date.fromisoformat(day)
+        except (TypeError, ValueError):
+            return None, "date_invalid"
+        fields["date"] = day
+    for key in ("category", "note"):
+        if key in d:
+            fields[key] = d[key]
+    return fields, None
+
+
+def get_entry(entry_id):
+    return db.get_db().execute(
+        "SELECT id, type, amount, category, note, date FROM entries WHERE id = ? AND user_id = ?",
+        (entry_id, session["user_id"])).fetchone()
+
+
 @app.post("/api/entries")
 @login_required
 def add_entry():
     d = request.get_json(silent=True) or {}
-    etype = d.get("type")
-    if etype not in ("income", "expense"):
-        return err("entry_type_invalid")
-    try:
-        amount = float(d.get("amount"))
-    except (TypeError, ValueError):
-        return err("amount_not_number")
-    if amount <= 0 or amount > 10_000_000:
-        return err("amount_positive")
-    day = d.get("date") or date.today().isoformat()
-    try:
-        date.fromisoformat(day)
-    except ValueError:
-        return err("date_invalid")
+    f, code = parse_entry(d)
+    if code:
+        return err(code)
     conn = db.get_db()
     cur = conn.execute(
         "INSERT INTO entries (user_id, type, amount, category, note, date) VALUES (?,?,?,?,?,?)",
-        (session["user_id"], etype, amount, d.get("category"), d.get("note"), day),
+        (session["user_id"], f["type"], f["amount"], f.get("category"), f.get("note"), f["date"]),
     )
     conn.commit()
     return jsonify({"ok": True, "id": cur.lastrowid}), 201
 
 
+@app.patch("/api/entries/<int:entry_id>")
+@login_required
+def edit_entry(entry_id):
+    """Change an entry. Send only the fields to change: type, amount, category, note, date."""
+    if not get_entry(entry_id):
+        return err("entry_not_found", 404)
+    d = request.get_json(silent=True) or {}
+    f, code = parse_entry(d, partial=True)
+    if code:
+        return err(code)
+    if not f:
+        return err("nothing_to_update")
+    sets = ", ".join(f"{k} = ?" for k in f)   # keys come from parse_entry, never from the user
+    conn = db.get_db()
+    conn.execute(f"UPDATE entries SET {sets} WHERE id = ? AND user_id = ?",
+                 (*f.values(), entry_id, session["user_id"]))
+    conn.commit()
+    return jsonify({"ok": True, "entry": dict(get_entry(entry_id))})
+
+
+@app.delete("/api/entries/<int:entry_id>")
+@login_required
+def delete_entry(entry_id):
+    if not get_entry(entry_id):
+        return err("entry_not_found", 404)
+    conn = db.get_db()
+    conn.execute("DELETE FROM entries WHERE id = ? AND user_id = ?", (entry_id, session["user_id"]))
+    conn.commit()
+    return jsonify({"ok": True})
+
+
 @app.get("/api/entries")
 @login_required
 def list_entries():
-    days = to_int(request.args.get("days")) or 7
-    since = (date.today() - timedelta(days=days - 1)).isoformat()
-    rows = db.get_db().execute(
-        "SELECT id, type, amount, category, note, date FROM entries "
-        "WHERE user_id = ? AND date >= ? ORDER BY date DESC, id DESC",
-        (session["user_id"], since),
-    ).fetchall()
+    """Recent entries. ?days=7 (default) or ?month=YYYY-MM for one calendar month."""
+    month = request.args.get("month")
+    if month:
+        if not re.fullmatch(r"\d{4}-(0[1-9]|1[0-2])", month):
+            return err("date_invalid")
+        rows = db.get_db().execute(
+            "SELECT id, type, amount, category, note, date FROM entries "
+            "WHERE user_id = ? AND date LIKE ? ORDER BY date DESC, id DESC",
+            (session["user_id"], month + "-%"),
+        ).fetchall()
+    else:
+        days = to_int(request.args.get("days")) or 7
+        since = (date.today() - timedelta(days=days - 1)).isoformat()
+        rows = db.get_db().execute(
+            "SELECT id, type, amount, category, note, date FROM entries "
+            "WHERE user_id = ? AND date >= ? ORDER BY date DESC, id DESC",
+            (session["user_id"], since),
+        ).fetchall()
     return jsonify([dict(r) for r in rows])
 
 
@@ -301,14 +372,19 @@ def _totals(uid, start, end):
 @app.get("/api/summary")
 @login_required
 def summary():
-    """Weekly (Mon-Sun) totals, not monthly: income is irregular."""
+    """Totals for this calendar month and last month (main view), plus this week and last week."""
     today = date.today()
-    this_start = today - timedelta(days=today.weekday())
-    last_start = this_start - timedelta(days=7)
     uid = session["user_id"]
+    month_start = today.replace(day=1)
+    last_month_end = month_start - timedelta(days=1)
+    last_month_start = last_month_end.replace(day=1)
+    week_start = today - timedelta(days=today.weekday())
+    last_week_start = week_start - timedelta(days=7)
     return jsonify({
-        "this_week": _totals(uid, this_start, today),
-        "last_week": _totals(uid, last_start, this_start - timedelta(days=1)),
+        "this_month": _totals(uid, month_start, today),
+        "last_month": _totals(uid, last_month_start, last_month_end),
+        "this_week": _totals(uid, week_start, today),
+        "last_week": _totals(uid, last_week_start, week_start - timedelta(days=1)),
     })
 
 
@@ -414,7 +490,7 @@ def create_goal():
         target = float(d.get("target"))
     except (TypeError, ValueError):
         return err("target_not_number")
-    if target <= 0 or target > 10_000_000:
+    if bad_amount(target):
         return err("target_positive")
     deadline = d.get("deadline") or None
     if deadline:
@@ -447,7 +523,7 @@ def contribute(goal_id):
         amount = float(d.get("amount"))
     except (TypeError, ValueError):
         return err("amount_not_number")
-    if amount <= 0 or amount > 10_000_000:
+    if bad_amount(amount):
         return err("amount_positive")
     conn = db.get_db()
     conn.execute("UPDATE goals SET saved = saved + ? WHERE id = ? AND user_id = ?",

@@ -20,6 +20,7 @@ MESSAGES = {
     "amount_not_number":   ("Amount must be a number", "ಮೊತ್ತ ಸಂಖ್ಯೆ ಆಗಿರಬೇಕು"),
     "amount_positive":     ("Amount must be greater than 0", "ಮೊತ್ತ 0 ಕ್ಕಿಂತ ಹೆಚ್ಚಿರಬೇಕು"),
     "date_invalid":        ("Date must be YYYY-MM-DD", "ದಿನಾಂಕ YYYY-MM-DD ರೂಪದಲ್ಲಿರಬೇಕು"),
+    "entry_not_found":     ("Entry not found", "ನಮೂದು ಸಿಗಲಿಲ್ಲ"),
     "unknown_scheme":      ("Scheme not found", "ಈ ಯೋಜನೆ ಸಿಗಲಿಲ್ಲ"),
     "goal_title_required": ("Goal title is required", "ಗುರಿಯ ಹೆಸರು ಬೇಕು"),
     "target_not_number":   ("Target must be a number", "ಗುರಿ ಮೊತ್ತ ಸಂಖ್ಯೆ ಆಗಿರಬೇಕು"),
